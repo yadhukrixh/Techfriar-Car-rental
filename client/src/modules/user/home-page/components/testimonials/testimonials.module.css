@@ -1,0 +1,52 @@
+.sliderWrapper {
+    display: flex;
+    height: max-content;
+    flex-direction: column;
+    align-items: center;
+    padding: 100px;
+    width: 100%;
+    margin: 0 auto;
+    background-color: #F1F1F1;
+}
+
+.sliderWrapper h2 {
+    margin-bottom: 20px;
+}
+
+.sliderContent {
+    width: 100%;
+    height: max-content;
+    padding: 10px;
+    max-width: 1300px;
+    overflow: hidden; /* Hide overflowing testimonials */
+}
+
+.testimonialGrid {
+    padding-left: 10px;
+    display: flex;
+    gap: 30px;
+    transition: transform 0.6s ease-in-out; /* Smoother transition for sliding */
+    width: max-content; /* Assuming 7 total testimonials, adjust width based on number of items */
+}
+
+.navButton {
+    background-color: #fff;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    padding: 10px;
+    margin: 0 10px;
+}
+
+.navButton:hover {
+    color: #F97316;
+}
+
+.testimonialCard {
+    width: 300px; /* Adjust to fit three cards in the grid */
+    flex-shrink: 0;
+    margin-right: 20px; /* Space between cards */
+}

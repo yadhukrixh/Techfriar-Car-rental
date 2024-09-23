@@ -1,0 +1,34 @@
+.carListWrapper {
+    text-align: left;
+    padding: 50px;
+    padding-left: 100px;
+    padding-right: 100px;
+    background-color: #F1F1F1;
+}
+
+.carListWrapper h2 {
+    font-size: 24px;
+}
+
+.carGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 cards per row */
+    gap: 20px;
+}
+
+.carListHeading {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 20px;
+    justify-content: space-between;
+}
+
+
+.viewAll a {
+    color: #F97316;
+    text-decoration: none;
+    font-size: 16px;
+    display: inline-block;
+}

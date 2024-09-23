@@ -1,0 +1,100 @@
+.heroContainer{
+    margin-top: 68px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.heroDescription {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.heroDescription div{
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+}
+
+.heroDescription h2{
+    font-size: 45px;
+    width: 300px;
+}
+
+.heroDescription p{
+    width: 470px;
+    font-size: 16px;
+    color: #637381;
+}
+
+.redirectingButtons{
+    display: flex;
+    flex-direction: row !important;
+    column-gap: 30px;
+}
+
+.downloadAppButton{
+    outline: none;
+    border: none;
+    background-color: transparent;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: 600;
+    column-gap: 20px;
+}
+
+.downloadApp{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    border-radius: 50%;
+    background-color: #F97316;
+}
+
+.downloadApp img{
+    width: 10px;
+    height: 10px;
+}
+
+.storeLinks{
+    display: flex !important;
+    flex-direction: row !important;
+}
+
+.storeLinks button{
+    padding: 10px;
+    width: 200px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    outline: none;
+    border: none;
+    background-color: transparent;
+}
+
+.storeLinks button img{
+    width: 25px;
+    height: 25px;
+}
+
+.storeLinks div{
+    row-gap: 0;
+    text-align: left;
+    color: #000;
+}
+
+.storeLinks div h3{
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.storeLinks button div p{
+    font-size: 12px;
+    width: max-content !important;
+}
