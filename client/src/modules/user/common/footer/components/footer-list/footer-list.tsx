@@ -8,16 +8,16 @@ const FooterList = () => {
         <h2>Rentalia</h2>
         <ul>
           <li>
-            <a href="#">About Us</a>
+            <a href="example.com">About Us</a>
           </li>
           <li>
-            <a href="#">Vehicles</a>
+            <a href="example.com">Vehicles</a>
           </li>
           <li>
-            <a href="#">Features</a>
+            <a href="example.com">Features</a>
           </li>
           <li>
-            <a href="#">Contact</a>
+            <a href="example.com">Contact</a>
           </li>
         </ul>
       </div>
@@ -47,16 +47,16 @@ const FooterList = () => {
         <h2>Connect with us</h2>
         <ul>
             <li>
-                <a href="#"><img src="/icons/facebook-white.svg" alt="" /></a>
+                <a href="example.com"><img src="/icons/facebook-white.svg" alt="" /></a>
             </li>
             <li>
-                <a href="#"><img src="/icons/twitter-white.svg" alt="" /></a>
+                <a href="example.com"><img src="/icons/twitter-white.svg" alt="" /></a>
             </li>
             <li>
-                <a href="#"><img src="/icons/instagram-white.svg" alt="" /></a>
+                <a href="example.com"><img src="/icons/instagram-white.svg" alt="" /></a>
             </li>
             <li>
-                <a href="#"><img src="/icons/linkd-in-white.svg" alt="" /></a>
+                <a href="example.com"><img src="/icons/linkd-in-white.svg" alt="" /></a>
             </li>
         </ul>
       </div>

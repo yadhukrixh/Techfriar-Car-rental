@@ -17,7 +17,7 @@ const HeroCard = () => {
             exceptional service ensure you get on the road effortlessly.
           </p>
           <div className={styles.redirectingButtons}>
-            <ButtonComponent value="Get Started" className="signUpButton" />
+            <ButtonComponent value="Get Started" className={styles.getStarted} />
             <button className={styles.downloadAppButton}>
               <span className={styles.downloadApp}>
                 <img src="icons/download.svg" alt="" />
@@ -46,7 +46,7 @@ const HeroCard = () => {
         </div>
       </div>
 
-      <img src="images/hero-image.svg" alt="" />
+      <img src="images/hero-image.svg" alt="" className={styles.banner}/>
     </div>
   );
 };

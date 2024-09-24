@@ -1,4 +1,4 @@
-.heroContainer{
+.heroContainer {
     margin-top: 68px;
     display: flex;
     flex-direction: row;
@@ -11,30 +11,42 @@
     justify-content: space-between;
 }
 
-.heroDescription div{
+.heroDescription div {
     display: flex;
     flex-direction: column;
     row-gap: 30px;
 }
 
-.heroDescription h2{
+.heroDescription h2 {
     font-size: 45px;
     width: 300px;
 }
 
-.heroDescription p{
+.heroDescription p {
     width: 470px;
     font-size: 16px;
     color: #637381;
 }
 
-.redirectingButtons{
+.redirectingButtons {
     display: flex;
     flex-direction: row !important;
     column-gap: 30px;
 }
 
-.downloadAppButton{
+.getStarted {
+    background-color: #F97316;
+    color: #fff;
+    transition: all 0.7s ease;
+    width: 117px;
+    height: 50px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+.downloadAppButton {
     outline: none;
     border: none;
     background-color: transparent;
@@ -45,7 +57,7 @@
     column-gap: 20px;
 }
 
-.downloadApp{
+.downloadApp {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -56,17 +68,17 @@
     background-color: #F97316;
 }
 
-.downloadApp img{
+.downloadApp img {
     width: 10px;
     height: 10px;
 }
 
-.storeLinks{
+.storeLinks {
     display: flex !important;
     flex-direction: row !important;
 }
 
-.storeLinks button{
+.storeLinks button {
     padding: 10px;
     width: 200px;
     display: flex;
@@ -78,23 +90,97 @@
     background-color: transparent;
 }
 
-.storeLinks button img{
+.storeLinks button img {
     width: 25px;
     height: 25px;
 }
 
-.storeLinks div{
+.storeLinks div {
     row-gap: 0;
     text-align: left;
     color: #000;
 }
 
-.storeLinks div h3{
+.storeLinks div h3 {
     font-size: 15px;
     font-weight: 600;
 }
 
-.storeLinks button div p{
+.storeLinks button div p {
     font-size: 12px;
     width: max-content !important;
 }
+
+
+@media only screen and (min-width: 320px) and (max-width: 600px) {
+    
+    .heroContainer {
+        margin-top: 0;
+        flex-direction: column;
+    }
+
+    .banner{
+        padding: 24px;
+        width: 100%;
+    }
+
+    .heroDescription {
+        padding: 24px;
+    }
+
+    .heroDescription h2{
+        width: 290px;
+        font-size: 40px;
+    }
+
+    .heroDescription p{
+        font-size: 15px;
+        width: 100%;
+    }
+
+    .getStarted, .downloadAppButton{
+        font-size: 10px;
+    }
+
+    .storeLinks{
+        display: none !important;
+    }
+
+}
+
+
+
+
+
+@media only screen and (min-width: 600px) and (max-width: 1100px) {
+
+    .heroContainer{
+        margin-top: 20px;
+        padding-left: 30px;
+        padding-right: 30px;
+        row-gap: 10px;
+    }
+
+    .heroDescription h2{
+        font-size: 40px;
+        max-width: 200px;
+    }
+
+    .heroDescription{
+        max-width: 200px;
+    }
+
+    .heroDescription p{
+        max-width: 200px;
+    }
+
+    .storeLinks{
+       display: none !important;
+    }
+
+    .banner{
+        max-width: calc(60dvw);
+        height: 515px;
+    }
+}
+

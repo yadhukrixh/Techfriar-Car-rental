@@ -5,8 +5,8 @@ import styles from './auth-buttons.module.css';
 const AuthButtons = () => {
   return (
     <div className={styles.authWrapper}>
-      <ButtonComponent value='Login' className='loginButton' />
-      <ButtonComponent value='Sign Up' className='signUpButton' />
+      <ButtonComponent value='Login' className={styles.loginButton} />
+      <ButtonComponent value='Sign Up' className={styles.signUpButton} />
     </div>
   )
 }

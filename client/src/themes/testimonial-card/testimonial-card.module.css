@@ -37,3 +37,15 @@
 .position {
     color: #666;
 }
+
+
+@media only screen and (min-width: 320px) and (max-width: 600px) {
+    .card{
+        width: 250px;
+    }
+
+    .feedback{
+        font-size: 10px;
+        font-weight: 600;
+    }
+}

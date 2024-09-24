@@ -1,8 +1,39 @@
 .navBarWrapper{
     justify-content: space-around;
+    background-color: #fff;
     display: flex;
     align-items: center;
     flex-direction: row;
     width: 100%;
     height: 90px;
 }
+
+.navList{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+
+@media only screen and (min-width: 300px) and (max-width: 900px) {
+
+    .navBarWrapper{
+        padding-left: 20px;
+        padding-right: 20px;
+        justify-content: space-between;
+    }
+    
+    .navList{
+        padding: 20px;
+        flex-direction: column;
+        position: absolute;
+        background-color: #fff;
+        align-items: flex-start;
+        top: 70px;
+        right: 0;
+        row-gap: 30px;
+        box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+    }
+ 
+ }
+ 

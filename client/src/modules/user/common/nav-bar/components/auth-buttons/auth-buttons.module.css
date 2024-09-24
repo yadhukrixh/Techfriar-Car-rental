@@ -3,3 +3,41 @@
     gap: 10px;
     flex-wrap: wrap;
 }
+
+.loginButton,
+.signUpButton {
+  width: 117px;
+  height: 50px;
+  background-color: #fff;
+  font-size: 15px;
+  color: #000;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.7s ease;
+}
+
+.signUpButton {
+  background-color: #F97316;
+  color: #fff;
+  transition: all 0.7s ease;
+}
+
+/* Hovering over the Login Button */
+.loginButton:hover {
+  border: 1px solid #F97316;
+}
+
+.signUpButton:hover{
+  background-color: #fff !important;
+  color: #000;
+  border: 1px solid #F97316;
+}
+
+@media only screen and (min-width: 300px) and (max-width: 900px) {
+
+    .authWrapper{
+      flex-direction: column;
+    }
+ 
+ }

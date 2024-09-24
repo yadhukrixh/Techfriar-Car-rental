@@ -50,7 +50,7 @@
 
 .storeLinks button{
     padding: 10px;
-    width: 200px;
+    width: max-content;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -87,6 +87,7 @@
 .socials{
     display: flex;
     flex-direction: column;
+    align-items: center;
     row-gap: 20px;
 }
 
@@ -109,3 +110,54 @@
     width: 20px;
     height: 20px;
 }
+
+
+
+@media only screen and (min-width: 300px) and (max-width: 600px) {
+
+    .footerListWrapper{
+        padding: 20px;
+        flex-direction: column;
+        justify-content: flex-start;
+        height: 100%;
+    }
+
+    .company ul {
+        display: grid;
+        grid-template-columns:repeat(auto, 1fr); /* Adjust minmax value as needed */
+        gap: 10px; /* Optional: add space between items */
+    }
+
+    .company ul li{
+        width: max-content;
+    }
+    
+
+    .company,
+    .appDownload,
+    .socials{
+        text-align: left;
+        align-items: flex-start;
+        width: 100%;
+        height: max-content;
+    }
+
+    .storeLinks{
+        display: grid !important;
+        width: 100% !important;
+        grid-template-columns: repeat(auto,1fr);
+        row-gap: 20px;
+    }
+ }
+
+ @media only screen and (min-width: 600px) and (max-width: 1000px) {
+    .footerListWrapper{
+        padding: 20px;
+        flex-direction: column;
+        justify-content: flex-start;
+        height: 100%;
+    }
+ }
+
+
+

@@ -9,7 +9,7 @@ const CarList = () => {
       <div className={styles.carListHeading}>
         <h2>Explore our vehicles</h2>
         <div className={styles.viewAll}>
-          <a href="/cars">View All →</a>
+          <a href="/cars">View All <img src="/icons/arrow.svg" alt="" /></a>
         </div>
       </div>
 

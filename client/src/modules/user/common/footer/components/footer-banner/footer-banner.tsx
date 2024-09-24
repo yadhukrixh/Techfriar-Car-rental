@@ -12,7 +12,7 @@ const FooterBanner = () => {
           companion for your next adventure. With a wide range of vehicles and
           exceptional customer service.
         </p>
-        <ButtonComponent value="Get Started" className='signUpButton'/>
+        <ButtonComponent value="Get Started" className={styles.getStartedButton}/>
       </div>
     </div>
   );

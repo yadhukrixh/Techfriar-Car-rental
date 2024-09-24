@@ -34,3 +34,17 @@
 .navList li:hover .underLine::before {
     width: 100%;
 }
+
+@media only screen and (min-width: 300px) and (max-width: 900px) {
+
+    .navList{
+        flex-direction: column;
+        row-gap: 20px;
+        text-align: left;
+    }
+
+    .navList li{
+        text-align: left;
+    }
+ 
+ }

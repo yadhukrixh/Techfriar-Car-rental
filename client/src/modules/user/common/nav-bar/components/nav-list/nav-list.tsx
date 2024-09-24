@@ -6,19 +6,19 @@ const NavList = () => {
     <div className={styles.navListWarapper}>
     <ul className={styles.navList}>
         <li>
-            <a href="#">Home</a>
+            <a href="example.domain.com">Home</a>
             <span className={styles.underLine}></span>
         </li>
         <li>
-            <a href="#">Vehicles</a>
+            <a href="example.domain.com">Vehicles</a>
             <span className={styles.underLine}></span>
         </li>
         <li>
-            <a href="#">Features</a>
+            <a href="example.domain.com">Features</a>
             <span className={styles.underLine}></span>
         </li>
         <li>
-            <a href="#">Contact</a>
+            <a href="example.domain.com">Contact</a>
             <span className={styles.underLine}></span>
         </li>
     </ul>

@@ -30,3 +30,35 @@
     width: 350px;
 }
 
+.getStartedButton {
+    background-color: #F97316;
+    color: #fff;
+    transition: all 0.7s ease;
+    width: 117px;
+    height: 50px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 10px;
+}
+
+@media only screen and (min-width: 300px) and (max-width: 900px) {
+
+    .footerBannerWrapper{
+        height: max-content;
+    }
+
+    .bannerDescription{
+        padding: 30px;
+    }
+
+    .bannerDescription h2{
+        font-size: 25px;
+    }
+
+    .bannerDescription p{
+        font-size: 15px;
+        width: 70%;
+    }
+ }
+

@@ -10,7 +10,7 @@ const CarCard:FC<CarsProps> = ({id,model,seats,fuel,transmission,price,image}) =
         <h3>{model}</h3>
         <p>{seats} seats • {fuel} • {transmission}</p>
         <h4>{price} / Day</h4>
-        <a href="#" className={styles.detailsLink}>View Details →</a>
+        <a href="example.domain.com" className={styles.detailsLink}>View Details →</a>
       </div>
     </div>
   )

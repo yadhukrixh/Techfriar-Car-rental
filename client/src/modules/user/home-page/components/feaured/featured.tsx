@@ -4,7 +4,7 @@ import styles from './Featured.module.css';
 const Featured = () => {
   return (
     <div className={styles.featureListWrapper}>
-      <h2>We’re BIG on what matters to you</h2>
+      <h2>We're BIG on what matters to you</h2>
       <div className={styles.featureGrid}>
         <div className={styles.featureCard}>
           <div className={styles.icon}><img src="/icons/Category.svg" alt="" /></div>

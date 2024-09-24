@@ -4,7 +4,10 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   transition: transform 0.3s ease;
- height: max-content;
+  height: max-content;
+  cursor: pointer;
+  min-width: 250px;
+  min-height: 300px;
 }
 
 .card:hover {
@@ -13,7 +16,7 @@
 
 .cardImage {
   width: 100%;
-  height:max-content;
+  height: max-content;
   object-fit: cover;
 }
 
@@ -45,4 +48,23 @@
   color: #F97316;
   display: inline-block;
   margin-top: 10px;
+}
+
+@media only screen and (min-width: 600px) and (max-width: 1100px) {
+  
+  .card{
+    min-width: 0 !important;
+  }
+
+  .cardContent h3{
+    font-size: 15px;
+  }
+
+  .cardContent p{
+    font-size: 10px;
+  }
+
+  .cardContent h4{
+    font-size: 15px;
+  }
 }
