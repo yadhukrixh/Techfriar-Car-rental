@@ -18,8 +18,8 @@ export default function RootLayout({
     <ApolloProvider client={client}>
       <html lang="en">
         <body>
-          {pathname.startsWith("/admin") && <AdminNavBar />}
-          {!pathname.startsWith("/admin") && <NavBar />}
+          {pathname.startsWith("/admin/dashboard") && <AdminNavBar />}
+          {!pathname.startsWith("/admin/") && <NavBar />}
 
           {children}
           {!pathname.startsWith("/admin") && <Footer />}

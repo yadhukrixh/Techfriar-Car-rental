@@ -13,12 +13,14 @@
     "clsx": "^2.1.1",
     "clx": "^1.0.0",
     "graphql": "^16.9.0",
+    "js-cookie": "^3.0.5",
     "next": "14.2.13",
     "react": "^18",
     "react-dom": "^18",
     "remixicon": "^4.3.0"
   },
   "devDependencies": {
+    "@types/js-cookie": "^3.0.6",
     "@types/next": "^9.0.0",
     "@types/node": "^20",
     "@types/react": "^18",

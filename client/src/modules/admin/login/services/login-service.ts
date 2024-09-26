@@ -2,8 +2,7 @@ import { ADMIN_LOGIN_MUTATION } from "@/graphql/admin/login-mutation";
 import { AdminLoginResponse, LoginFormState } from "@/interfaces/admin";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { Router } from "next/router";
-
+import Cookies from 'js-cookie';
 
 export class AdminLoginService {
     private client: ApolloClient<NormalizedCacheObject>;
@@ -39,7 +38,6 @@ export class AdminLoginService {
     public handleSubmit = async (e: React.FormEvent): Promise<void> => {
         e.preventDefault();
         this.setError(null);
-    
         try {
           const { data } = await this.client.mutate<AdminLoginResponse>({
             mutation: ADMIN_LOGIN_MUTATION,
@@ -50,7 +48,10 @@ export class AdminLoginService {
           });
     
           if (data?.adminLogin.success) {
-            localStorage.setItem('token', data.adminLogin.token || '');
+            
+            Cookies.set('adminToken', data.adminLogin.token || '', { expires: 7, path: '/' });
+
+            localStorage.setItem('adminToken', data.adminLogin.token || '');
             this.router.push('/admin/dashboard');
           } else {
             this.setError(data?.adminLogin.message || 'Invalid email or password');

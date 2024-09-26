@@ -9,10 +9,11 @@ class AuthRepository {
             if(!admin){
                 throw new Error("Admin not found");
             }
-
             return admin;
         }catch(error){
-            throw new Error("Failed to fetch Data");
+            return{
+                message:"user not found"
+            }
         }
     }
 }

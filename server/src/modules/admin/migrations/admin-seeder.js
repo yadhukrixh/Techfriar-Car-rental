@@ -6,16 +6,16 @@ const seedAdmin = async () => {
   // Check if the admin user already exists
   const existingAdmin = await Admins.findOne({
     where: {
-      email: 'admin@example.com', // Check by email or any unique identifier
+      email: 'admin@gmail.com', // Check by email or any unique identifier
     },
   });
 
   // If the admin user does not exist, create a new one
   if (!existingAdmin) {
-    const hashedPassword = await bcrypt.hash('admin123', 10);
+    const hashedPassword = await bcrypt.hash('admin@123', 10);
     await Admins.create({
       name: 'Admin User',
-      email: 'admin@example.com',
+      email: 'admin@gmail.com',
       password: hashedPassword,
       role: 'admin',
     });
