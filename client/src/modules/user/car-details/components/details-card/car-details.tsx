@@ -37,8 +37,10 @@ const car ={
       
     ],
     type: "Sport",
-    capacity: "2 Person",
-    fuel: "70L",
+    seats:"4",
+    transmission:"Manual",
+    doors:"2",
+    fuel: "Petrol",
     rating: 4.5,
   };
 
@@ -82,9 +84,10 @@ const car ={
                 </p>
                 <p className={styles.description}>{car.description}</p>
                 <div className={styles.specs}>
-                    <div>Type: {car.type}</div>
-                    <div>Capacity: {car.capacity}</div>
-                    <div>Fuel: {car.fuel}</div>
+                    <div><img src="/icons/gear.svg" alt="" /> {car.transmission}</div>
+                    <div><img src="/icons/seat.svg" alt="" /> {car.seats}</div>
+                    <div><img src="/icons/door.svg" alt="" /> {car.doors}</div>
+                    <div><img src="/icons/fuel.svg" alt="" /> {car.fuel}</div>
                 </div>
                 <div className={styles.priceContainer}>
                     <span className={styles.price}>${car.price}/day</span>

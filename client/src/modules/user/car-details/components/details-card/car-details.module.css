@@ -8,7 +8,8 @@
     padding: 20px;
     max-width: 1200px;
     margin: 0 auto;
-    flex-direction: row; /* Flex direction for desktop */
+    flex-direction: row;
+    /* Flex direction for desktop */
 }
 
 .imageContainer {
@@ -25,12 +26,11 @@
     display: flex;
     margin-top: 10px;
     gap: 10px;
-    justify-content: center;
     max-width: 500px;
     overflow: scroll;
 }
 
-.thumbnailContainer::-webkit-scrollbar{
+.thumbnailContainer::-webkit-scrollbar {
     display: none;
 }
 
@@ -82,7 +82,21 @@
     margin-bottom: 20px;
     font-size: 16px;
     color: #666;
+    align-items: center;
 }
+
+.specs div{
+    display: flex;
+    align-items: center;
+    gap: 3px;
+}
+
+.specs img {
+    width: 15px;
+    height: 15px;
+}
+
+
 
 .priceContainer {
     font-size: 24px;
@@ -119,30 +133,31 @@
 }
 
 .wishlistButton {
-    background-color: #ff9900;
+    background-color: #F97316;
     color: white;
 }
 
 /* RESPONSIVE STYLES */
 
 /* Mobile View */
-@media (max-width: 768px) {
+@media (max-width: 830px) {
     .container {
-        flex-direction: column; /* Stack images and details vertically on mobile */
+        flex-direction: column;
+        /* Stack images and details vertically on mobile */
         padding: 15px;
         align-items: center;
         width: 100%;
     }
 
-    .imageContainer{
+    .imageContainer {
         width: 100%;
     }
 
-    .mainImage img{
+    .mainImage img {
         max-width: 100%;
     }
 
-    .thumbnailContainer{
+    .thumbnailContainer {
         max-width: 100%;
     }
 
@@ -152,7 +167,7 @@
         padding: 15px;
     }
 
-   .detailsContainer h1 {
+    .detailsContainer h1 {
         font-size: 20px;
     }
 
@@ -169,10 +184,11 @@
     }
 
     .specs {
-        flex-direction: column;
-        gap: 10px;
+        flex-direction: row;
+        gap: 15px;
         font-size: 14px;
     }
+
 
     .priceContainer {
         font-size: 20px;
@@ -205,7 +221,7 @@
 }
 
 /* Larger Mobile View */
-@media (min-width: 769px) and (max-width: 1024px) {
+@media (min-width: 830px) and (max-width: 1024px) {
     .container {
         flex-direction: row;
         padding: 20px;

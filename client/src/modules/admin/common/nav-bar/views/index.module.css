@@ -1,0 +1,78 @@
+/* AdminNavBar.module.css */
+
+.navBarWrapper {
+    display: flex;
+    position: fixed;
+    flex-direction: column;
+    left: 0;
+    background-color: rgb(0, 9, 79);
+    height: 100dvh;
+    padding-top: 50px;
+    transition: width 0.4s ease; /* Smooth transition when the navbar width changes */
+}
+
+.open {
+    width: 300px;
+    max-width: 300px;
+}
+
+.closed {
+    width: 80px; /* Narrow navbar width when closed */
+    max-width: 80px;
+}
+
+.navHeader {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    justify-content: space-between;
+    font-size: 20px;
+    padding: 10px;
+    color: #fff;
+}
+
+.navList ul {
+    padding-left: 30px;
+    margin-top: 50px;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    row-gap: 50px;
+}
+
+.navList ul li {
+    display: flex;
+    flex-direction: row;
+    column-gap: 10px;
+    font-size: 25px;
+    padding: 5px;
+    align-items: center;
+    border-radius: 10px;
+    transition: all 0.4s ease;
+    max-width: 200px;
+}
+
+.navList ul li:hover {
+    background-color: #ffffff2c;
+}
+
+.listLogos {
+    color: #fff;
+}
+
+.listLabel {
+    color: #fff;
+    font-size: 20px;
+    transition: opacity 0.4s ease; /* Smooth transition for label visibility */
+}
+
+.closed .listLabel {
+    opacity: 0;
+    visibility: hidden; /* Hide labels when navbar is closed */
+}
+
+.open .listLabel {
+    opacity: 1;
+    visibility: visible;
+}
+

@@ -1,30 +1,37 @@
-import express from "express";
-import dotenv from "dotenv";
-import cors from "cors";
+import express from 'express';
+import dotenv from 'dotenv';
+import corsConfig from './config/cors.js';
+import sequelize from './config/postgres.js';
+import { runSeed } from './config/seed.js';
+import { startApolloServer } from './config/apollo-server.js';
 
-// configure dotenv
 dotenv.config();
 
-// configure app
 const app = express();
 
 app.use(express.json());
-
-// configure cors
-app.use(
-  cors({
-    origin: process.env.FRONTEND_URL, // Allow requests from frontend
-    methods: "GET, PUT, POST, DELETE",
-    credentials: true, // Allow credentials (cookies, headers)
-  })
-);
+app.use(corsConfig);
 
 app.get('/', (req, res) => {
   res.send("Backend");
 });
 
-// configure app port
-const PORT = process.env.PORT || 3400; // Default port if not set
-app.listen(PORT, () => {
+const PORT = process.env.PORT || 3400;
+
+startApolloServer(app); // Start Apollo Server
+
+app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}`);
+
+  try {
+    await sequelize.authenticate(); // Explicitly authenticate before syncing
+    console.log('Database connection established successfully.');
+
+    await sequelize.sync(); // Ensure models are synced
+    console.log('All models were synchronized successfully.');
+    await runSeed(); // Seed the database if needed
+  } catch (error) {
+    console.error('Error during server initialization:', error);
+  }
 });
+
