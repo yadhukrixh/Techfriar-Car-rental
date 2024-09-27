@@ -13,7 +13,7 @@ export function middleware(req: NextRequest) {
 
     // If no token, redirect to the login page
     if (!adminToken) {
-      return NextResponse.redirect(new URL('/admin/login', req.url));
+      return NextResponse.redirect(new URL('/admin', req.url));
     }
   }
 

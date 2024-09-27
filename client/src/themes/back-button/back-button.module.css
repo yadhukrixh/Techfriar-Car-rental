@@ -1,0 +1,21 @@
+.backButton {
+    padding: 10px;
+    background-color: #0070f3;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Optional: Add hover transition */
+    max-width: 100px;
+    max-height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+    font-weight: 700;
+  }
+  
+  .backButton:hover {
+    background-color: #005bb5; /* Optional: Change color on hover */
+  }
+  

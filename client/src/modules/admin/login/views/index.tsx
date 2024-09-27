@@ -34,6 +34,7 @@ const AdminLoginForm: React.FC = () => {
   return (
     <form className={styles.form} onSubmit={loginService.handleSubmit}>
         <h2>Admin Login</h2>
+        
       <div className={styles.flexColumn}>
         <label>Email</label>
       </div>
@@ -69,6 +70,7 @@ const AdminLoginForm: React.FC = () => {
       <div className={styles.flexRow}>
         <span className={styles.span}>Forgot password?</span>
       </div>
+      <p className={styles.error}>{error}</p>
       <button type="submit" className={styles.buttonSubmit}>
         Sign In
       </button>

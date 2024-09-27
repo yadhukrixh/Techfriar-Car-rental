@@ -1,0 +1,23 @@
+.manageBrandsWrapper{
+    display: flex;
+    flex-direction: column;
+}
+
+.manageBrandsHeader{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+
+.brandsTableWrapper{
+    margin-top: 40px;
+}
+
+.addBrands{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    row-gap: 40px;
+    align-items: center;
+}
