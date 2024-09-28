@@ -1,0 +1,65 @@
+.selectWrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.selectBox {
+  width: 100%;
+  padding: 12px;
+  height: 100%;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease-in-out;
+}
+
+.selectBox:hover {
+  border-color: #007bff;
+}
+
+.selectBox:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+  outline: none;
+}
+
+.filterationSelector{
+  padding: 5px;
+  height: 40px;
+  max-width: 400px;
+  border: none;
+  outline: none;
+  width: 100%;
+  color: #b92528;
+  font-weight: 600;
+  border-radius: 10px;
+}
+
+.filterationSelector:focus {
+  border-color: #007bff;
+}
+
+@media(max-width:768px){
+  .filterationSelector{
+    border: none;
+    height: max-content;
+    text-align: center;
+    padding: 5px;
+    -webkit-appearance: none;
+    font-size: 10px;
+    width: max-content;
+    outline: none;
+    transition: all 0.7s ease;
+  }
+
+  .filterationSelector:focus{
+    color:#b92528;
+    font-weight: 700;
+    border-bottom: 1px solid #b92528;
+    border-radius: 0;
+  }
+}

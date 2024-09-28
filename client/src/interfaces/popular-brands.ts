@@ -33,3 +33,19 @@ export interface CountriesResponse {
     data: Country[];
   };
 }
+
+// image file and brand form
+
+export interface ImageFile{
+  file?: File | null;  // The actual image file
+  name: string | null;  // The name of the image file
+  preview: string | null; // URL for the image preview
+}
+
+export interface AddBrandResponse{
+  addBrand:{
+    success:Boolean;
+    message:string;
+  }
+}
+

@@ -10,7 +10,6 @@ const brandTypeDefs = gql`
 
   type Query {
     getBrands: [AddBrandResponse!]!
-  
   }
 
   type Mutation {

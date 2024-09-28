@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.11.8",
+    "apollo-upload-client": "^18.0.1",
     "clsx": "^2.1.1",
     "clx": "^1.0.0",
     "graphql": "^16.9.0",
@@ -20,6 +21,7 @@
     "remixicon": "^4.3.0"
   },
   "devDependencies": {
+    "@types/apollo-upload-client": "^18.0.0",
     "@types/js-cookie": "^3.0.6",
     "@types/next": "^9.0.0",
     "@types/node": "^20",

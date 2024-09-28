@@ -15,12 +15,13 @@ import styles from './input-component.module.css';
  */
 interface InputSectionProps {
   type: string;
-  value: string;
-  onChange: (value: string) => void;
+  value: any;
+  onChange: (value:any) => void;
   placeholder?: string;
   customClassName?: keyof typeof styles; // Ensure this matches a key in `styles`
   editableStatus?: boolean;
   toUppercase?: boolean;
+  acceptType?:string;
 }
 
 /**
@@ -37,6 +38,7 @@ const InputComponent: FC<InputSectionProps> = ({
   customClassName,
   editableStatus,
   toUppercase,
+  acceptType
 }) => {
   /**
    * Handle changes to the input field
@@ -72,6 +74,8 @@ const InputComponent: FC<InputSectionProps> = ({
         required
         // Make the input field read-only if editableStatus is false
         readOnly={editableStatus || false}
+        // accept type
+        accept={acceptType}
       />
     </div>
   );
