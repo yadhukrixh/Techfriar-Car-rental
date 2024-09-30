@@ -4,10 +4,15 @@ import corsConfig from './config/cors.js';
 import sequelize from './config/postgres.js';
 import { runSeed } from './config/seed.js';
 import { startApolloServer } from './config/apollo-server.js';
+import { graphqlUploadExpress } from 'graphql-upload';
 
 dotenv.config();
 
+
+
 const app = express();
+
+app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 1 }));
 
 app.use(express.json());
 app.use(corsConfig);

@@ -1,6 +1,7 @@
 /* AdminNavBar.module.css */
 
 .navBarWrapper {
+    z-index: 999;
     display: flex;
     position: fixed;
     flex-direction: column;
@@ -77,3 +78,41 @@
     visibility: visible;
 }
 
+@media (max-width:768px){
+    .navHeader{
+        font-size: 10px;
+    }
+
+
+    .navBarWrapper{
+        max-width: 100%;
+        width: 100%;
+        flex-direction: row;
+        height: max-content;
+        align-items: center;
+        justify-content: space-between;
+        padding:10px;
+        top: 0;
+    }
+
+    .navList ul{
+        padding: 0;
+        margin: 0;
+        flex-direction: row;
+        column-gap: 10px;
+        align-items: center;
+        font-size: 10px;
+    }
+
+    .navList ul li{
+        flex-direction: column;
+    }
+
+    .navList ul li span{
+        font-size: 16px;
+    }
+
+    .navList ul li p{
+        font-size: 10px;
+    }
+}

@@ -19,3 +19,9 @@
     background-color: #005bb5; /* Optional: Change color on hover */
   }
   
+
+  @media(max-width:768px){
+    .backButton{
+      font-size: 10px;
+    }
+  }

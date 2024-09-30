@@ -20,8 +20,12 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "types": ["node", "apollo-upload-client"]
+    "typeRoots": [
+      "./node_modules/@types",
+      "./types"  // Add your custom types folder
+    ],
+    "types": ["node", "apollo-upload-client"]  // Optional if you've added to typeRoots
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/lib/apollo-client.ts"],
   "exclude": ["node_modules"]
 }

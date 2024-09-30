@@ -1,5 +1,6 @@
 import React, { FC, ChangeEvent } from 'react';
 import styles from './input-component.module.css';
+import clsx from 'clsx';
 
 /**
  * Interface for InputSectionProps
@@ -18,7 +19,7 @@ interface InputSectionProps {
   value: any;
   onChange: (value:any) => void;
   placeholder?: string;
-  customClassName?: keyof typeof styles; // Ensure this matches a key in `styles`
+  customClassName?: string; // Ensure this matches a key in `styles`
   editableStatus?: boolean;
   toUppercase?: boolean;
   acceptType?:string;
@@ -69,7 +70,7 @@ const InputComponent: FC<InputSectionProps> = ({
         // Optional placeholder text
         placeholder={placeholder}
         // Apply a custom class name if provided
-        className={customClassName ? styles[customClassName] : styles.CustomInput}
+        className={clsx(styles.customButton, customClassName)}
         // Make the input field required
         required
         // Make the input field read-only if editableStatus is false

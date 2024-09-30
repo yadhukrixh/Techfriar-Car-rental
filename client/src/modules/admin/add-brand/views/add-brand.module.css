@@ -1,41 +1,120 @@
-.custumFileUpload {
-    height: 200px;
-    width: 300px;
-    display: flex;
-    flex-direction: column;
-    align-items: space-between;
-    gap: 20px;
-    cursor: pointer;
-    align-items: center;
-    justify-content: center;
-    border: 2px dashed #cacaca;
-    background-color: rgba(255, 255, 255, 1);
-    padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0px 48px 35px -48px rgba(0,0,0,0.1);
+.addBrandWrapper{
+  padding: 50px;
+}
+
+.addBrandContainer {
+  width: 100%;
+  margin: 0 auto;
+  padding: 2rem;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+
+.header h2{
+  width: 100%;
+  text-align: center;
+}
+
+
+.title {
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.formSection {
+  margin-bottom: 1.5rem;
+}
+
+.inputLabel {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 14px;
+  font-weight: 500;
+  color: #333;
+}
+
+.brandNameInput{
+  max-width: 200px;
+  width: max-content;
+  outline: none;
+  border: 1px solid rgb(78, 76, 76);
+  padding: 3px;
+  border-radius: 10px;
+  font-size: 15px;
+}
+
+.uploadSection {
+  margin-bottom: 1.5rem;
+}
+
+.uploadButton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #999;
+  font-size: 16px;
+}
+
+.uploadComponent .ant-upload.ant-upload-select-picture-card {
+  width: 100%;
+  height: 180px;
+  border: 2px dashed #d9d9d9;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f9f9f9;
+}
+
+.uploadComponent .ant-upload-list-picture-card-container {
+  width: 100%;
+}
+
+.buttonSection {
+  display: flex;
+  justify-content: center;
+}
+
+.submitButton {
+  width: 100%;
+  padding: 10px 15px;
+  background-color: #1890ff;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 16px;
+}
+
+
+
+
+
+.spinnerContainer{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #00000020;
+  backdrop-filter: blur(10px);
+  width: 100dvw;
+  height: 100dvh;
+}
+
+
+@media(max-width:768px){
+  .addBrandWrapper{
+    padding: 5px;
+    width: 100%;
   }
-  
-  .custumFileUpload .icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .brandNameInput{
+    width: 150px;
   }
-  
-  .custumFileUpload .icon img {
-    height: 80px;
-  }
-  
-  .custumFileUpload .text {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  .custumFileUpload .text span {
-    font-weight: 400;
-    color: rgba(75, 85, 99, 1);
-  }
-  
-  .custumFileUpload input {
-    display: none;
-  }
+}
+

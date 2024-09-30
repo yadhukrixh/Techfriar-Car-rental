@@ -4,7 +4,7 @@ const brandTypeDefs = gql`
   scalar Upload
 
   type AddBrandResponse {
-    succes:Boolean!
+    success:Boolean!
     message:String!
   }
 

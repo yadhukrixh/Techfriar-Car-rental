@@ -9,7 +9,7 @@ export const runSeed = async () => {
 
     await seedAdmin(); // Call the seed function
 
-    await seedCountries()
+    await seedCountries();
     
     console.log('Seeding completed.');
   } catch (error) {

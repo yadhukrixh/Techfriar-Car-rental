@@ -1,10 +1,10 @@
 import AddBrand from '@/modules/admin/add-brand/views'
-import BackButton from '@/themes/back-button/back-button'
+import styles from './add-brand.module.css';
 import React from 'react'
 
 const page = () => {
   return (
-    <div>
+    <div className={styles.addBrandWrapper}>
       <AddBrand />
     </div>
   )

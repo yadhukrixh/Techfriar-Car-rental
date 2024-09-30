@@ -1,10 +1,13 @@
 import mime from "mime-types";
 import dotenv from "dotenv";
 import BrandsRepository from "../repositories/brands-repo.js";
+import { v4 as uuidv4 } from 'uuid';
+import minioClient from "../../../config/minio.js";
+
 dotenv.config();
 
 class BrandController {
-  // fetch countries to assign the brands
+  // Fetch countries to assign the brands
   static async fetchCountries() {
     try {
       const countries = await BrandsRepository.fetchCountries();
@@ -21,53 +24,67 @@ class BrandController {
     }
   }
 
-  //   assign brands to the db
+  // Assign brands to the db
   static async addBrands(name, country, image) {
     try {
-      const { createReadStream, filename } = await image; // Get filename
+      // Get the file stream and filename
+      const { createReadStream, filename } = await image;
       const stream = createReadStream();
-      const uniqueFilename = `manufacturer/${uuidv4()}-${filename}`; // Generate a unique filename
+      const uniqueFilename = `brands/${uuidv4()}-${filename}`; // Generate a unique filename
 
-      const contentType = mime.lookup(filename) || "application/octet-stream"; // Default to octet-stream
+      const isBrandExist = await BrandsRepository.checkBrandExist(name);
 
+      if(isBrandExist){
+        return{
+          success:false,
+          message:"Brand already exist"
+        }
+      }
+  
+      // Determine the content type of the file (default to application/octet-stream if unknown)
+      const contentType = mime.lookup(filename) || "application/octet-stream";
+  
+      // Upload the file to MinIO
       await new Promise((resolve, reject) => {
         minioClient.putObject(
           process.env.MINIO_BUCKET_NAME,
           uniqueFilename,
           stream,
           {
-            "Content-Type": contentType, // Set the content type for the uploaded file
-            "Content-Disposition": "inline", // Allow inline rendering in the browser
+            "Content-Type": contentType, // Set the content type
           },
           (error) => {
             if (error) {
               console.error("Error uploading to MinIO:", error);
               return reject(new Error("MinIO upload failed"));
             }
-
-            resolve();
+            resolve(); // Resolve the promise on successful upload
           }
         );
       });
+  
+      // Instead of generating a presigned URL, store the unique filename
+      const imageUrl = `http://${process.env.MINIO_SERVER}:${process.env.MINIO_PORT}/${process.env.MINIO_BUCKET_NAME}/${uniqueFilename}`;
+      console.log(imageUrl); // You can log or further use this URL
 
-      const imageUrl = await minioClient.presignedGetObject(
-        process.env.MINIO_BUCKET_NAME,
-        uniqueFilename
+      // Store the brand details in the repository
+      const brand = await BrandsRepository.addBrand(
+        name,
+        country,
+        imageUrl, // Store the unique filename or URL in the database
       );
-
-      const brand = await BrandsRepository.addBrand({name,country,imageUrl})
-      return{
-        success:brand.success,
-        message:brand.message
-      }
-
-
-      
+  
+      // Return success response
+      return {
+        success: brand.success,
+        message: brand.message,
+      };
     } catch (error) {
-      return{
-        success:false,
-        message:"Failed to Add Brand"
-      }
+      console.error("Error in handleAddBrand:", error);
+      return {
+        success: false,
+        message: "Failed to add brand",
+      };
     }
   }
 }
