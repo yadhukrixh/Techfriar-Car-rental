@@ -18,6 +18,17 @@ const brandResolvers = {
         }
       },
     },
+
+    Query: {
+      getBrands: async () => {
+        try{
+          return await BrandController.fetchBrands()
+        } catch (error) {
+          console.error("Error fetching brands:", error);
+          throw new Error("Failed to fetch brands");
+        }
+      }
+    }
   };
   
 

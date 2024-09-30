@@ -103,6 +103,7 @@ const AddBrand = () => {
             type="text"
             onChange={setBrandName}
             customClassName={styles.brandNameInput}
+            toUppercase={true}
           />
         </div>
 
@@ -134,7 +135,7 @@ const AddBrand = () => {
             showSearch
             placeholder="Select a country"
             onChange={handleCountryChange}
-            style={{ width: "100%" }}
+            style={{ width: "100%", maxWidth:"500px"}}
             optionFilterProp="children"
             filterOption={(input, option) =>
               (option?.children as unknown as string)

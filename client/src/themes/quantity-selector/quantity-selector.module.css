@@ -1,0 +1,11 @@
+.quantitySelector {
+    display: flex;
+    align-items: center;
+}
+.quantitySelector button{
+    font-weight: 600;
+}
+.numberSelectorInput input{
+    text-align: center !important;
+}
+  

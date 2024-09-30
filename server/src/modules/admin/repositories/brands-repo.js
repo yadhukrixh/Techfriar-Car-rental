@@ -49,6 +49,18 @@ class BrandsRepository {
     }
   }
 
+  // Function to fetch brands from the database
+  static async getBrands(){
+    try{
+      const brands = await Brands.findAll({
+        attributes:['id','name','imageUrl']
+      })
+      return brands;
+    }catch(error){
+      throw new Error("Failed to fetch Brands")
+    }
+  }
+
   
 }
 

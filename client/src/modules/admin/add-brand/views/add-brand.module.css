@@ -45,8 +45,9 @@
   max-width: 200px;
   width: max-content;
   outline: none;
-  border: 1px solid rgb(78, 76, 76);
+  border: 1px solid rgb(156, 148, 148);
   padding: 3px;
+  padding-left: 8px;
   border-radius: 10px;
   font-size: 15px;
 }
@@ -114,7 +115,7 @@
     width: 100%;
   }
   .brandNameInput{
-    width: 150px;
+    width: 200px;
   }
 }
 

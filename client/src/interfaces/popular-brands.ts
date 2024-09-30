@@ -7,11 +7,11 @@ export interface PopularBrands {
 
 //  brand info for the admin
 export interface Brand {
-  id: number;
-  logoUrl: string;
-  name: string;
-  country: string;
-  numberOfCars: number;
+  id?: number;
+  logoUrl?: string;
+  name?: string;
+  country?: string;
+  numberOfCars?: number;
 };
 
 export interface BrandTableProps {

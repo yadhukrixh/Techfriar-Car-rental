@@ -87,6 +87,25 @@ class BrandController {
       };
     }
   }
+
+  static async fetchBrands(){
+    try{
+      const brands = await BrandsRepository.getBrands();
+      if(brands){
+        return {
+          success: true,
+          message: "Countries fetched successfully",
+          data: brands, // Ensure you're returning this data
+        };
+      }
+      
+    }catch(error){
+      return {
+        success: false,
+        message: "Failed to fetch data",
+      };
+    }
+  }
 }
 
 export default BrandController;

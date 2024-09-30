@@ -1,0 +1,18 @@
+.addVehicleWrapper{
+    width: 100dvw;
+}
+
+.addVehicleWrapper{
+    padding: 0 50px 50px 50px;
+    width: calc(100dvw);
+    height: 100dvh;
+}
+
+@media(max-width:768px){
+    .addVehicleWrapper{
+        padding: 0;
+        display: flex;
+        width: 100dvw;
+        justify-content: center;
+    }
+}

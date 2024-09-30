@@ -8,8 +8,20 @@ const brandTypeDefs = gql`
     message:String!
   }
 
+  type Brand {
+    id:String!
+    name:String!
+    imageUrl:String!
+  }
+
+  type GetBrandResponse {
+    success:Boolean!
+    message:String!
+    data:[Brand!]
+  }
+
   type Query {
-    getBrands: [AddBrandResponse!]!
+    getBrands: GetBrandResponse!
   }
 
   type Mutation {
