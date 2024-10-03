@@ -1,44 +1,47 @@
-import React from "react";
-import BrandsTable from "../components/brands-table/brands-table";
-import ButtonComponent from "@/themes/button-component/button-component";
+"use client";
+import React, { useEffect, useState } from 'react'
+import BrandTable from '../components/brands-table/brands-table'
+import { Brand } from '@/interfaces/brands';
 import styles from './manage-brands.module.css';
-
+import { ManageBrandsClass } from '../services/manage-brands-services';
+import {LoadingOutlined} from "@ant-design/icons";
+import { ApolloClient, NormalizedCacheObject, useApolloClient } from '@apollo/client';
+import { Spin } from 'antd';
 const ManageBrands = () => {
-  const brands = [
-    {
-      id: 1,
-      logoUrl: "/path-to-logo1.png",
-      name: "Brand 1",
-      country: "USA",
-      numberOfCars: 50,
-    },
+  const client = useApolloClient() as ApolloClient<NormalizedCacheObject>;
+  const [brandData,setBrandData] = useState<Brand[]>([]);
+  const [loading,setLoading] = useState(true);
 
-    // more brands
-  ];
+  const manageBrandsClass = new ManageBrandsClass(client);
+
+  useEffect(()=>{
+    const fetchData = async () => {
+      await manageBrandsClass.fetchBrands(setBrandData,setLoading);
+      setLoading(false); // Set loading to false after data is fetched
+    };
+
+    fetchData();
+  },[client])
+
+  if (loading) {
+    return (
+      <div className={styles.spinnerContainer}>
+        <Spin
+          indicator={
+            <LoadingOutlined
+              style={{ fontSize: "70px", color: "rgb(0, 9, 79)" }}
+              spin
+            />
+          }
+        />
+      </div>
+    );
+  }
   return (
-    <div className={styles.manageBrandsWrapper}>
-      <div className={styles.manageBrandsHeader}>
-        <h2>Manage Brands</h2>
-        <ButtonComponent value="Add Brands" />
-      </div>
-
-      <div className={styles.brandsTableWrapper}>
-        {brands.length > 0 && (
-          <BrandsTable
-            brands={brands}
-            onEdit={(id: any) => console.log(`Edit brand with id: ${id}`)}
-            onDelete={(id: any) => console.log(`Delete brand with id: ${id}`)}
-          />
-        )}
-        {brands.length <= 0 && (
-          <div className={styles.addBrands}>
-            <p>Add any brands to see</p>
-            <ButtonComponent value="Add Brands" />
-          </div>
-        )}
-      </div>
+    <div className={styles.brandTableWrapper}>
+      <BrandTable brandData={brandData} client={client}/>
     </div>
-  );
-};
+  )
+}
 
-export default ManageBrands;
+export default ManageBrands

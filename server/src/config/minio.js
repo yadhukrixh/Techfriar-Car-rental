@@ -6,9 +6,9 @@ dotenv.config();
 
 // Create a MinIO client
 const minioClient = new Client({
-  endPoint: 'localhost', // Change if your MinIO server is hosted elsewhere
-  port: 9000,
-  useSSL: process.env.MINIO_USE_SSL === 'true', // Set to true if using HTTPS
+  endPoint: process.env.MINIO_SERVER, // Your MinIO server IP/domain
+  port: parseInt(process.env.MINIO_PORT, 10), // MinIO server port (9000)
+  useSSL: false, // Set to true if using HTTPS
   accessKey: process.env.MINIO_ACCESS_KEY, // Your MinIO access key
   secretKey: process.env.MINIO_SECRET_KEY, // Your MinIO secret key
 });

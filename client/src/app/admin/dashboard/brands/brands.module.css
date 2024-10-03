@@ -1,0 +1,13 @@
+.manageBrandsWrapper{
+    width: 100dvw;
+    height: 100dvh;
+    padding-left: 50px;
+    padding-right: 50px;
+}
+
+@media (max-width: 768px){
+    .manageBrandsWrapper{
+        padding-left: 0;
+        padding-right: 0;
+    }
+}

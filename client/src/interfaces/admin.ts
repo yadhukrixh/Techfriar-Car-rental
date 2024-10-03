@@ -10,7 +10,7 @@ export interface LoginFormState {
 // interface for the admin response
 export interface AdminLoginResponse {
     adminLogin: {
-        success: boolean;
+        status: boolean;
         message?: string;
         token?: string;
     };

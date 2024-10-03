@@ -1,9 +1,10 @@
-import { ADD_VEHICLE } from "@/graphql/admin/mutations/add-vehicles";
+import { ADD_CAR } from "@/graphql/admin/mutations/add-car-mutation";
 import { BRANDS_QUERY } from "@/graphql/admin/queries/brands-query";
-import { Brand } from "@/interfaces/popular-brands";
-import { AddVehicleResponse, GetBrandsResponse } from "@/interfaces/vehicles";
+import { Brand, GetBrandsResponse } from "@/interfaces/brands";
+import { AddCarResponse } from "@/interfaces/vehicles";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import { message } from "antd";
+import Swal from "sweetalert2";
 
 export class AddVehicleClass {
     // Fetch brands data
@@ -16,11 +17,12 @@ export class AddVehicleClass {
                 query: BRANDS_QUERY,
             });
 
-            if (data.getBrands.success) {
-                const formattedBrands = data.getBrands.data.map((brand: any) => ({
+            if (data.getBrands.status) {
+                const formattedBrands:Brand[] = data.getBrands.data.map((brand: any) => ({
                     id: Number(brand.id),         // Converting string id to number
                     logoUrl: brand.imageUrl,      // Mapping imageUrl to logoUrl
                     name: brand.name,             // Directly mapping name
+                    country:brand.country,
                 }));
 
                 // Set the formatted data into setBrands
@@ -44,7 +46,7 @@ export class AddVehicleClass {
         if (type === "primary") {
             if (fileList.length > 0) {
                 const latestFile = fileList[0];
-                setPrimaryImage(latestFile.originFileObj);
+                setPrimaryImage(latestFile);
                 message.success(`${latestFile.name} primary image uploaded successfully`);
             } else {
                 setPrimaryImage(null); // Reset state if no files are selected
@@ -66,47 +68,59 @@ export class AddVehicleClass {
     public handleAddVehicle = async (
         client: ApolloClient<NormalizedCacheObject>,
         vehicleName: string,
-        description: string, // Add description
-        primaryImage: File,
-        otherImages: File[],
+        description: string,
+        primaryImage: any, // Adjust to handle the raw file
+        otherImages: any[], // Adjust to handle raw files
         selectedBrand: number,
         quantity: number,
         selectedYear: number | null,
-        fuelType: string | null, // Add fuel type
-        transmissionType: string | null, // Add transmission type
-        seatNum:Number,
-        doorNum:Number
-
+        fuelType: string | null,
+        transmissionType: string | null,
+        seatNum: Number,
+        doorNum: Number
     ): Promise<void> => {
         try {
-            const { data } = await client.mutate<AddVehicleResponse>({
-                mutation: ADD_VEHICLE,
+            // Extract the raw file from Ant Design's Upload component
+            const rawPrimaryImage = primaryImage.originFileObj || primaryImage;
+            const rawOtherImages = otherImages.map((image) => image.originFileObj || image);
+
+            const { data } = await client.mutate<AddCarResponse>({
+                mutation: ADD_CAR,
                 variables: {
-                    input: {
-                        name: vehicleName,
-                        description: description, // Include description in the mutation
-                        image: primaryImage,
-                        additionalImages: otherImages,
-                        brandId: selectedBrand,
-                        quantity: quantity,
-                        year: selectedYear,
-                        fuelType: fuelType, // Include fuel type
-                        transmissionType: transmissionType, // Include transmission type
-                        numberOfSeats:seatNum,
-                        numberOfDoors:doorNum
-                    },
+                    name: vehicleName,
+                    description: description,
+                    primaryImage: rawPrimaryImage, // Use raw file
+                    additionalImages: rawOtherImages, // Use array of raw files
+                    brandId: selectedBrand,
+                    quantity: quantity,
+                    year: selectedYear,
+                    fuelType: fuelType,
+                    transmissionType: transmissionType,
+                    numberOfSeats: seatNum,
+                    numberOfDoors: doorNum,
                 },
             });
 
-            if (data?.addVehicle.success) {
-                message.success("Vehicle added successfully");
+            if (data?.addCar.status) {
+                Swal.fire({
+                    title: "Success!",
+                    text: "Car added successfully",
+                    icon: "success",
+                    confirmButtonText: "OK",  // Use confirmButtonText instead of 'button'
+                });
             } else {
-                message.error("Failed to add the vehicle");
+                Swal.fire({
+                    title: "Error",
+                    text: data?.addCar.message,
+                    icon: "error",
+                    confirmButtonText: "OK",  // Use confirmButtonText instead of 'button'
+                });
             }
         } catch (error) {
             console.error(error);
             message.error("An error occurred while adding the vehicle");
         }
     };
+
 
 }

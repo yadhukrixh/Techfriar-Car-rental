@@ -7,12 +7,12 @@ export interface PopularBrands {
 
 //  brand info for the admin
 export interface Brand {
-  id?: number;
-  logoUrl?: string;
-  name?: string;
-  country?: string;
-  numberOfCars?: number;
-};
+  id: number; // Assuming id is always present
+  logoUrl: string; // Assuming logoUrl is always present
+  name: string; // Assuming name is always present
+  country: string; // Assuming country is always present
+  numberOfCars?: string; // Assuming numberOfCars is always present
+}
 
 export interface BrandTableProps {
   brands: Brand[];
@@ -28,7 +28,7 @@ export interface Country {
 // interface of countries
 export interface CountriesResponse {
   getCountries: {
-    success: Boolean;
+    status: Boolean;
     message: string;
     data: Country[];
   };
@@ -44,7 +44,32 @@ export interface ImageFile{
 
 export interface AddBrandResponse{
   addBrand:{
-    success:Boolean;
+    status:Boolean;
+    message:string;
+  }
+}
+
+// fetchBrands Response
+export interface GetBrandsResponse{
+  getBrands:{
+      status:boolean;
+      message:string;
+      data:Brand[];
+  }
+}
+
+// Delete brands response
+export interface DeleteBrandResponse{
+  deleteBrand:{
+    status:boolean;
+    message:string;
+  }
+}
+
+// update brand response
+export interface UpdateBrandResponse{
+  updateBrand: {
+    status:boolean;
     message:string;
   }
 }

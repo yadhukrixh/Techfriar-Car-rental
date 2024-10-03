@@ -7,14 +7,14 @@ const authResolvers = {
       try {
         const response = await AuthController.adminLogin(email,password)
         return {
-          success:response.success,
+          status:response.status,
           message:response.message,
           token:response.token
         }
       } catch (error) {
         console.error("Error during admin login:", error);
         return {
-          success: false,
+          status: false,
           message: "Internal server error",
         };
       }

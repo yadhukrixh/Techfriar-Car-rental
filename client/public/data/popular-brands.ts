@@ -1,4 +1,4 @@
-import { PopularBrands } from "@/interfaces/popular-brands";
+import { PopularBrands } from "@/interfaces/brands";
 
 
 // popular brands data  

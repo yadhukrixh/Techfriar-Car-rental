@@ -3,17 +3,18 @@ import { InputNumber, Button } from 'antd';
 import styles from './quantity-selector.module.css';
 
 interface QuantitySelectorProps {
+  minimum:number;
   quantity: number;
   setQuantity: (value: number) => void; // expects number only
 }
 
-const QuantitySelector: React.FC<QuantitySelectorProps> = ({ quantity, setQuantity }) => {
+const QuantitySelector: React.FC<QuantitySelectorProps> = ({ minimum , quantity, setQuantity }) => {
   const handleIncrement = () => {
     setQuantity(quantity ? quantity + 1 : quantity);
   };
 
   const handleDecrement = () => {
-    setQuantity(quantity && quantity > quantity ? quantity - 1 : quantity);
+    setQuantity(quantity && quantity >minimum ? quantity - 1 : quantity);
   };
 
   const handleChange = (value: number | null) => {
@@ -24,11 +25,11 @@ const QuantitySelector: React.FC<QuantitySelectorProps> = ({ quantity, setQuanti
 
   return (
     <div className={styles.quantitySelector}>
-      <Button onClick={handleDecrement} disabled={!quantity || quantity <= 1} style={{color:"black"}}>
+      <Button onClick={handleDecrement} disabled={!quantity || quantity <= minimum} style={{color:"black"}}>
         -
       </Button>
       <InputNumber
-        min={1}
+        min={minimum}
         value={quantity}
         onChange={handleChange} // Use handleChange to handle null
         className={styles.numberSelectorInput}

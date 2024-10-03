@@ -1,0 +1,90 @@
+/* Container adjustments for responsiveness and cleaner layout */
+.editBrandContainer {
+    font-weight: 500 !important;
+    max-width: 100%;
+    width: 600px;
+    background-color: #dcdee4;
+    /* Light background for contrast */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Spacing improvements for form fields */
+.editBrandContainer .formFields {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 16px;
+}
+
+.editBrandContainer label {
+    font-size: 14px;
+    color: #333;
+    /* Darker text for readability */
+    margin-bottom: 5px;
+}
+
+.editBrandContainer .formFields input,
+.editBrandContainer .formFields .ant-select-selector {
+    border-radius: 8px;
+    border: 1px solid #d1d5db;
+    /* Softer border color */
+    padding: 8px;
+    transition: border-color 0.2s;
+}
+
+.editBrandContainer .formFields input:focus,
+.editBrandContainer .formFields .ant-select-focused {
+    border-color: #3b82f6;
+    /* Primary focus color */
+    box-shadow: 0 0 5px rgba(59, 130, 246, 0.4);
+}
+
+/* Logo upload section */
+.editLogo {
+    display: flex;
+    margin-top: 16px;
+}
+
+.editLogo div {
+    margin-right: 16px;
+}
+
+.ant-upload.ant-upload-select-picture-card {
+    border-radius: 8px;
+    border: 2px dashed #d1d5db;
+    background-color: #f3f4f6;
+}
+
+.ant-upload.ant-upload-select-picture-card:hover {
+    border-color: #3b82f6;
+}
+
+.editBrandContainer .ant-upload-text {
+    color: #3b82f6;
+    font-size: 12px;
+}
+
+.editBrandContainer .ant-upload .ant-upload-icon {
+    color: #2563eb;
+}
+
+/* Button styling */
+.updateButton {
+    background-color: #3b82f6;
+    color: #fff;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    transition: background-color 0.3s;
+}
+
+.updateButton:hover {
+    background-color: #2563eb;
+}
+
+.updateButton:active {
+    background-color: #1d4ed8;
+}

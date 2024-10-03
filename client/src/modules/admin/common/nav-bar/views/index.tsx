@@ -36,6 +36,13 @@ const AdminNavBar = () => {
 
           <li style={isOpen?{}:{padding:"0", justifyContent:"center", width:"100%"}}>
             <span className={styles.listLogos}>
+              <i className="ri-car-washing-fill"></i>
+            </span>
+            {isOpen && <p className={styles.listLabel}>Rentables</p>}
+          </li>
+
+          <li style={isOpen?{}:{padding:"0", justifyContent:"center", width:"100%"}}>
+            <span className={styles.listLogos}>
               <i className="ri-community-fill"></i>
             </span>
             {isOpen && <p className={styles.listLabel}>Brands</p>}

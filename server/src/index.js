@@ -12,7 +12,7 @@ dotenv.config();
 
 const app = express();
 
-app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 1 }));
+app.use(graphqlUploadExpress({ maxFileSize: 10000000, maxFiles: 10 }));
 
 app.use(express.json());
 app.use(corsConfig);

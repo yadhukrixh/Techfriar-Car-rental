@@ -15,14 +15,14 @@ class AuthRequest {
       const { error } = this.schema.validate({ email, password });
       if (error) {
         return {
-          success: false,
+          status: false,
           message: error.details[0].message,
         };
       }
 
       // Validation successful
       return {
-        success: true,
+        status: true,
       };
     } catch (error) {
       console.log(error);

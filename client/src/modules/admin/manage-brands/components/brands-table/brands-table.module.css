@@ -1,59 +1,94 @@
-.tableContainer {
-  margin: 0;
-  width: 100%;
-  border-collapse: collapse;
-  font-family: Arial, sans-serif;
-}
-
+/* Brand Table Styling */
 .brandTable {
-  width: 100%;
-  border-collapse: collapse;
-  text-align: left;
-}
-
-.brandTable th, .brandTable td {
-  padding: 12px;
-  border-bottom: 1px solid #ccc;
+  background-color: #FFFFFF;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
 }
 
 .brandTable th {
-  background-color: #f2f2f2;
+  background-color: rgb(0, 9, 79) !important;  /* Deep Purple */
+  color: #FFFFFF !important;
   font-weight: bold;
+  text-align: left;
+  padding: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.brandTable img {
-  width: 40px;
-  height: 40px;
-  object-fit: contain;
+.brandTable td {
+  padding: 12px;
+  color: #000000 !important;
+  font-weight: 600;
 }
 
-.editButton, .deleteButton {
-  padding: 5px 10px;
-  margin-right: 10px;
-  border: none;
-  cursor: pointer;
+.brandTable td img {
+  border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px !important;
+  height: 50px !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-.editButton {
-  background-color: #4CAF50;
-  color: white;
+.table tr{
+  background-color: #ffffff !important;
 }
 
-.deleteButton {
-  background-color: #f44336;
-  color: white;
+
+.editButton{
+  background-color:transparent !important;  /* Vibrant Green */
+  border: 2px solid #000000;
+  color: #000000 !important;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 
-.editButton:hover {
-  background-color: #45a049;
+.deleteButton{
+  background-color:transparent !important;  /* Vibrant Green */
+  border: 2px solid #ff0000;
+  color: #ff0000 !important;
+  box-shadow: 0 2px 5px rgba(255, 0, 0, 0.3);
 }
 
-.deleteButton:hover {
-  background-color: #e60000;
+/* Buttons for edit and delete */
+
+
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .table table{
+    width: 100% !important;
+  }
+  .brandTable td {
+    font-size: 14px;
+    padding: 10px;
+  }
+  
+  .brandTable th {
+    font-size: 14px;
+    padding: 10px;
+  }
 }
 
-.actions{
-    display: flex;
-    flex-direction: row;
-    column-gap: 5px;
+/* Table Header Sticky on Scroll */
+.ant-table-thead > tr > th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+
+/* Pagination Styling */
+.ant-pagination-item-active {
+  border-color: #6200EA;
+}
+
+.ant-pagination-item-active a {
+  color: #6200EA;
+}
+
+/* Smooth Transitions */
+.brandTable * {
+  transition: all 0.3s ease;
 }

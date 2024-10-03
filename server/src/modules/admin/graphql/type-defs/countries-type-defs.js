@@ -8,7 +8,7 @@ const countriesTypeDefs = gql`
   }
 
   type CountriesResponse {
-    success: Boolean!
+    status: Boolean!
     message: String!
     data: [Country]!
   }

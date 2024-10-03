@@ -4,7 +4,7 @@ const brandTypeDefs = gql`
   scalar Upload
 
   type AddBrandResponse {
-    success:Boolean!
+    status:Boolean!
     message:String!
   }
 
@@ -12,10 +12,12 @@ const brandTypeDefs = gql`
     id:String!
     name:String!
     imageUrl:String!
+    country:String
+    numberOfCars:String!
   }
 
   type GetBrandResponse {
-    success:Boolean!
+    status:Boolean!
     message:String!
     data:[Brand!]
   }
@@ -25,8 +27,33 @@ const brandTypeDefs = gql`
   }
 
   type Mutation {
-    addBrand(name: String!, country: String, image: Upload!): AddBrandResponse!
+    addBrand(name: String!, country: String!, image: Upload!): AddBrandResponse!
   }
+
+
+  type DeleteBrandResponse {
+    status: Boolean!
+    message: String!
+  }
+
+  input deleteBrand {
+    id: Int!
+  }
+
+
+  type Mutation {
+    deleteBrand(id: Int!): DeleteBrandResponse!
+  }
+
+  type UpdateBrandresponse{
+    status:Boolean!
+    message:String!
+  }
+  
+  type Mutation {
+    updateBrand(id: Int!, name:String!, country:String!, image:Upload):UpdateBrandresponse!
+  }
+
 `;
 
 export default brandTypeDefs;

@@ -47,7 +47,7 @@ export class AdminLoginService {
             },
           });
     
-          if (data?.adminLogin.success) {
+          if (data?.adminLogin.status) {
             
             Cookies.set('adminToken', data.adminLogin.token || '', { expires: 1 / 24, path: '/admin' });
 

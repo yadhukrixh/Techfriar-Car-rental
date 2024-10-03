@@ -3,12 +3,14 @@ import { gql } from "@apollo/client";
 export const BRANDS_QUERY = gql`
     query{
         getBrands{
-            success
+            status
             message
             data{
                 id
                 name
                 imageUrl
+                country
+                numberOfCars
             }
         }
     }

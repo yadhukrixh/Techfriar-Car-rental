@@ -1,20 +1,11 @@
-interface Brand{
-    id:string;
-    name:string;
-    imageUrl:string;
-}
+import { Brand } from "./brands";
 
-export interface GetBrandsResponse{
-    getBrands:{
-        success:boolean;
+
+
+
+export interface AddCarResponse {
+    addCar:{
+        status:boolean;
         message:string;
-        data:Brand[];
-    }
-}
-
-export interface AddVehicleResponse {
-    addVehicle:{
-        success:boolean;
-        mesage:string;
     }
 }

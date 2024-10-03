@@ -1,6 +1,6 @@
 import { ADD_BRAND } from "@/graphql/admin/mutations/add-brand-mutation";
 import { COUNTRIES_QUERY } from "@/graphql/admin/queries/countries-query";
-import { AddBrandResponse, CountriesResponse} from "@/interfaces/popular-brands";
+import { AddBrandResponse, CountriesResponse} from "@/interfaces/brands";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import Swal from "sweetalert2";
 
@@ -17,7 +17,7 @@ export class AddBrandClass {
             });
 
             // Assuming data.getCountries.data contains the array of countries
-            if (data.getCountries.success) {
+            if (data.getCountries.status) {
                 // Extract country names and set them in setCountries
                 const countryNames = data.getCountries.data.map(country => country.country);
                 setCountries(countryNames); // Set the state with the country names
@@ -37,7 +37,6 @@ export class AddBrandClass {
         brandLogo: File, // Ensure the type is File here
         country: string
     ): Promise<void> => {
-        console.log("brand logo",brandLogo);
         try {
             // Check if brandLogo exists
             if (!brandLogo) {
@@ -59,7 +58,15 @@ export class AddBrandClass {
             });
 
 
-           if(!(data?.addBrand.success)){
+            if((data?.addBrand.status)){
+                Swal.fire({
+                    title:"Success!",
+                    text:data.addBrand.message,
+                    icon:"success",
+                    confirmButtonText:"OK"
+                })
+            }
+           if(!(data?.addBrand.status)){
             Swal.fire({
                 title:"Error!",
                 text:`${data?.addBrand.message}`,
@@ -67,9 +74,6 @@ export class AddBrandClass {
                 confirmButtonText:"continue"
             })
            }
-
-
-            console.log("response data:",data);
 
         } catch (error) {
             console.error("Error in handleAddBrand:", error);

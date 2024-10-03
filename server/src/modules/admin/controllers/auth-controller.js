@@ -13,12 +13,12 @@ class AuthController {
 
       const validation = await authRequest.ValidateAdmin(email, password); // Call non-static method
       
-      if (validation.success) {
+      if (validation.status) {
         const admin = await AuthRepository.findAdmin(email);
         const isMatch = await bcrypt.compare(password, admin.password);
         if (!isMatch) {
           return {
-            success: false,
+            status: false,
             message: "Invalid credentials",
           };
         }
@@ -30,14 +30,14 @@ class AuthController {
         );
 
         return {
-          success: true,
-          message: "Login successful",
+          status: true,
+          message: "Login statusful",
           token,
         };
       }
     } catch (error) {
       return {
-        success: false,
+        status: false,
         message: "User Not found",
       };
     }

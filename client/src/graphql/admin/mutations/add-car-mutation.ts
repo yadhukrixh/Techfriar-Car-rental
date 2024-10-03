@@ -1,7 +1,7 @@
 import { gql } from "@apollo/client";
 
-export const ADD_VEHICLE = gql`
-  mutation AddVehicle(
+export const ADD_CAR = gql`
+  mutation AddCar(
     $name: String!
     $description: String!
     $brandId: Int!
@@ -14,7 +14,7 @@ export const ADD_VEHICLE = gql`
     $numberOfSeats: Int!
     $numberOfDoors: Int!
   ) {
-    addVehicle(
+    addCar(
       input: {
         name: $name
         description: $description
@@ -29,7 +29,7 @@ export const ADD_VEHICLE = gql`
         numberOfDoors: $numberOfDoors
       }
     ) {
-      success
+      status
       message
     }
   }
