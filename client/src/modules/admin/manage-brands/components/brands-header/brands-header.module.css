@@ -1,0 +1,20 @@
+.brandHeaderWrapper{
+    padding-top: 30px;
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.addBrand{
+    background-color: rgb(0, 9, 79);
+    color: #fff;
+    font-size: 10px;
+    border-radius: 5px;
+}
+
+@media(max-width:425px){
+    .brandHeaderWrapper h2{
+        font-size: 18px;
+    }
+}

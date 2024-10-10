@@ -1,13 +1,13 @@
-import mime from "mime-types";
+
 import dotenv from "dotenv";
 import BrandsRepository from "../repositories/brands-repo.js";
-import { v4 as uuidv4 } from "uuid";
-import minioClient from "../../../config/minio.js";
 import { FormatImageUrl } from "../../../utils/format-image-url.js";
+import { MinioUtils } from "../../../utils/minio-functions.js";
 
 dotenv.config();
 
 class BrandController {
+
   // Fetch countries to assign the brands
   static async fetchCountries() {
     try {
@@ -25,47 +25,25 @@ class BrandController {
     }
   }
 
-  // Assign brands to the db
+  // Add brands to the db
   static async addBrands(name, country, image) {
     try {
-      // Get the file stream and filename
-      const { createReadStream, filename } = await image;
-      const stream = createReadStream();
-      const uniqueFilename = `brands/${uuidv4()}-${filename}`; // Generate a unique filename
-
       const isBrandExist = await BrandsRepository.checkBrandExist(name);
 
-      if (isBrandExist) {
+      if (isBrandExist.status) {
         return {
           status: false,
           message: "Brand already exist",
         };
       }
 
-      // Determine the content type of the file (default to application/octet-stream if unknown)
-      const contentType = mime.lookup(filename) || "application/octet-stream";
-
-      // Upload the file to MinIO
-      await new Promise((resolve, reject) => {
-        minioClient.putObject(
-          process.env.MINIO_BUCKET_NAME,
-          uniqueFilename,
-          stream,
-          {
-            "Content-Type": contentType, // Set the content type
-          },
-          (error) => {
-            if (error) {
-              console.error("Error uploading to MinIO:", error);
-              return reject(new Error("MinIO upload failed"));
-            }
-            resolve(); // Resolve the promise on successful upload
-          }
-        );
-      });
-
-      // Instead of generating a presigned URL, store the unique filename
-      const imageUrl = `${uniqueFilename}`;
+      const imageUrl = await MinioUtils.uploadFileToMinio(image, "/brands");
+      if (!imageUrl) {
+        return {
+          status: false,
+          message: "Failed to upload image on minio.",
+        };
+      }
 
       // Store the brand details in the repository
       const brand = await BrandsRepository.addBrand(
@@ -149,23 +127,7 @@ class BrandController {
       }
 
       // Delete the image from MinIO
-      await new Promise((resolve, reject) => {
-        minioClient.removeObject(
-          process.env.MINIO_BUCKET_NAME,
-          brand.data.imageUrl,
-          function (err) {
-            if (err) {
-              console.log(
-                "Error occurred while deleting the image from MinIO:",
-                err
-              );
-              return reject(new Error("MinIO deletion failed"));
-            } else {
-              return resolve(); // Resolve after successful deletion
-            }
-          }
-        );
-      });
+      await MinioUtils.deleteFileFromMinio(brand.data.imageUrl);
 
       const deleteBrand = await BrandsRepository.deleteBrand(id);
       return deleteBrand;
@@ -176,78 +138,48 @@ class BrandController {
     }
   }
 
+  // function for update brand
   static async updateBrand(id, name, country, image) {
     try {
+      // Check the given brand is already exist
+      const isBrandExist = await BrandsRepository.checkBrandExist(name);
+      if (isBrandExist.status && isBrandExist.data.id !== id) {
+        return {
+          status: false,
+          message: "This Brand already Exist !",
+        };
+      }
+
       const brand = await this.getBrand(id);
 
       // set image url into an another variable, it may or may not change according to the Image that we get from the backend
       let imageUrl = brand.data.imageUrl;
 
       if (brand.status) {
-
         // if there i an new logo, we have to delete the old logo and insert a new one
         if (image !== null) {
-
           // delete the image first
-          await new Promise((resolve, reject) => {
-            minioClient.removeObject(
-              process.env.MINIO_BUCKET_NAME,
-              brand.data.imageUrl,
-              function (err) {
-                if (err) {
-                  console.log(
-                    "Error occurred while deleting the image from MinIO:",
-                    err
-                  );
-                  return reject(new Error("MinIO deletion failed"));
-                } else {
-                  return resolve(); // Resolve after successful deletion
-                }
-              }
-            );
-          });
+          await MinioUtils.deleteFileFromMinio(brand.data.imageUrl);
 
           // Now add new image
-          const { createReadStream, filename } = await image;
-          const stream = createReadStream();
-          const uniqueFilename = `brands/${uuidv4()}-${filename}`; // Generate a unique filename
-          const contentType = mime.lookup(filename) || "application/octet-stream";
-
-          // Upload the file to MinIO
-          await new Promise((resolve, reject) => {
-            minioClient.putObject(
-              process.env.MINIO_BUCKET_NAME,
-              uniqueFilename,
-              stream,
-              {
-                "Content-Type": contentType, // Set the content type
-              },
-              (error) => {
-                if (error) {
-                  console.error("Error uploading to MinIO:", error);
-                  return reject(new Error("MinIO upload failed"));
-                }
-                resolve(); // Resolve the promise on successful upload
-              }
-            );
-          });
-
-          // Instead of generating a presigned URL, store the unique filename
-          imageUrl = `${uniqueFilename}`;
+          imageUrl = await MinioUtils.uploadFileToMinio(image, "/brands");
         }
 
-        const updateBrand = await BrandsRepository.updateBrand(id,name,country,imageUrl);
-        return{
-          status:updateBrand.status,
-          message:updateBrand.message
-        }
-
-      }
-      else{
-        return{
-          status:false,
-          message:"There is no brand present on this id"
-        }
+        const updateBrand = await BrandsRepository.updateBrand(
+          id,
+          name,
+          country,
+          imageUrl
+        );
+        return {
+          status: updateBrand.status,
+          message: updateBrand.message,
+        };
+      } else {
+        return {
+          status: false,
+          message: "There is no brand present on this id",
+        };
       }
     } catch (error) {
       console.error(error);

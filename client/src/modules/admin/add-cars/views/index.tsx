@@ -80,8 +80,7 @@ const AddCars = () => {
   const handleBrandChange = (value: number) => setSelectedBrand(value);
   const handleYearChange = (value: number) => setSelectedYear(value);
   const handleFuelTypeChange = (value: string) => setFuelType(value);
-  const handleTransmissionChange = (value: string) =>
-    setTransmissionType(value);
+  const handleTransmissionChange = (value: string) => setTransmissionType(value);
 
   const generateYearOptions = () => {
     const currentYear = new Date().getFullYear();

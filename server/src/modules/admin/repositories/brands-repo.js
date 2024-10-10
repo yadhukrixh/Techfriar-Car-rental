@@ -24,7 +24,13 @@ class BrandsRepository {
       return {
         status: true,
         message: "Brand already exists",
+        data:existingBrand,
       };
+    }else{
+      return{
+        status:false,
+        message:"No brand exist"
+      }
     }
   }
 
@@ -118,7 +124,6 @@ class BrandsRepository {
   // update the brand data 
   static async updateBrand(id,name,country,imageUrl){
     try{
-
       const brand = await Brands.findByPk(id);
       const updatedBrand = await brand.update({
         name,
@@ -133,6 +138,17 @@ class BrandsRepository {
       }
     }catch(error){
       throw new Error(error);
+    }
+  }
+
+  static async getBrandByName(brandName){
+    try {
+      const brand = await Brands.findOne({ where: { name:brandName } });
+      if (brand) {
+        return brand.dataValues;
+      }
+    } catch (error) {
+      throw new Error("Failed to fetch Brand data");
     }
   }
 }

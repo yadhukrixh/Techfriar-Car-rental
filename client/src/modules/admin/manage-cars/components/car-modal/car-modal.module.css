@@ -1,0 +1,19 @@
+.modalContainer{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.modalWrapper{
+    width: 100% !important;
+    top: 10px;
+}
+
+.uploadButton {
+    display: flex;
+    flex-direction: column-reverse;
+}
+
+.uploadButton button{
+    width: 100%;
+}

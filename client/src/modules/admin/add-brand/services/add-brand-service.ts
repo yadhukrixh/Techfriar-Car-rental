@@ -1,5 +1,5 @@
-import { ADD_BRAND } from "@/graphql/admin/mutations/add-brand-mutation";
-import { COUNTRIES_QUERY } from "@/graphql/admin/queries/countries-query";
+import { ADD_BRAND } from "@/graphql/admin/mutations/brands/add-brand-mutation";
+import { COUNTRIES_QUERY } from "@/graphql/admin/queries/brands/countries-query";
 import { AddBrandResponse, CountriesResponse} from "@/interfaces/brands";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import Swal from "sweetalert2";
@@ -64,7 +64,11 @@ export class AddBrandClass {
                     text:data.addBrand.message,
                     icon:"success",
                     confirmButtonText:"OK"
-                })
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.reload()
+                    }
+                });
             }
            if(!(data?.addBrand.status)){
             Swal.fire({

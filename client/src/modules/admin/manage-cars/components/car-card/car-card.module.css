@@ -1,0 +1,88 @@
+.card {
+    transition: transform 0.2s;
+    margin-bottom: 16px;
+    max-width: 100% !important;
+    gap: 30px !important;
+    border: 2px solid rgb(189, 181, 181)  !important;
+    min-height: 500px;
+}
+
+
+
+.carouselContainer{
+    border-radius: 5px;
+    padding: 5px;
+    position: relative;
+}
+
+.carouselNavButtons{
+    z-index: 400;
+    width: 100%;
+    height: 100%;
+    left: 0 !important;
+    top: 0 !important;
+    position: absolute;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.carouselNavButtons button{
+    background-color: transparent !important;
+    outline: none !important;
+    border: none !important;
+    font-weight: 700;
+}
+
+.carouselNavButtons button:hover{
+    color: #000 !important;
+}
+
+.carousal{
+    max-width: 600px !important;
+    width: 100% !important;
+    height: auto;
+}
+
+.cardHeader {
+    display: flex;
+    align-items: center;
+}
+
+.carDetails {
+    margin-left: 12px;
+}
+
+.carDetails p{
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.tags span{
+    margin: 5px !important;
+}
+
+.additionalDetails{
+    margin-top: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.additionalDetails p{
+    overflow: hidden;
+   text-overflow: ellipsis;
+   display: -webkit-box;
+   -webkit-line-clamp: 3; /* number of lines to show */
+           line-clamp: 3;
+   -webkit-box-orient: vertical;
+}
+
+.cardContent {
+    margin-top: 12px;
+}
+
+.cardActions {
+    display: flex;
+    justify-content: space-between;
+}

@@ -1,6 +1,6 @@
-import { DELETE_BRAND } from "@/graphql/admin/mutations/delete-brand-mutation";
-import { UPDATE_BRAND } from "@/graphql/admin/mutations/edit-brand-mutation";
-import { BRANDS_QUERY } from "@/graphql/admin/queries/brands-query";
+import { DELETE_BRAND } from "@/graphql/admin/mutations/brands/delete-brand-mutation";
+import { UPDATE_BRAND } from "@/graphql/admin/mutations/brands/edit-brand-mutation";
+import { BRANDS_QUERY } from "@/graphql/admin/queries/brands/brands-query";
 import { Brand, DeleteBrandResponse, GetBrandsResponse, UpdateBrandResponse } from "@/interfaces/brands";
 import client from "@/lib/apollo-client";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
@@ -100,17 +100,17 @@ export class ManageBrandsClass {
         id: Number,
         name: string,
         country: string,
-        image: File | null
+        image: File | null,
+        onClose: () => void
     ): Promise<void> => {
         try {
             Swal.fire({
-                title: "Are you sure?",
-                text: "Brand will be deleted along with assigned vehicles on this brand!",
+                title: "Save Changes?",
                 icon: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Yes, delete it!"
+                confirmButtonText: "Save"
             }).then(async (result) => {
                 if (result.isConfirmed) {
                     const { data } = await this.client.mutate<UpdateBrandResponse>({
@@ -122,14 +122,30 @@ export class ManageBrandsClass {
                             image: image,
                         },
                     });
-
                     if (data?.updateBrand.status) {
-                        console.log(data)
+                        Swal.fire({
+                            title: "Saved!",
+                            text: "Brand updated succesfully",
+                            icon: "success",
+                            showConfirmButton: true
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                onClose();
+                                window.location.reload()
+                            }
+                        });
+                    } else {
+                        Swal.fire({
+                            title: "Error!",
+                            text: data?.updateBrand.message,
+                            icon: "error",
+                            showConfirmButton: true
+                        });
                     }
                 }
             });
-            }catch (error) {
-                console.error(error)
-            }
+        } catch (error) {
+            console.error(error)
         }
+    }
 }

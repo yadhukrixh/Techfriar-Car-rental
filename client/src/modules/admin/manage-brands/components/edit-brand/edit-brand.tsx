@@ -1,6 +1,6 @@
 "use client";
 import React, { FC, useEffect, useState } from "react";
-import { Modal, Form, Input, Button, message, Select, Upload } from "antd";
+import { Modal, Button, message, Select, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import { Brand } from "@/interfaces/brands";
@@ -54,8 +54,7 @@ const EditBrand: FC<EditBrandModalProps> = ({
     image: File | null
   ) => {
     try {
-      await manageBrandClass.updateBrand(id, name, country, image);
-      onClose(); // Close modal on success
+      await manageBrandClass.updateBrand(id, name, country, image,onClose);
     } catch (error) {
       message.error("Failed to update the brand.");
       console.error(error);

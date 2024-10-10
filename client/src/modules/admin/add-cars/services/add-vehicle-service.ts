@@ -1,5 +1,5 @@
-import { ADD_CAR } from "@/graphql/admin/mutations/add-car-mutation";
-import { BRANDS_QUERY } from "@/graphql/admin/queries/brands-query";
+import { ADD_CAR } from "@/graphql/admin/mutations/cars/add-car-mutation";
+import { BRANDS_QUERY } from "@/graphql/admin/queries/brands/brands-query";
 import { Brand, GetBrandsResponse } from "@/interfaces/brands";
 import { AddCarResponse } from "@/interfaces/vehicles";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";

@@ -21,7 +21,7 @@ export function middleware(req: NextRequest) {
   return NextResponse.next();
 }
 
-// Specify which paths should trigger the middleware (optional)
+// Specify which paths should trigger the middleware 
 export const config = {
   matcher: ['/admin/dashboard/:path*'], // Protects the /admin/dashboard route
 };

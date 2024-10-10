@@ -1,71 +1,13 @@
-import ManageCarsRepository from "../repositories/manage-cars-repo.js";
 import mime from "mime-types";
-import { v4 as uuidv4 } from "uuid";
 import dotenv from "dotenv";
-import minioClient from "../../../config/minio.js";
+import minioClient from "../config/minio.js";
+import { v4 as uuidv4 } from "uuid";
 dotenv.config();
 
-class ManageCarControllers {
-  static async addNewCar(
-    name,
-    description,
-    brandId,
-    primaryImageFile,
-    additionalImagesFiles,
-    quantity,
-    year,
-    fuelType,
-    transmissionType,
-    numberOfSeats,
-    numberOfDoors
-  ) {
+export class MinioUtils {
 
-
-    try {
-      // Check if car already exists
-      const carExist = await ManageCarsRepository.checkCarExist(name,year);
-      if (carExist.status) {
-        return {
-          status: false,
-          message: "This Car already exists",
-        };
-      } else {
-        // Upload primary image
-        const primaryImageUrl = await this.uploadImageToTheMinio(
-          `cars/${name}/primaryImage`,
-          primaryImageFile
-        );
-
-        // Upload additional images using map and Promise.all
-        const otherImages = await Promise.all(
-          additionalImagesFiles.map(async (imageFile, index) => {
-            return await this.uploadImageToTheMinio(
-              `cars/${name}/additionalImages`,
-              imageFile
-            );
-          })
-        );
-
-        const response = await ManageCarsRepository.addCar(name,description,brandId,primaryImageUrl,otherImages,quantity,year,fuelType,transmissionType,numberOfSeats,numberOfDoors)
-
-        if(response){
-            return {
-              status: response.status,
-              message: response.message,
-            };
-        }
-      }
-    } catch (error) {
-        console.error(error);
-      return{
-        status:false,
-        message:"failed to add car on the database"
-      }
-    }
-  }
-
-  // Upload imge to the minio
-  static async uploadImageToTheMinio(folderName, image) {
+  // Function to upload image to the minio
+  static async uploadFileToMinio(image, folderName) {
     try {
       // Ensure we have the correct fields from the image object
       const { createReadStream, filename } = await image;
@@ -129,6 +71,24 @@ class ManageCarControllers {
     }
   }
 
+  // Function to delete Image from the minio
+  static async deleteFileFromMinio(imageUrl) {
+    return new Promise((resolve) => {
+      minioClient.removeObject(
+        process.env.MINIO_BUCKET_NAME,
+        imageUrl,
+        function (err) {
+          if (err) {
+            console.log(
+              "Error occurred while deleting the image from MinIO:",
+              err
+            );
+            return resolve(false); // Resolve false on error
+          } else {
+            return resolve(true); // Resolve true on successful deletion
+          }
+        }
+      );
+    });
+  }
 }
-
-export default ManageCarControllers;

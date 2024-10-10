@@ -7,6 +7,7 @@ import { ManageBrandsClass } from '../services/manage-brands-services';
 import {LoadingOutlined} from "@ant-design/icons";
 import { ApolloClient, NormalizedCacheObject, useApolloClient } from '@apollo/client';
 import { Spin } from 'antd';
+import BrandsHeader from '../components/brands-header/brands-headet';
 const ManageBrands = () => {
   const client = useApolloClient() as ApolloClient<NormalizedCacheObject>;
   const [brandData,setBrandData] = useState<Brand[]>([]);
@@ -39,6 +40,7 @@ const ManageBrands = () => {
   }
   return (
     <div className={styles.brandTableWrapper}>
+      <BrandsHeader />
       <BrandTable brandData={brandData} client={client}/>
     </div>
   )

@@ -1,0 +1,16 @@
+.manageCarsWrapper{
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 40px;
+    padding: 10px;
+    max-width: 100%;
+}
+
+.spinnerContainer{
+    width: 100dvw;
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
