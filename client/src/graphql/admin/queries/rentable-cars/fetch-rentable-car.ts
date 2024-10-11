@@ -13,6 +13,7 @@ export const FETCH_RENTABLE_CAR = gql`
         brandLogo
         primaryImage
         availableQuantity
+        pricePerDay
         rentableCars {
           id
           registrationNumber

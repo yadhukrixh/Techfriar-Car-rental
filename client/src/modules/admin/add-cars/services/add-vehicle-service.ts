@@ -77,7 +77,8 @@ export class AddVehicleClass {
         fuelType: string | null,
         transmissionType: string | null,
         seatNum: Number,
-        doorNum: Number
+        doorNum: Number,
+        pricePerDay: Number
     ): Promise<void> => {
         try {
             // Extract the raw file from Ant Design's Upload component
@@ -98,6 +99,7 @@ export class AddVehicleClass {
                     transmissionType: transmissionType,
                     numberOfSeats: seatNum,
                     numberOfDoors: doorNum,
+                    pricePerDay: pricePerDay
                 },
             });
 

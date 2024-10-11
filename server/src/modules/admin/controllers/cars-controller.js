@@ -18,7 +18,8 @@ class ManageCarControllers {
     fuelType,
     transmissionType,
     numberOfSeats,
-    numberOfDoors
+    numberOfDoors,
+    pricePerDay
   ) {
     try {
       // Check if car already exists
@@ -56,7 +57,8 @@ class ManageCarControllers {
           fuelType,
           transmissionType,
           numberOfSeats,
-          numberOfDoors
+          numberOfDoors,
+          pricePerDay
         );
 
         if (response) {
@@ -98,6 +100,7 @@ class ManageCarControllers {
           transmissionType: car.transmissionType || "",
           numberOfSeats: car.numberOfSeats || 0,
           numberOfDoors: car.numberOfDoors || 0,
+          pricePerDay: car.pricePerDay
         }));
         return {
           status: true,
@@ -107,7 +110,7 @@ class ManageCarControllers {
       } else {
         return {
           status: false,
-          message: "Failed to fetch form data base",
+          message: "Failed to fetch from data base",
         };
       }
     } catch (error) {
@@ -174,7 +177,8 @@ class ManageCarControllers {
     fuelType,
     transmissionType,
     numberOfSeats,
-    numberOfDoors
+    numberOfDoors,
+    pricePerDay
   ) {
     try {
       // Check if the car with the same name and year exists
@@ -267,7 +271,8 @@ class ManageCarControllers {
         fuelType,
         transmissionType,
         numberOfSeats,
-        numberOfDoors
+        numberOfDoors,
+        pricePerDay
       );
   
       return {

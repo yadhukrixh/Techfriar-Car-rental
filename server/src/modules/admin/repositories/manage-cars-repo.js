@@ -35,7 +35,8 @@ class ManageCarsRepository {
     fuelType,
     transmissionType,
     numberOfSeats,
-    numberOfDoors
+    numberOfDoors,
+    pricePerDay
   ) {
     try {
       const car = await AllCars.create({
@@ -50,6 +51,7 @@ class ManageCarsRepository {
         transmissionType: transmissionType,
         numberOfSeats: numberOfSeats,
         numberOfDoors: numberOfDoors,
+        pricePerDay: pricePerDay
       });
 
       return {
@@ -108,6 +110,7 @@ class ManageCarsRepository {
           "transmissionType",
           "numberOfSeats",
           "numberOfDoors",
+          "pricePerDay",
         ],
       });
 
@@ -126,6 +129,7 @@ class ManageCarsRepository {
         transmissionType: car.transmissionType,
         numberOfSeats: car.numberOfSeats,
         numberOfDoors: car.numberOfDoors,
+        pricePerDay: car.pricePerDay
       }));
 
       return formattedCars;
@@ -187,7 +191,8 @@ class ManageCarsRepository {
     fuelType,
     transmissionType,
     numberOfSeats,
-    numberOfDoors
+    numberOfDoors,
+    pricePerDay
   ) {
     try {
       const car = await AllCars.findByPk(id);
@@ -203,6 +208,7 @@ class ManageCarsRepository {
         transmissionType:transmissionType,
         numberOfSeats:numberOfSeats,
         numberOfDoors:numberOfDoors,
+        pricePerDay: pricePerDay,
       });
 
       if (updatedCar) {

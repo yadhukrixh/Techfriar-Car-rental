@@ -1,6 +1,6 @@
 import { gql } from "apollo-server-express";
 
-const rentableCarsTypeDefs = gql `
+const rentableCarsTypeDefs = gql`
   type RentableCars {
     id: Int!
     registrationNumber: String!
@@ -15,6 +15,7 @@ const rentableCarsTypeDefs = gql `
     brandLogo: String!
     primaryImage: String!
     availableQuantity: Int!
+    pricePerDay: Int!
     rentableCars: [RentableCars]
   }
 
@@ -26,6 +27,15 @@ const rentableCarsTypeDefs = gql `
 
   type Query {
     fetchRentablecars(id: Int!): FetchRentablecarsResponse
+  }
+
+  type Mutation {
+    addRentableCar(registrationNumber: String!, carId: Int!): AddCarResponse!
+  }
+
+  type AddRentableCarResponse {
+    status: Boolean!
+    message: String!
   }
 `;
 

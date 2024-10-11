@@ -20,11 +20,6 @@ const carSchema = {
   fields: [
     { name: 'id', type: 'int32', facet: false },
     { name: 'name', type: 'string', facet: true },
-    { name: 'description', type: 'string', facet: false },
-    { name: 'brandName', type: 'string', facet: true },  // Use brandName instead of brandId
-    { name: 'primaryImageUrl', type: 'string', facet: false },
-    { name: 'secondaryImages', type: 'string[]', facet: false },
-    { name: 'availableQuantity', type: 'int32', facet: false },
     { name: 'year', type: 'int32', facet: true },
     { name: 'fuelType', type: 'string', facet: true },
     { name: 'transmissionType', type: 'string', facet: true },

@@ -13,6 +13,7 @@ export const ADD_CAR = gql`
     $transmissionType: String
     $numberOfSeats: Int!
     $numberOfDoors: Int!
+    $pricePerDay: Int
   ) {
     addCar(
       input: {
@@ -27,6 +28,7 @@ export const ADD_CAR = gql`
         transmissionType: $transmissionType
         numberOfSeats: $numberOfSeats
         numberOfDoors: $numberOfDoors
+        pricePerDay: $pricePerDay
       }
     ) {
       status

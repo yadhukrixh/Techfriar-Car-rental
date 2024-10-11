@@ -1,0 +1,221 @@
+.rentableFormWrapper {
+    padding: 24px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  .carDetailContainer {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Left Side - Car Image */
+  .carImageSection {
+    max-height: max-content;
+    flex: 0 0 400px;
+  }
+  
+  .primaryImage {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    object-fit: cover;
+  }
+  
+  /* Right Side - Car Details */
+  .carInfoSection {
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    min-width: 0;
+  }
+  
+  .carHeader {
+    margin-bottom: 24px;
+  }
+  
+  .nameYearSection {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  
+  .nameYearSection h2 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+    color: #1a1a1a;
+  }
+  
+  .year {
+    padding: 4px 12px;
+    background: #f0f0f0;
+    border-radius: 16px;
+    font-weight: 500;
+  }
+  
+  .brandSection {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 16px;
+  }
+  
+  .brandLogo {
+    border-radius: 8px;
+    object-fit: contain;
+  }
+  
+  .brandName {
+    font-size: 18px;
+    font-weight: 500;
+    color: #666;
+  }
+  
+  .quantitySection {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .availabilityAndPrice{
+    display: flex !important;
+    flex-direction: row !important;
+    column-gap: 5px !important;
+  }
+
+  .availabilityAndPrice span{
+    background-color: #e6e8e6;
+    font-size: 12px;
+    padding: 5px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+  
+  .addButton {
+    border-radius: 8px;
+  }
+  
+  .addNewForm {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    padding: 16px;
+    background: #f8f8f8;
+    border-radius: 8px;
+  }
+  
+  .rentableCarsList {
+    background: #f8f8f8;
+    padding: 20px;
+    border-radius: 12px;
+  }
+  
+  .rentableCarsList h3 {
+    margin-bottom: 16px;
+    color: #1a1a1a;
+  }
+  
+  .carCard {
+    margin-bottom: 12px;
+  }
+  
+  .carCardContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .registrationNumber {
+    font-size: 16px;
+    font-weight: 500;
+  }
+  
+  .cardActions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .carDetailContainer {
+      flex-direction: column;
+    }
+
+  
+    .primaryImage {
+      max-height: 300px;
+      width: 100%;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .rentableFormWrapper {
+      padding: 16px;
+    }
+  
+    .carInfoSection {
+        display: flex;
+        flex: 1;
+        flex-direction: column;
+        min-width: 0;
+      }
+    .nameYearSection {
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 8px;
+    }
+  
+    .quantitySection {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  
+    .addNewForm {
+      flex-direction: column;
+    }
+  
+    .carCardContent {
+      flex-direction: column;
+      gap: 12px;
+      text-align: center;
+    }
+  
+    .cardActions {
+      justify-content: center;
+    }
+  }
+  
+  /* Loading States */
+  .rentableFormWrapper :global(.ant-btn-loading) {
+    opacity: 0.7;
+  }
+  
+  /* Transitions */
+  .carCard {
+    transition: all 0.3s ease;
+  }
+  
+  .carCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .addNewForm {
+    animation: slideDown 0.3s ease;
+  }
+  
+  @keyframes slideDown {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }

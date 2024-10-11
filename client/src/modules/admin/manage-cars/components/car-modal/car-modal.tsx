@@ -6,7 +6,11 @@ import { CarData } from "@/interfaces/cars";
 import styles from "./car-modal.module.css";
 import QuantitySelector from "@/themes/quantity-selector/quantity-selector";
 import { AddVehicleClass } from "@/modules/admin/add-cars/services/add-vehicle-service";
-import { ApolloClient, NormalizedCacheObject, useApolloClient } from "@apollo/client";
+import {
+  ApolloClient,
+  NormalizedCacheObject,
+  useApolloClient,
+} from "@apollo/client";
 import { ManageCars } from "../../services/manage-cars-services";
 
 interface Brand {
@@ -31,6 +35,7 @@ const CarModal: React.FC<CarModalProps> = ({
   carData,
 }) => {
   const [name, setName] = useState<string>("");
+  const [pricePerDay,setPricePerday] = useState<Number>(0);
   const [description, setDescription] = useState<string>("");
   const [brandName, setBrandName] = useState<string | undefined>(undefined);
   const [primaryImage, setPrimaryImage] = useState<UploadFile[]>([]);
@@ -49,7 +54,8 @@ const CarModal: React.FC<CarModalProps> = ({
   const [brands, setBrands] = useState<Brand[]>([]);
 
   const handleFuelTypeChange = (value: string) => setFuelType(value);
-  const handleTransmissionChange = (value: string) => setTransmissionType(value);
+  const handleTransmissionChange = (value: string) =>
+    setTransmissionType(value);
   const handleYearChange = (value: number) => setSelectedYear(value);
 
   const generateYearOptions = () => {
@@ -71,9 +77,12 @@ const CarModal: React.FC<CarModalProps> = ({
 
     if (carData) {
       setName(carData.name);
+      setPricePerday(carData.pricePerDay)
       setDescription(carData.description);
       setBrandName(carData.brandName);
-      setPrimaryImage([{ url: carData.primaryImage, uid: "-1", name: "Primary Image" }]);
+      setPrimaryImage([
+        { url: carData.primaryImage, uid: "-1", name: "Primary Image" },
+      ]);
       setSecondaryImages(
         carData.otherImages.map((url, index) => ({
           uid: `${index}`,
@@ -92,7 +101,11 @@ const CarModal: React.FC<CarModalProps> = ({
     }
   }, [carData]);
 
-  const handlePrimaryImageChange = ({ fileList }: { fileList: UploadFile[] }) => {
+  const handlePrimaryImageChange = ({
+    fileList,
+  }: {
+    fileList: UploadFile[];
+  }) => {
     if (fileList.length > 0) {
       const file = fileList[0]; // Only one image allowed
 
@@ -108,7 +121,11 @@ const CarModal: React.FC<CarModalProps> = ({
     }
   };
 
-  const handleSecondaryImagesChange = ({ fileList }: { fileList: UploadFile[] }) => {
+  const handleSecondaryImagesChange = ({
+    fileList,
+  }: {
+    fileList: UploadFile[];
+  }) => {
     setSecondaryImages(fileList);
   };
 
@@ -130,13 +147,14 @@ const CarModal: React.FC<CarModalProps> = ({
       description,
       brandName,
       primaryImageToSend,
-      secondaryImages.map((file) => (file.originFileObj || file.url)),
+      secondaryImages.map((file) => file.originFileObj || file.url),
       availableQuantity,
       year,
       fuelType,
       transmissionType,
       numberOfSeats,
-      numberOfDoors
+      numberOfDoors,
+      pricePerDay
     );
   };
 
@@ -159,6 +177,13 @@ const CarModal: React.FC<CarModalProps> = ({
           placeholder="Enter car name"
           value={name}
           onChange={(e) => setName(e.target.value)}
+          className={styles.inputField}
+        />
+
+        <Input
+          placeholder="Enter Price Per Day"
+          value={pricePerDay?pricePerDay.toString():undefined}
+          onChange={(e) => setPricePerday(parseInt(e.target.value,10))}
           className={styles.inputField}
         />
 
@@ -262,12 +287,20 @@ const CarModal: React.FC<CarModalProps> = ({
 
         <div className={styles.formSection}>
           <label>Number of Seats:</label>
-          <QuantitySelector minimum={2} quantity={numberOfSeats} setQuantity={setNumberOfSeats} />
+          <QuantitySelector
+            minimum={2}
+            quantity={numberOfSeats}
+            setQuantity={setNumberOfSeats}
+          />
         </div>
 
         <div className={styles.formSection}>
           <label>Number of Doors:</label>
-          <QuantitySelector minimum={2} quantity={numberOfDoors} setQuantity={setNumberOfDoors} />
+          <QuantitySelector
+            minimum={2}
+            quantity={numberOfDoors}
+            setQuantity={setNumberOfDoors}
+          />
         </div>
       </div>
     </Modal>

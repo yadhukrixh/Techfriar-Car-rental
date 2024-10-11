@@ -19,6 +19,7 @@ export const GET_ALL_CARS_QUERY = gql`
                 transmissionType
                 numberOfSeats
                 numberOfDoors
+                pricePerDay
             }
         }
     }

@@ -74,9 +74,14 @@ const CarCard: FC<CarCardProps> = ({ car, onEdit, onDelete, onAddRentables }) =>
           <Tag color="blue">Doors: {car.numberOfDoors}</Tag>
         </div>
         <div className={styles.additionalDetails}>
-          <Tag color="black" style={{ width: "max-content" }}>
-            <p>Available: {car.availableQuantity}</p>
-          </Tag>
+          <div style={{display:"flex", flexDirection:"row"}}>
+            <Tag color="black" style={{ width: "max-content" }}>
+              <p>Available: {car.availableQuantity}</p>
+            </Tag>
+            <Tag color="black" style={{ width: "max-content" }}>
+              <p>{car.pricePerDay}/Day</p>
+            </Tag>
+          </div>
           <p>{car.description}</p>
         </div>
       </div>

@@ -18,6 +18,20 @@ const rentableCarResolver = {
                 }
             }
         }
+    },
+
+    Mutation: {
+        addRentableCar: async(_,{registrationNumber,carId})=>{
+            try{
+                const addRentableCar = await RentableCarsController.addRentableCar(registrationNumber,carId)
+                return{
+                    status:addRentableCar.status,
+                    message:addRentableCar.message
+                }
+            }catch(error){
+                throw new Error(error)
+            }
+        }
     }
 }
 

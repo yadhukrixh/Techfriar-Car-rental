@@ -61,6 +61,10 @@ const AllCars = sequelize.define('AllCars', {
     type: DataTypes.INTEGER, // Number of doors
     allowNull: false,
   },
+  pricePerDay: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,

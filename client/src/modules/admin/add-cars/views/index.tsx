@@ -36,6 +36,7 @@ const AddCars = () => {
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [numSeats, setNumSeats] = useState<number>(2);
   const [numDoors, setNumDoors] = useState<number>(2);
+  const [pricePerDay,setPricePerday] = useState<string>('')
 
   const addVehicleClass = new AddVehicleClass();
 
@@ -73,7 +74,8 @@ const AddCars = () => {
       fuelType,
       transmissionType,
       numSeats,
-      numDoors
+      numDoors,
+      parseInt(pricePerDay,10)
     );
   };
 
@@ -123,6 +125,17 @@ const AddCars = () => {
               onChange={setVehicleName}
               customClassName={styles.vehicleNameInput}
               placeholder="Vehicle model name"
+            />
+          </div>
+
+          <div className={styles.formSection}>
+            <label className={styles.inputLabel}>Daily Rate</label>
+            <InputComponent
+              value={pricePerDay}
+              type="number"
+              onChange={setPricePerday}
+              customClassName={styles.vehicleNameInput}
+              placeholder="Price Per Day"
             />
           </div>
 

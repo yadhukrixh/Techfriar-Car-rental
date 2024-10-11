@@ -14,7 +14,7 @@ const allCarsResolver = {
       } catch (error) {
         return {
           status: false,
-          message: "Internal server errorm couldnt fetch Data",
+          message: "Internal server error couldnt fetch Data",
         };
       }
     },
@@ -34,6 +34,7 @@ const allCarsResolver = {
         transmissionType,
         numberOfSeats,
         numberOfDoors,
+        pricePerDay,
       } = await input;
 
       try {
@@ -53,7 +54,8 @@ const allCarsResolver = {
           fuelType,
           transmissionType,
           numberOfSeats,
-          numberOfDoors
+          numberOfDoors,
+          pricePerDay
         );
 
         // Example response indicating success
@@ -100,6 +102,7 @@ const allCarsResolver = {
         transmissionType,
         numberOfSeats,
         numberOfDoors,
+        pricePerDay
       }
     ) => {
       try {
@@ -115,7 +118,9 @@ const allCarsResolver = {
           fuelType,
           transmissionType,
           numberOfSeats,
-          numberOfDoors);
+          numberOfDoors,
+          pricePerDay
+        );
           return{
             status:editCar.status,
             message:editCar.message

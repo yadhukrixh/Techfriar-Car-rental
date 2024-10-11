@@ -15,6 +15,7 @@ const allCarsTypeDefs = gql`
     transmissionType: String
     numberOfSeats: Int!
     numberOfDoors: Int!
+    pricePerDay: Int
   }
 
   type AddCarResponse {
@@ -40,6 +41,7 @@ const allCarsTypeDefs = gql`
     transmissionType: String!
     numberOfSeats: Int!
     numberOfDoors: Int!
+    pricePerDay: Int!
   }
 
   type GetAllCarsResponse {
@@ -81,6 +83,7 @@ const allCarsTypeDefs = gql`
       transmissionType: String!
       numberOfSeats: Int!
       numberOfDoors: Int!
+      pricePerDay: Int!
     ): EditCarResponse
   }
 

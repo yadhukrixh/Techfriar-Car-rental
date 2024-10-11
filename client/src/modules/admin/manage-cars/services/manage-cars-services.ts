@@ -95,7 +95,8 @@ export class ManageCars {
         fuelType: string,
         transmissionType: string,
         numberOfSeats: number | null,
-        numberOfDoors: number | null
+        numberOfDoors: number | null,
+        pricePerDay: Number
     ) => {
         try {
             // Prepare primary image input
@@ -134,7 +135,8 @@ export class ManageCars {
                             fuelType: fuelType,
                             transmissionType: transmissionType,
                             numberOfSeats: numberOfSeats,
-                            numberOfDoors: numberOfDoors
+                            numberOfDoors: numberOfDoors,
+                            pricePerDay: pricePerDay
                         }
                     });
 

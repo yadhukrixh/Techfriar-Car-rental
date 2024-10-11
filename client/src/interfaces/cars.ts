@@ -24,6 +24,7 @@ export interface CarData{
     transmissionType:string;
     numberOfSeats:number;
     numberOfDoors:number;
+    pricePerDay: number;
 }
 
 // Interface for the query
