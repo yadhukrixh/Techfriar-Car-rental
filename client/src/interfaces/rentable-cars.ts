@@ -27,7 +27,7 @@ export interface FetchRentablecarsResponse {
 }
 
 export interface AddRentableCarResponse{
-    addrentablecar:{
+    addRentableCar:{
         status:boolean;
         message:string;
     }

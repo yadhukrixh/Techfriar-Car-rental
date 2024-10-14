@@ -118,6 +118,7 @@ export class AddVehicleClass {
                     confirmButtonText: "OK",  // Use confirmButtonText instead of 'button'
                 });
             }
+            window.location.reload()
         } catch (error) {
             console.error(error);
             message.error("An error occurred while adding the vehicle");

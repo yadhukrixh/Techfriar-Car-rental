@@ -18,9 +18,10 @@ const typesenseClient = new Typesense.Client({
 const carSchema = {
   name: 'cars',
   fields: [
-    { name: 'id', type: 'int32', facet: false },
+    { name: 'id', type: 'string', facet: false },
     { name: 'name', type: 'string', facet: true },
     { name: 'year', type: 'int32', facet: true },
+    { name: 'brandName', type: 'string', facet: true },
     { name: 'fuelType', type: 'string', facet: true },
     { name: 'transmissionType', type: 'string', facet: true },
     { name: 'numberOfSeats', type: 'int32', facet: true },

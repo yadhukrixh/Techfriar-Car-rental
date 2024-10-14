@@ -2,6 +2,7 @@ import { ADD_RENTABLE_CAR } from "@/graphql/admin/mutations/rentable-cars/add-re
 import { FETCH_RENTABLE_CAR } from "@/graphql/admin/queries/rentable-cars/fetch-rentable-car";
 import { AddRentableCarResponse, FetchRentablecarsResponse, RentableModel } from "@/interfaces/rentable-cars";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
+import Swal from "sweetalert2";
 
 export class AddRentablecars{
     private client: ApolloClient<NormalizedCacheObject>;
@@ -43,6 +44,26 @@ export class AddRentablecars{
                     carId: carId
                 }
             })
+
+
+            if (data?.addRentableCar.status) {
+                console.log(data)
+                Swal.fire({
+                    title: "Success!",
+                    text: "Car added successfully",
+                    icon: "success",
+                    confirmButtonText: "OK",  // Use confirmButtonText instead of 'button'
+                });
+            } else {
+                console.log(data)
+                Swal.fire({
+                    title: "Error",
+                    text: data?.addRentableCar.message,
+                    icon: "error",
+                    confirmButtonText: "OK",  // Use confirmButtonText instead of 'button'
+                });
+            }
+            window.location.reload();
         }catch(error){
             console.error(error);
         }

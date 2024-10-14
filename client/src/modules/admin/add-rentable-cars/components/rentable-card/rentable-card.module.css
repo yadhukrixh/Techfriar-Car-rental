@@ -1,0 +1,39 @@
+.carCard {
+    margin-bottom: 12px;
+    transition: all 0.3s ease;
+  }
+  
+  .carCard:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .carCardContent {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .registrationNumber {
+    font-size: 16px;
+    font-weight: 500;
+  }
+  
+  .cardActions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .carCardContent {
+      flex-direction: column;
+      gap: 12px;
+      text-align: center;
+    }
+  
+    .cardActions {
+      justify-content: center;
+    }
+  }

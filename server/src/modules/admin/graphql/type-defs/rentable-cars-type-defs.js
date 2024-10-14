@@ -37,6 +37,15 @@ const rentableCarsTypeDefs = gql`
     status: Boolean!
     message: String!
   }
+
+  type Mutation{
+    changeActiveStatus(id:Int!,status:Boolean!): ChangeActiveStatusResponse!
+  }
+
+  type ChangeActiveStatusResponse{
+    status: Boolean!
+    message: String!
+  }
 `;
 
 export default rentableCarsTypeDefs;

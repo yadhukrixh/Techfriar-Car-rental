@@ -6,6 +6,8 @@ import { runSeed } from './config/seed.js';
 import { startApolloServer } from './config/apollo-server.js';
 import { graphqlUploadExpress } from 'graphql-upload';
 
+import  './config/typesense.js';
+
 dotenv.config();
 
 

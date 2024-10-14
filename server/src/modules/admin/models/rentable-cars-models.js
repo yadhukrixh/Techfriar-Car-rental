@@ -28,10 +28,6 @@ const RentableCars = sequelize.define('RentableCars', {
     type: DataTypes.BOOLEAN,
     defaultValue: true, // Car is active by default
   },
-  bookingDates: {
-    type: DataTypes.ARRAY(DataTypes.DATEONLY), // Array of dates when the car is booked
-    allowNull: true,
-  },
   createdAt: {
     type: DataTypes.DATE,
     allowNull: false,

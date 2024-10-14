@@ -31,8 +31,20 @@ const rentableCarResolver = {
             }catch(error){
                 throw new Error(error)
             }
+        },
+
+        changeActiveStatus: async(_,{id,status})=>{
+            try{
+                
+            }catch(error){
+                return{
+                    status:false,
+                    message:error
+                }
+            }
         }
     }
+
 }
 
 export default rentableCarResolver

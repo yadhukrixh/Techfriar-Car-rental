@@ -17,6 +17,7 @@ import {
 } from "@ant-design/icons";
 import Image from "next/image";
 import styles from "./rentable-car-form.module.css";
+import RentableCard from "../rentable-card/rentable-card";
 
 const AddRentableForm = () => {
   const searchParams = useSearchParams();
@@ -29,6 +30,7 @@ const AddRentableForm = () => {
   const [showAddNew, setShowAddNew] = useState(false);
   const [newRegistration, setNewRegistration] = useState("");
   const [loading, setLoading] = useState(false);
+  const [activeStatus,setActiveStatus] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchCarData = async () => {
@@ -37,19 +39,9 @@ const AddRentableForm = () => {
       }
     };
     fetchCarData();
-  }, [id]);
+  }, [id,showAddNew]);
 
-  const handleStatusChange = async (checked: boolean, carId: number) => {
-    try {
-      setLoading(true);
-      // Implement status change logic here
-      message.success("Status updated successfully");
-    } catch (error) {
-      message.error("Failed to update status");
-    } finally {
-      setLoading(false);
-    }
-  };
+
 
   const handleAddNew = async () => {
     try {
@@ -59,23 +51,10 @@ const AddRentableForm = () => {
       }
       setLoading(true);
       await addRentableCars.addrentableCar(newRegistration,carData?.id)
-      message.success("New car added successfully");
       setShowAddNew(false);
       setNewRegistration("");
     } catch (error) {
       message.error("Failed to add new car");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleDelete = async (carId: number) => {
-    try {
-      setLoading(true);
-      // Implement delete logic here
-      message.success("Car deleted successfully");
-    } catch (error) {
-      message.error("Failed to delete car");
     } finally {
       setLoading(false);
     }
@@ -178,34 +157,12 @@ const AddRentableForm = () => {
             <h3>Rentable Cars</h3>
             {carData.rentableCars.length > 0 ? (
               carData.rentableCars.map((car) => (
-                <Card key={car.id} className={styles.carCard}>
-                  <div className={styles.carCardContent}>
-                    <span className={styles.registrationNumber}>
-                      {car.registrationNumber}
-                    </span>
-                    <div className={styles.cardActions}>
-                      <Switch
-                        checked={car.activeStatus}
-                        onChange={(checked) =>
-                          handleStatusChange(checked, car.id)
-                        }
-                        disabled={loading}
-                      />
-                      <Button
-                        icon={<EditOutlined />}
-                        type="text"
-                        disabled={loading}
-                      />
-                      <Button
-                        icon={<DeleteOutlined />}
-                        type="text"
-                        danger
-                        onClick={() => handleDelete(car.id)}
-                        disabled={loading}
-                      />
-                    </div>
-                  </div>
-                </Card>
+                <RentableCard 
+                key={car.id}
+                car={car}
+                loading={loading}
+                setLoading={setLoading}
+                />
               ))
             ) : (
               <Empty description="No rentable cars available" />
