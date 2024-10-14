@@ -6,7 +6,7 @@ import {
   NormalizedCacheObject,
   useApolloClient,
 } from "@apollo/client";
-import { AddRentablecars } from "../../services/add-rentable-cars-service";
+import { ManageRentablecars } from "../../services/add-rentable-cars-service";
 import { RentableModel, RentableCar } from "@/interfaces/rentable-cars";
 import { Card, Button, Switch, Input, message, Empty, Tooltip } from "antd";
 import {
@@ -25,7 +25,7 @@ const AddRentableForm = () => {
     ? parseInt(searchParams.get("id")!, 10)
     : null;
   const client = useApolloClient() as ApolloClient<NormalizedCacheObject>;
-  const addRentableCars = new AddRentablecars(client);
+  const addRentableCars = new ManageRentablecars(client);
   const [carData, setCarData] = useState<RentableModel>();
   const [showAddNew, setShowAddNew] = useState(false);
   const [newRegistration, setNewRegistration] = useState("");

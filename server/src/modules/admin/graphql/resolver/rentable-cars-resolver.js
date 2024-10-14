@@ -1,4 +1,5 @@
 import { RentableCarsController } from "../../controllers/rentable-cars-controller.js";
+import { RentableCarsRepository } from "../../repositories/rentable-cars-repo.js";
 
 const rentableCarResolver = {
     Query: {
@@ -21,6 +22,7 @@ const rentableCarResolver = {
     },
 
     Mutation: {
+        // add new rentable car
         addRentableCar: async(_,{registrationNumber,carId})=>{
             try{
                 const addRentableCar = await RentableCarsController.addRentableCar(registrationNumber,carId)
@@ -33,9 +35,30 @@ const rentableCarResolver = {
             }
         },
 
+        // change active status
         changeActiveStatus: async(_,{id,status})=>{
             try{
-                
+                const updateStatus = await RentableCarsController.changeActiveStatus(id,status);
+                return{
+                    status:updateStatus.status,
+                    message:updateStatus.message
+                }
+            }catch(error){
+                return{
+                    status:false,
+                    message:error
+                }
+            }
+        },
+
+        // edit registration number
+        editRegistrationNumber: async(_,{id,registrationNumber}) => {
+            try{
+                const editRegistrationNumber = await RentableCarsController.editRegistrationNumber(id,registrationNumber);
+                return{
+                    status:editRegistrationNumber.status,
+                    message:editRegistrationNumber.message
+                }
             }catch(error){
                 return{
                     status:false,

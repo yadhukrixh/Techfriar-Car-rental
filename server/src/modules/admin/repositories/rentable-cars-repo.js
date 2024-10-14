@@ -96,6 +96,7 @@ export class RentableCarsRepository {
         return {
           status: true,
           message: "This Registration number already Exist!",
+          data:rentableCar
         };
       } else {
         return {
@@ -109,7 +110,7 @@ export class RentableCarsRepository {
   }
 
   // fetch available rentable ccars
-  static async fetchAvailablerentableCars(carId, rentableCarId) {
+  static async fetchAvailableRentableCars(carId, rentableCarId) {
     try {
       const availableRentableCars = await RentableCars.findAll({
         where: {
@@ -211,14 +212,12 @@ export class RentableCarsRepository {
     }
   }
 
-  
-
-  // Change acyive status
+  // Change active status
   static async changeActiveStatus(id, status) {
     try {
       const changeActiveStatus = await RentableCars.update(
-        { activeStatus: false },
-        { where: { id: rentableCarId } }
+        { activeStatus: status },
+        { where: { id: id } }
       );
       if (changeActiveStatus) {
         return {
@@ -231,6 +230,32 @@ export class RentableCarsRepository {
         status: false,
         message: error,
       };
+    }
+  }
+
+  // edit registration number
+  static async editRegistrationNumber(id,registrationNumber){
+    try{
+        const editRegistrationNumber = await RentableCars.update(
+            { registrationNumber: registrationNumber },
+            { where: { id: id} } 
+        );
+        if(editRegistrationNumber){
+            return{
+                status:true,
+                message:"Registration number updated successfully!"
+            }
+        }else{
+            return{
+                status:false,
+                message:"Failed to fetch Registration number!"
+            }
+        }
+    }catch(error){
+        return{
+            status:false,
+            message:"Failed to update the Registration Number"
+        }
     }
   }
 }

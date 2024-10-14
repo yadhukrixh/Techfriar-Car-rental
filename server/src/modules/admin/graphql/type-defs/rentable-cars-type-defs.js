@@ -46,6 +46,17 @@ const rentableCarsTypeDefs = gql`
     status: Boolean!
     message: String!
   }
+
+  type Mutation {
+    editRegistrationNumber(id:Int!,registrationNumber:String!): EditRegistrationNumberResponse!
+  }
+
+  type EditRegistrationNumberResponse{
+    status:Boolean!
+    message:String!
+  }
+
+  
 `;
 
 export default rentableCarsTypeDefs;

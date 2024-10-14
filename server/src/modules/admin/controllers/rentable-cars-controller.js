@@ -75,88 +75,126 @@ export class RentableCarsController {
   static async changeActiveStatus(id, status) {
     try {
       if (status) {
-        // set from false status to the true
+        const changeActiveStatus = await RentableCarsRepository.changeActiveStatus(id, status);
+        return {
+          status: changeActiveStatus.status,
+          message: changeActiveStatus.message,
+        };
       } else {
-        // check is there any dates in future booking
-        const fetchFutureOrders =
-          await OrdersRepository.fetchFutureOrders(id);
-        const futureOrders = fetchFutureOrders.data;
+        // Fetch future orders
+        const fetchFutureOrders = await OrdersRepository.fetchFutureOrders(id);
+        const futureOrders = fetchFutureOrders.data || [];
 
-        // if there is no any future bookings directly deactivate
+
+        // Directly deactivate the car if there are no future bookings
         if (futureOrders.length === 0) {
-          const changeActiveStatus =
-            await RentableCarsRepository.changeActiveStatus(id, status);
+          const changeActiveStatus = await RentableCarsRepository.changeActiveStatus(id, status);
           return {
             status: changeActiveStatus.status,
             message: changeActiveStatus.message,
           };
         }
 
-        // handle future bookings
-        const car = (await RentableCarsRepository.getRentableCar(id)).data;
         for (const order of futureOrders) {
-          const bookedDates = order.bookedDates;
+          let bookedDates = order.bookedDates;
 
-          //Find other rentable cars with the same carId, excluding the current one
+          // Ensure bookedDates is an array
+          if (!Array.isArray(bookedDates)) {
+            console.error("Error: bookedDates is not an array!", bookedDates);
+            return {
+              status: false,
+              message: "Invalid data: bookedDates is not an array",
+            };
+          }
+
+          // Check for available rentable cars for reassignment
           const availableRentableCars = (
-            await RentableCarsRepository.fetchAvailablerentableCars(
-              car.carId,
-              id
-            )
-          ).data;
+            await RentableCarsRepository.fetchAvailableRentableCars(order.carId, id)
+          ).data || [];
 
           let reassignedCarId = null;
 
-          // check each rentable car to avoid conflict
           for (const rentableCar of availableRentableCars) {
-            const overlappingDates = rentableCar.bookingDates?.filter((date) =>
+            const existingBookingDates = Array.isArray(rentableCar.bookingDates)
+              ? rentableCar.bookingDates
+              : [];
+
+            const overlappingDates = existingBookingDates.filter((date) =>
               bookedDates.includes(date)
             );
 
             if (overlappingDates.length === 0) {
-              // Car is available for these dates
               reassignedCarId = rentableCar.id;
-              break; // Exit loop as we found an available car
+              break;
             }
           }
 
           if (reassignedCarId) {
-            // Step 5: Reassign the order to the new rentable car
-            const updateOrders = await OrdersRepository.updateOrderData(reassignedCarId,order.id)
-            
+            await OrdersRepository.updateOrderData(reassignedCarId, order.id);
 
-            // Step 6: Update the booking dates for the newly assigned rentable car
+            const targetCar = availableRentableCars.find((car) => car.id === reassignedCarId);
             const newBookingDates = [
-              ...availableRentableCars.find((car) => car.id === reassignedCarId)
-                .bookingDates,
+              ...(Array.isArray(targetCar.bookingDates) ? targetCar.bookingDates : []),
               ...bookedDates,
             ];
-            await RentableCars.update(
-              { bookingDates: newBookingDates },
-              { where: { id: reassignedCarId } }
-            );
+
+            await RentableCarsRepository.updateBookingDates(reassignedCarId, newBookingDates);
           } else {
-            // No available car with the same model for the requested dates
             return {
               status: false,
-              message:
-                "No available rentable car for future bookings on these dates.",
+              message: "No available rentable car for future bookings on these dates.",
             };
           }
         }
 
-        //update status of rentable car
-        const updateStatus = await RentableCarsRepository.changeActiveStatus(id,status);
-        return{
-            status:updateStatus.status,
-            message:updateStatus.message
-        }
+        const updateStatus = await RentableCarsRepository.changeActiveStatus(id, status);
+        return {
+          status: updateStatus.status,
+          message: updateStatus.message,
+        };
       }
     } catch (error) {
+      console.error("Error in changeActiveStatus function:", error);
       return {
         status: false,
-        message: error,
+        message: `Error occurred: ${error.message || error}`,
       };
     }
   }
+
+  // Edit registration number
+  static async editRegistrationNumber(id,registrationNumber){
+    try{
+        const checkRentableAlreadyExist = await RentableCarsRepository.checkRentableAlreadyExist(registrationNumber);
+        if((checkRentableAlreadyExist.status) && (id === checkRentableAlreadyExist.data.id)){
+            return{
+                status:true,
+                message:"No action Taken"
+            }
+        }
+
+        if(checkRentableAlreadyExist.status){
+            return{
+                status:false,
+                message:"This registration number already assigned to another car!"
+            }
+        }
+
+        const editregistrationNumber = await RentableCarsRepository.editRegistrationNumber(id,registrationNumber);
+
+        return{
+            status:editregistrationNumber.status,
+            message:editregistrationNumber.message
+        }
+
+    }catch(error){
+        return{
+            status:false,
+            message:error
+        }
+    }
+  }
+  
+  
+  
 }

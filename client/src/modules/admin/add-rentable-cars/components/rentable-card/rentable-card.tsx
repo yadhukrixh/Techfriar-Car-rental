@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { Card, Switch, Button, message } from 'antd';
+import { Card, Switch, Button, message, Modal, Input } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styles from './rentable-card.module.css';
 import { ApolloClient, NormalizedCacheObject, useApolloClient } from '@apollo/client';
-import { AddRentablecars } from '../../services/add-rentable-cars-service';
+import { ManageRentablecars } from '../../services/add-rentable-cars-service';
 
 interface Car {
   id: string | number;
@@ -14,7 +14,7 @@ interface Car {
 interface CarCardProps {
   car: Car;
   loading: boolean;
-  setLoading: (status:boolean)=>void;
+  setLoading: (status: boolean) => void;
 }
 
 const RentableCard: React.FC<CarCardProps> = ({ 
@@ -23,17 +23,19 @@ const RentableCard: React.FC<CarCardProps> = ({
   setLoading
 }) => {
 
-  const [activeStatus,setActiveStatus] = useState<boolean>(car.activeStatus);
+  const [activeStatus, setActiveStatus] = useState<boolean>(car.activeStatus);
+  const [isModalVisible, setIsModalVisible] = useState<boolean>(false);
+  const [newRegistrationNumber, setNewRegistrationNumber] = useState<string>(car.registrationNumber);
   const client = useApolloClient() as ApolloClient<NormalizedCacheObject>;
-  const addRentableCars = new AddRentablecars(client);
+  const manageRentableCars = new ManageRentablecars(client);
+  const id = parseInt((car.id).toString(), 10);
 
   // Handle status change
-  const handleStatusChange = async (checked: boolean, carId: string | number) => {
+  const handleStatusChange = async (checked: boolean) => {
     try {
       setLoading(true);
-      console.log(checked)
-      message.success("Status updated successfully");
       setActiveStatus(!activeStatus);
+      await manageRentableCars.changeActiveStatus(id, checked);
     } catch (error) {
       message.error("Failed to update status");
     } finally {
@@ -41,35 +43,84 @@ const RentableCard: React.FC<CarCardProps> = ({
     }
   };
 
-  
+  // Show modal to edit registration number
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  // Handle modal OK button
+  const handleSaveEdit = async () => {
+    try {
+      setLoading(true);
+      // Here you can send the updated registration number to the server.
+      await manageRentableCars.editRegistrationNumber(id,newRegistrationNumber)
+      setIsModalVisible(false);
+    } catch (error) {
+      message.error("Failed to update registration number");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle modal Cancel button
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setNewRegistrationNumber(car.registrationNumber); // Reset to the original value
+  };
+
   return (
-    <Card className={styles.carCard}>
-      <div className={styles.carCardContent}>
-        <span className={styles.registrationNumber}>
-          {car.registrationNumber}
-        </span>
-        <div className={styles.cardActions}>
-          <Switch
-            checked={activeStatus}
-            onChange={(checked: boolean) => handleStatusChange(checked, car.id)}
-            disabled={loading}
-          />
-          <Button
-            icon={<EditOutlined />}
-            type="text"
-            disabled={loading}
-            // onClick={() => onEdit && onEdit(car.id)}
-          />
-          <Button
-            icon={<DeleteOutlined />}
-            type="text"
-            danger
-            // onClick={() => onDelete(car.id)}
-            disabled={loading}
-          />
+    <>
+      <Card className={styles.carCard}>
+        <div className={styles.carCardContent}>
+          <span className={styles.registrationNumber}>
+            {car.registrationNumber}
+          </span>
+          <div className={styles.cardActions}>
+            <Switch
+              checked={activeStatus}
+              onChange={(checked: boolean) => handleStatusChange(checked)}
+              disabled={loading}
+            />
+            <Button
+              icon={<EditOutlined />}
+              type="text"
+              disabled={loading}
+              onClick={showModal} // Show the modal on Edit click
+            />
+            <Button
+              icon={<DeleteOutlined />}
+              type="text"
+              danger
+              disabled={loading}
+            />
+          </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+
+      {/* Modal for editing registration number */}
+      <Modal
+        title="Edit Registration Number"
+        visible={isModalVisible}
+        onOk={handleSaveEdit}
+        onCancel={handleCancel}
+        confirmLoading={loading}
+      >
+        <Input
+          value={newRegistrationNumber}
+          onChange={(e) => {
+            const regex = /^[A-Z]{0,2}\d{0,2}[A-Z]{0,2}\d{0,4}$/; // Regex for Indian vehicle registration format
+            const inputValue = e.target.value
+              .toUpperCase()
+              .replace(/\s/g, ""); // Convert to uppercase and remove spaces
+
+            if (regex.test(inputValue)) {
+              setNewRegistrationNumber(inputValue); // Set value if it matches the regex
+            }
+          }}
+          placeholder="Enter new registration number"
+        />
+      </Modal>
+    </>
   );
 };
 

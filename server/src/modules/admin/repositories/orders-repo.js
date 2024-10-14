@@ -1,29 +1,51 @@
+import { Op } from "sequelize";
 import Orders from "../models/orders-model.js";
 
 export class OrdersRepository {
   // fetch future orders
   static async fetchFutureOrders(id) {
-    const currentDate = new Date();
+    try {
+      const currentDate = new Date();
 
-    // Fetch all orders where the first date in bookedDates is greater than the current date
-    const futureOrders = await Orders.findAll({
-      where: {
-        bookedCarId: rentableCarId, // Match the rentable car ID
-        // Ensure the first date in bookedDates is greater than the current date
-        bookedDates: {
-          [Op.and]: [
-            { [Op.ne]: null }, // Ensure it's not null
-            { [Op.gt]: currentDate }, // First element of the array is greater than current date
-          ],
+      // Fetch all orders where the bookedDates array contains dates greater than the current date
+      const futureOrders = await Orders.findAll({
+        where: {
+          bookedCarId: id,
+          bookedDates: {
+            [Op.and]: [
+              { [Op.ne]: null },
+              { [Op.contains]: [currentDate] }, // Query where the array contains future dates
+            ],
+          },
         },
-      },
-    });
+      });
 
-    return {
-      status: true,
-      message: "Successfully fetched futureDates",
-      data: futureOrders,
-    };
+
+      return {
+        status: true,
+        message: "Successfully fetched future orders",
+        data: futureOrders,
+      };
+    } catch (error) {
+      console.error("Error fetching future orders:", error);
+      return {
+        status: false,
+        message: `Error fetching future orders: ${error.message}`,
+      };
+    }
+  }
+
+  static async updateOrderData(newCarId, orderId) {
+    try {
+      await Orders.update(
+        { bookedCarId: newCarId },
+        { where: { id: orderId } }
+      );
+      return { status: true, message: "Order updated successfully" };
+    } catch (error) {
+      console.error("Error updating order:", error);
+      return { status: false, message: `Error updating order: ${error.message}` };
+    }
   }
 
   // update orders

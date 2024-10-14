@@ -32,3 +32,17 @@ export interface AddRentableCarResponse{
         message:string;
     }
 }
+
+export interface ChangeActiveStatusResponse{
+    changeActiveStatus:{
+        status:boolean;
+        message:string;
+    }
+}
+
+export interface EditRegistrationNumberResponse{
+    editRegistrationNumber:{
+        status:boolean;
+        message:string;
+    }
+}
