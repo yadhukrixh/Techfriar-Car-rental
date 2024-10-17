@@ -37,7 +37,7 @@ class BrandController {
         };
       }
 
-      const imageUrl = await MinioUtils.uploadFileToMinio(image, "/brands");
+      const imageUrl = await MinioUtils.uploadFileToMinio(image, "/brands",process.env.MINIO_BUCKET_NAME);
       if (!imageUrl) {
         return {
           status: false,
@@ -127,7 +127,7 @@ class BrandController {
       }
 
       // Delete the image from MinIO
-      await MinioUtils.deleteFileFromMinio(brand.data.imageUrl);
+      await MinioUtils.deleteFileFromMinio(brand.data.imageUrl,process.env.MINIO_BUCKET_NAME);
 
       const deleteBrand = await BrandsRepository.deleteBrand(id);
       return deleteBrand;
@@ -159,10 +159,10 @@ class BrandController {
         // if there i an new logo, we have to delete the old logo and insert a new one
         if (image !== null) {
           // delete the image first
-          await MinioUtils.deleteFileFromMinio(brand.data.imageUrl);
+          await MinioUtils.deleteFileFromMinio(brand.data.imageUrl,process.env.MINIO_BUCKET_NAME);
 
           // Now add new image
-          imageUrl = await MinioUtils.uploadFileToMinio(image, "/brands");
+          imageUrl = await MinioUtils.uploadFileToMinio(image, "/brands",process.env.MINIO_BUCKET_NAME);
         }
 
         const updateBrand = await BrandsRepository.updateBrand(

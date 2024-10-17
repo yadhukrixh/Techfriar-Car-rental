@@ -7,7 +7,7 @@ dotenv.config();
 export class MinioUtils {
 
   // Function to upload image to the minio
-  static async uploadFileToMinio(image, folderName) {
+  static async uploadFileToMinio(image, folderName, bucketName) {
     try {
       // Ensure we have the correct fields from the image object
       const { createReadStream, filename } = await image;
@@ -30,7 +30,7 @@ export class MinioUtils {
       // Ensure the bucket exists before uploading
       await new Promise((resolve, reject) => {
         minioClient.bucketExists(
-          process.env.MINIO_BUCKET_NAME,
+          bucketName,
           (err, exists) => {
             if (err) {
               console.error("Error checking bucket existence:", err);
@@ -49,7 +49,7 @@ export class MinioUtils {
       // Upload the image to MinIO
       await new Promise((resolve, reject) => {
         minioClient.putObject(
-          process.env.MINIO_BUCKET_NAME,
+          bucketName,
           uniqueFilename,
           stream,
           { "Content-Type": contentType },
@@ -72,10 +72,10 @@ export class MinioUtils {
   }
 
   // Function to delete Image from the minio
-  static async deleteFileFromMinio(imageUrl) {
+  static async deleteFileFromMinio(imageUrl,bucketName) {
     return new Promise((resolve) => {
       minioClient.removeObject(
-        process.env.MINIO_BUCKET_NAME,
+        bucketName,
         imageUrl,
         function (err) {
           if (err) {

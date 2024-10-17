@@ -33,7 +33,8 @@ class ManageCarControllers {
         // Upload primary image
         const primaryImageUrl = await MinioUtils.uploadFileToMinio(
           primaryImageFile,
-          `cars/${name}-${year}/primaryImage`
+          `cars/${name}-${year}/primaryImage`,
+          process.env.MINIO_BUCKET_NAME
         );
 
         // Upload additional images using map and Promise.all
@@ -41,7 +42,8 @@ class ManageCarControllers {
           additionalImagesFiles.map(async (imageFile, index) => {
             return await MinioUtils.uploadFileToMinio(
               imageFile,
-              `cars/${name}-${year}/additionalImages`
+              `cars/${name}-${year}/additionalImages`,
+              process.env.MINIO_BUCKET_NAME
             );
           })
         );
@@ -140,12 +142,12 @@ class ManageCarControllers {
       const car = await this.fetchCar(id);
 
       // delete the primary image
-      await MinioUtils.deleteFileFromMinio(car.data.primaryImageUrl);
+      await MinioUtils.deleteFileFromMinio(car.data.primaryImageUrl,process.env.MINIO_BUCKET_NAME);
 
       // Delete the secondary Images
       if (car.data.secondaryImages && car.data.secondaryImages.length > 0) {
         for (const imageUrl of car.data.secondaryImages) {
-          await MinioUtils.deleteFileFromMinio(imageUrl);
+          await MinioUtils.deleteFileFromMinio(imageUrl,process.env.MINIO_BUCKET_NAME);
         }
       }
 
@@ -201,10 +203,11 @@ class ManageCarControllers {
           // Upload the new primary image
           const url = await MinioUtils.uploadFileToMinio(
             primaryImage.image,
-            `cars/${name}-${year}/primaryImage`
+            `cars/${name}-${year}/primaryImage`,
+            process.env.MINIO_BUCKET_NAME
           );
           // Delete the old primary image
-          await MinioUtils.deleteFileFromMinio(car.data.primaryImageUrl);
+          await MinioUtils.deleteFileFromMinio(car.data.primaryImageUrl,process.env.MINIO_BUCKET_NAME);
   
           return url;
         } else {
@@ -240,7 +243,7 @@ class ManageCarControllers {
         // Delete the images that are no longer needed
         if (deletionUrls.length > 0) {
           await Promise.all(
-            deletionUrls.map((item) => MinioUtils.deleteFileFromMinio(item))
+            deletionUrls.map((item) => MinioUtils.deleteFileFromMinio(item,process.env.MINIO_BUCKET_NAME))
           );
         }
       }
@@ -250,7 +253,8 @@ class ManageCarControllers {
         newOtherImages.map(async (imageFile, index) => {
           return await MinioUtils.uploadFileToMinio(
             imageFile,
-            `cars/${name}-${year}/additionalImages`
+            `cars/${name}-${year}/additionalImages`,
+            process.env.MINIO_BUCKET_NAME
           );
         })
       );

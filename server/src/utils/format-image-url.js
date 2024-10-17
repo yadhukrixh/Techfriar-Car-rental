@@ -13,4 +13,8 @@ export class FormatImageUrl{
         const url = imageUrl.replace("http://127.0.0.1:9000/rentalia/","");
         return url;
     }
+
+    static async formatUserImageUrl(imageUrl){
+        return(`http://127.0.0.1:9000/${process.env.MINIO_USER_BUCKET}/${imageUrl}`)
+    }
 }

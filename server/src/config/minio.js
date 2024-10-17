@@ -13,7 +13,7 @@ const minioClient = new Client({
   secretKey: process.env.MINIO_SECRET_KEY, // Your MinIO secret key
 });
 
-// Function to create a bucket if it doesn't exist
+// Function to create a bucket if it doesn't existrs
 const createBucketIfNotExists = async (bucketName) => {
   try {
     const exists = await minioClient.bucketExists(bucketName);
@@ -33,5 +33,6 @@ const createBucketIfNotExists = async (bucketName) => {
 // Initialize the bucket (replace with your actual bucket name)
 const bucketName = process.env.MINIO_BUCKET_NAME || 'default-bucket';
 createBucketIfNotExists(bucketName);
+createBucketIfNotExists("user");
 
 export default minioClient;

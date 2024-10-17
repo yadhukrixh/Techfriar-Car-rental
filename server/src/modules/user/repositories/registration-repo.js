@@ -9,6 +9,7 @@ export class RegistrationRepository {
         return {
           status: true,
           message: "User already exist in this phone number.",
+          data:user.dataValues
         };
       } else {
         return {
@@ -38,6 +39,7 @@ export class RegistrationRepository {
         country: inputData.country,
         pincode: inputData.pincode,
         phoneNumberVerified:true,
+        profileUrl:"default/user.svg",
       });
 
       if(user){

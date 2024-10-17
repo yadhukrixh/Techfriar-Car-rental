@@ -55,7 +55,7 @@ export const verifyOtpApi = async (phoneNumber, otp) => {
     if(response.data.Status === "Success"){
         return{
             status:true,
-            message:"OTP validated successfullt"
+            message:"OTP validated successfully"
         }
     }else{
         return{

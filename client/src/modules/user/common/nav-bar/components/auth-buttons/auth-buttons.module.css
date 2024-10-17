@@ -28,6 +28,19 @@
   border: 1px solid #F97316;
 }
 
+.profileButton{
+  outline: none;
+  border: none;
+  background-color: transparent;
+}
+
+.profilePic{
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
 .signUpButton:hover{
   background-color: #fff !important;
   color: #000;

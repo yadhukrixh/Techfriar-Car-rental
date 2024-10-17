@@ -1,3 +1,5 @@
+import { message } from "antd";
+
 export interface UserData {
     name?: string;
     email?: string;
@@ -9,4 +11,17 @@ export interface UserData {
     country?: string;
     pincode?: string; // Change to string
     otp?:string;
+}
+
+export interface UserProfilePic{
+    profileUrl:string,
+    userId:number;
+}
+
+export interface FetchProfilePicResponse{
+    getProfilePic:{
+        status:boolean;
+        message:string;
+        data:UserProfilePic;
+    }
 }

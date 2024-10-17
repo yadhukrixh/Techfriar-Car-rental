@@ -136,7 +136,7 @@ export class HandleRegistration {
                 }
             })
             if(data?.registerUser.status){
-                Cookies.set('userId', (data.registerUser.data.userId).toString()|| '', { expires: 1 / 24, path: '/' });
+                Cookies.set('userId', (data.registerUser.data.userId).toString()|| '', { expires: 6 / 24, path: '/' });
                 Swal.fire({
                     title: "User Registration Successfull!",
                     text: data.registerUser.message,
