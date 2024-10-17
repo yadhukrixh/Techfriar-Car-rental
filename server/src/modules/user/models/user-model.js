@@ -1,27 +1,13 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../../../config/postgres.js';
 
-
 const Users = sequelize.define('User', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
     autoIncrement: true, // Automatically increments the id
   },
-  firstName: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  secondName: {
-    type: DataTypes.STRING,
-    allowNull: true, // Optional if second name is not always required
-  },
-  userName: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true, // Ensures usernames are unique
-  },
-  password: {
+  name: {
     type: DataTypes.STRING,
     allowNull: false,
   },
@@ -34,13 +20,9 @@ const Users = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: false,
   },
-  address: {
+  password: {
     type: DataTypes.STRING,
-    allowNull: true, // This is filled in the additional details step
-  },
-  street: {
-    type: DataTypes.STRING,
-    allowNull: true,
+    allowNull: false,
   },
   city: {
     type: DataTypes.STRING,
@@ -50,17 +32,21 @@ const Users = sequelize.define('User', {
     type: DataTypes.STRING,
     allowNull: true,
   },
+  country: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   pincode: {
     type: DataTypes.STRING,
     allowNull: true,
   },
-  drivingLicence: {
-    type: DataTypes.STRING,
-    allowNull: true,
-  },
-  registrationComplete: {
+  phoneNumberVerified: {
     type: DataTypes.BOOLEAN,
-    defaultValue: false, // Tracks if the user completed the full registration
+    defaultValue: false, // Tracks phone number verification status
+  },
+  profileUrl: { // New column for storing the profile URL
+    type: DataTypes.STRING,
+    allowNull: true, // Allow null if the user hasn't set a profile image
   }
 });
 

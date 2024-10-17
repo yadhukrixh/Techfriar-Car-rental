@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from 'react'
 import BrandTable from '../components/brands-table/brands-table'
-import { Brand } from '@/interfaces/brands';
+import { Brand } from '@/interfaces/admin/brands';
 import styles from './manage-brands.module.css';
 import { ManageBrandsClass } from '../services/manage-brands-services';
 import {LoadingOutlined} from "@ant-design/icons";

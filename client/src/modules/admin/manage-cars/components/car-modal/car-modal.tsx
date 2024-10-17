@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Modal, Input, Select, Upload, Button, Typography } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { RcFile, UploadFile } from "antd/es/upload/interface";
-import { CarData } from "@/interfaces/cars";
+import { CarData } from "@/interfaces/admin/cars";
 import styles from "./car-modal.module.css";
 import QuantitySelector from "@/themes/quantity-selector/quantity-selector";
 import { AddVehicleClass } from "@/modules/admin/add-cars/services/add-vehicle-service";

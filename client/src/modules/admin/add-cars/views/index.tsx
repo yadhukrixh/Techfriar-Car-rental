@@ -16,7 +16,7 @@ import {
   PlusOutlined,
 } from "@ant-design/icons";
 import { AddVehicleClass } from "../services/add-vehicle-service";
-import { Brand } from "@/interfaces/brands";
+import { Brand } from "@/interfaces/admin/brands";
 import QuantitySelector from "@/themes/quantity-selector/quantity-selector";
 
 const { Option } = Select;

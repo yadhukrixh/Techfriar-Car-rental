@@ -6,7 +6,7 @@ import {
 } from "@apollo/client";
 import React, { useEffect, useState } from "react";
 import { ManageCars } from "../services/manage-cars-services";
-import { CarData } from "@/interfaces/cars";
+import { CarData } from "@/interfaces/admin/cars";
 import CarList from "../components/car-list/car-list";
 import {LoadingOutlined} from "@ant-design/icons";
 import ManageCarsHeader from "../components/manage-cars-header/manage-cars-header";

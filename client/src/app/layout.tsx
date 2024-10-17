@@ -22,7 +22,7 @@ export default function RootLayout({
           {!pathname.startsWith("/admin") && <NavBar />}
 
           {children}
-          {!pathname.startsWith("/admin") && <Footer />}
+          {!pathname.startsWith("/admin") && !pathname.startsWith("/register") && <Footer />}
         </body>
       </html>
     </ApolloProvider>

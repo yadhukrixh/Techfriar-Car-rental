@@ -6,6 +6,7 @@
     flex-direction: row;
     width: 100%;
     height: 90px;
+    z-index: 999;
 }
 
 .navList{
@@ -21,6 +22,7 @@
         padding-left: 20px;
         padding-right: 20px;
         justify-content: space-between;
+        z-index: 999;
     }
     
     .navList{
@@ -32,6 +34,7 @@
         top: 70px;
         right: 0;
         row-gap: 30px;
+        z-index: 999;
         box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
     }
  

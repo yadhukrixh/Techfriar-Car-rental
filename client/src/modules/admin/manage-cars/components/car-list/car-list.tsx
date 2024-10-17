@@ -1,7 +1,7 @@
 "use client";
 import React, { FC, useState } from "react";
 import { Row, Col, message } from "antd";
-import { CarData } from "@/interfaces/cars";
+import { CarData } from "@/interfaces/admin/cars";
 import CarCard from "../car-card/car-card";
 import styles from "./car-list.module.css";
 import {

@@ -9,7 +9,7 @@ import {
 } from "@ant-design/icons";
 
 import styles from "./car-card.module.css";
-import { CarData } from "@/interfaces/cars";
+import { CarData } from "@/interfaces/admin/cars";
 
 interface CarCardProps {
   car: CarData;

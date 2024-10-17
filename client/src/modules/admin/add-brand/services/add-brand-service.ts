@@ -1,6 +1,6 @@
 import { ADD_BRAND } from "@/graphql/admin/mutations/brands/add-brand-mutation";
 import { COUNTRIES_QUERY } from "@/graphql/admin/queries/brands/countries-query";
-import { AddBrandResponse, CountriesResponse} from "@/interfaces/brands";
+import { AddBrandResponse, CountriesResponse} from "@/interfaces/admin/brands";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import Swal from "sweetalert2";
 

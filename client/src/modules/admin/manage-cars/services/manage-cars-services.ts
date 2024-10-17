@@ -1,19 +1,19 @@
 import { DELETE_CAR } from "@/graphql/admin/mutations/cars/delete-car-mutation";
 import { EDIT_CAR } from "@/graphql/admin/mutations/cars/edit-car";
 import { GET_ALL_CARS_QUERY } from "@/graphql/admin/queries/cars/get-all-cars-query";
-import { CarData, DeleteCarResponse, EditCarResponse, GetAllCarsResponse } from "@/interfaces/cars";
+import { CarData, DeleteCarResponse, EditCarResponse, GetAllCarsResponse } from "@/interfaces/admin/cars";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import { UploadFile } from "antd";
 import { RcFile } from "antd/es/upload";
 import Swal from "sweetalert2";
 
 export class ManageCars {
-    private client: ApolloClient<NormalizedCacheObject>;
-    constructor(
-        client: ApolloClient<NormalizedCacheObject>
-    ) {
-        this.client = client;
-    }
+        private client: ApolloClient<NormalizedCacheObject>;
+        constructor(
+            client: ApolloClient<NormalizedCacheObject>
+        ) {
+            this.client = client;
+        }
 
     // fetch all cars data
     public getAllCars = async(

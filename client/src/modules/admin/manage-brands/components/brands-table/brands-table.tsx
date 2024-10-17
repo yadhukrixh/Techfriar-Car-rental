@@ -4,7 +4,7 @@ import { Table, Button, Space, Image } from 'antd';
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons';
 import styles from './brands-table.module.css';
 import { ColumnsType } from 'antd/es/table';
-import { Brand } from '@/interfaces/brands';
+import { Brand } from '@/interfaces/admin/brands';
 import { ManageBrandsClass } from '../../services/manage-brands-services';
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import EditBrand from '../edit-brand/edit-brand';

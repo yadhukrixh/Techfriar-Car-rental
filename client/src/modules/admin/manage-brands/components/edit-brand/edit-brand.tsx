@@ -3,7 +3,7 @@ import React, { FC, useEffect, useState } from "react";
 import { Modal, Button, message, Select, Upload } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
-import { Brand } from "@/interfaces/brands";
+import { Brand } from "@/interfaces/admin/brands";
 import Image from "next/image";
 import styles from "./edit-brand.module.css";
 import InputComponent from "@/themes/input-component/input-component";

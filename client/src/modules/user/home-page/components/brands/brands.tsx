@@ -3,7 +3,7 @@
 
 import React, { FC, useState } from 'react';
 import styles from './brands.module.css';
-import { PopularBrands } from '@/interfaces/brands';
+import { PopularBrands } from '@/interfaces/admin/brands';
 import { carBrands } from '../../../../../../public/data/popular-brands';
 
 const Brands = () => {

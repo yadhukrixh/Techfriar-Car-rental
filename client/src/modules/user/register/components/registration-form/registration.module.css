@@ -1,0 +1,184 @@
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    background-color: #ebebeb;
+}
+
+.steps {
+    margin-bottom: 30px;
+}
+
+/* Custom styles for Steps */
+.ant-steps-item-process .ant-steps-item-icon {
+    background-color: #ff7118;
+    border-color: #ff7118;
+}
+
+.ant-steps-item-finish .ant-steps-item-icon {
+    background-color: #ff7118;
+    border-color: #ff7118;
+}
+
+.ant-steps-item-finish .ant-steps-item-icon>.ant-steps-icon {
+    color: #fff;
+}
+
+.ant-steps-item-finish>.ant-steps-item-container>.ant-steps-item-content>.ant-steps-item-title::after {
+    background-color: #ff7118;
+}
+
+.ant-steps-item-finish .ant-steps-item-title {
+    color: #ff7118;
+}
+
+.buttonContainer{
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.form {
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.form h3 {
+    margin-top: 0;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.formItem {
+    margin-bottom: 20px;
+}
+
+.formItem label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.formItem input,
+.formItem select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.formItem input[type="password"] {
+    letter-spacing: 0.3em;
+}
+
+.formItem .inputGroup {
+    display: flex;
+    align-items: center;
+}
+
+.inputGroup{
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+}
+
+.sendOtp{
+    max-width: max-content;
+    color: #ff7118;
+    background-color: #fff;
+    transition: none;
+    border: 1px solid #ff7118 !important;
+}
+
+
+
+
+
+.formItem .inputGroup input {
+    flex-grow: 1;
+    margin-right: 10px;
+}
+
+.formItem .inputGroup button {
+    white-space: nowrap;
+}
+
+
+.buttonGroup {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.button:hover {
+    opacity: 0.9;
+}
+
+.buttonPrimary {
+    border: 2px solid #ff7118;
+}
+
+.buttonSecondary {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.errorMessage {
+    color: #ff4d4f;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+@media (max-width: 768px) {
+    .container {
+        padding: 10px;
+    }
+
+    .form {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .buttonGroup {
+        flex-direction: column;
+    }
+
+    .button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+}
+
+
+
+.steps :global .ant-steps-item-finish > .ant-steps-item-container > .ant-steps-item-tail::after {
+    display: block !important;
+    background-color: #ff7118 !important;
+}
+.steps :global .ant-steps-item-active .ant-steps-item-icon {
+    background-color: #ff7118 !important;
+    border: 1px solid #ff7118;
+}
+
+.steps :global .ant-steps-item-finish .ant-steps-item-icon >.ant-steps-icon {
+    color: #ff7118 !important;
+}
+
+.steps :global .ant-steps-item-finish .ant-steps-item-tail::after {
+    background-color: #ff7118 !important;
+}

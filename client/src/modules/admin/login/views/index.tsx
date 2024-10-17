@@ -10,7 +10,7 @@ import {
 } from "@apollo/client";
 import { useRouter } from "next/navigation";
 import { AdminLoginService } from "../services/login-service";
-import { LoginFormState } from "@/interfaces/admin";
+import { LoginFormState } from "@/interfaces/admin/admin";
 
 const AdminLoginForm: React.FC = () => {
   const [formState, setFormState] = useState<LoginFormState>({

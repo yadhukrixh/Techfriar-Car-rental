@@ -1,4 +1,4 @@
-import { CarsProps } from '@/interfaces/cars';
+import { CarsProps } from '@/interfaces/admin/cars';
 import React, { FC } from 'react';
 import styles from './car-card.module.css';
 

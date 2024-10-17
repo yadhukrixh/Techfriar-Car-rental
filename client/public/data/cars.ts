@@ -1,4 +1,4 @@
-import { CarsProps } from "@/interfaces/cars";
+import { CarsProps } from "@/interfaces/admin/cars";
 
 export const cars:CarsProps[] = [
     { id: 1, model: 'Audi Q5', year: "2023", seats: 5, fuel: 'Petrol', transmission: 'Automatic', price: '7000', image: 'images/cars/car.svg' },

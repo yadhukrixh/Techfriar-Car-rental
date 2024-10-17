@@ -7,7 +7,7 @@ import {
   useApolloClient,
 } from "@apollo/client";
 import { ManageRentablecars } from "../../services/add-rentable-cars-service";
-import { RentableModel, RentableCar } from "@/interfaces/rentable-cars";
+import { RentableModel, RentableCar } from "@/interfaces/admin/rentable-cars";
 import { Card, Button, Switch, Input, message, Empty, Tooltip } from "antd";
 import {
   PlusOutlined,

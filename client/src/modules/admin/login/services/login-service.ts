@@ -1,5 +1,5 @@
 import { ADMIN_LOGIN_MUTATION } from "@/graphql/admin/mutations/login-mutation";
-import { AdminLoginResponse, LoginFormState } from "@/interfaces/admin";
+import { AdminLoginResponse, LoginFormState } from "@/interfaces/admin/admin";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import Cookies from 'js-cookie';
@@ -50,8 +50,6 @@ export class AdminLoginService {
           if (data?.adminLogin.status) {
             
             Cookies.set('adminToken', data.adminLogin.token || '', { expires: 1 / 24, path: '/admin' });
-
-            localStorage.setItem('adminToken', data.adminLogin.token || '');
             this.router.push('/admin/dashboard');
           } else {
             this.setError(data?.adminLogin.message || 'Invalid email or password');

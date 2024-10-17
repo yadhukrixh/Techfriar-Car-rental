@@ -1,6 +1,7 @@
 import { adminResolvers, adminTypeDefs } from "../modules/admin/graphql/index.js";
+import { userResolvers, userTypeDefs } from "../modules/user/graphql/index.js";
 
-const typeDefs = adminTypeDefs;
-const resolvers = adminResolvers;
+const typeDefs = [adminTypeDefs,userTypeDefs];
+const resolvers = [adminResolvers,userResolvers];
 
 export {typeDefs,resolvers}

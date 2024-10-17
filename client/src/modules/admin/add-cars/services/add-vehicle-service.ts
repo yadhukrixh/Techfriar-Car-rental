@@ -1,7 +1,7 @@
 import { ADD_CAR } from "@/graphql/admin/mutations/cars/add-car-mutation";
 import { BRANDS_QUERY } from "@/graphql/admin/queries/brands/brands-query";
-import { Brand, GetBrandsResponse } from "@/interfaces/brands";
-import { AddCarResponse } from "@/interfaces/vehicles";
+import { Brand, GetBrandsResponse } from "@/interfaces/admin/brands";
+import { AddCarResponse } from "@/interfaces/admin/vehicles";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import { message } from "antd";
 import Swal from "sweetalert2";
@@ -109,6 +109,10 @@ export class AddVehicleClass {
                     text: "Car added successfully",
                     icon: "success",
                     confirmButtonText: "OK",  // Use confirmButtonText instead of 'button'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.reload()
+                    }
                 });
             } else {
                 Swal.fire({
@@ -116,9 +120,13 @@ export class AddVehicleClass {
                     text: data?.addCar.message,
                     icon: "error",
                     confirmButtonText: "OK",  // Use confirmButtonText instead of 'button'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.reload()
+                    }
                 });
             }
-            window.location.reload()
+            
         } catch (error) {
             console.error(error);
             message.error("An error occurred while adding the vehicle");

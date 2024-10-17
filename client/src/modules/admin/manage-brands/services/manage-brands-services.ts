@@ -1,7 +1,7 @@
 import { DELETE_BRAND } from "@/graphql/admin/mutations/brands/delete-brand-mutation";
 import { UPDATE_BRAND } from "@/graphql/admin/mutations/brands/edit-brand-mutation";
 import { BRANDS_QUERY } from "@/graphql/admin/queries/brands/brands-query";
-import { Brand, DeleteBrandResponse, GetBrandsResponse, UpdateBrandResponse } from "@/interfaces/brands";
+import { Brand, DeleteBrandResponse, GetBrandsResponse, UpdateBrandResponse } from "@/interfaces/admin/brands";
 import client from "@/lib/apollo-client";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import Swal from "sweetalert2";

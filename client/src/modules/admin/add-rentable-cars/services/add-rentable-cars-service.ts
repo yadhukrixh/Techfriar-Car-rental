@@ -2,7 +2,7 @@ import { ADD_RENTABLE_CAR } from "@/graphql/admin/mutations/rentable-cars/add-re
 import { CHANGE_ACTIVE_STATUS } from "@/graphql/admin/mutations/rentable-cars/change-active-status";
 import { EDIT_REGISTRTION_NUMBER } from "@/graphql/admin/mutations/rentable-cars/edit-registrtion-number";
 import { FETCH_RENTABLE_CAR } from "@/graphql/admin/queries/rentable-cars/fetch-rentable-car";
-import { AddRentableCarResponse, ChangeActiveStatusResponse, EditRegistrationNumberResponse, FetchRentablecarsResponse, RentableModel } from "@/interfaces/rentable-cars";
+import { AddRentableCarResponse, ChangeActiveStatusResponse, EditRegistrationNumberResponse, FetchRentablecarsResponse, RentableModel } from "@/interfaces/admin/rentable-cars";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import { message } from "antd";
 import Swal from "sweetalert2";
@@ -55,6 +55,10 @@ export class ManageRentablecars{
                     text: "Car added successfully",
                     icon: "success",
                     confirmButtonText: "OK",  // Use confirmButtonText instead of 'button'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.reload()
+                    }
                 });
             } else {
                 console.log(data)
@@ -63,9 +67,12 @@ export class ManageRentablecars{
                     text: data?.addRentableCar.message,
                     icon: "error",
                     confirmButtonText: "OK",  // Use confirmButtonText instead of 'button'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.reload()
+                    }
                 });
             }
-            window.location.reload();
         }catch(error){
             console.error(error);
         }

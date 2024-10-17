@@ -6,7 +6,9 @@ const AuthButtons = () => {
   return (
     <div className={styles.authWrapper}>
       <ButtonComponent value='Login' className={styles.loginButton} />
-      <ButtonComponent value='Sign Up' className={styles.signUpButton} />
+      <ButtonComponent value='Sign Up' className={styles.signUpButton} onClickFunction={()=>{
+        window.location.href = "/register"
+      }} />
     </div>
   )
 }
