@@ -16,12 +16,14 @@
     "clsx": "^2.1.1",
     "clx": "^1.0.0",
     "firebase-admin": "^12.6.0",
+    "framer-motion": "^11.11.9",
     "graphql": "^16.9.0",
     "js-cookie": "^3.0.5",
     "next": "14.2.13",
     "react": "^18",
     "react-dom": "^18",
     "remixicon": "^4.3.0",
+    "styled-components": "^6.1.13",
     "sweetalert2": "^11.14.1"
   },
   "devDependencies": {

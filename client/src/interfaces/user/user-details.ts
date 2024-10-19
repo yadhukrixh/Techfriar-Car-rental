@@ -11,6 +11,8 @@ export interface UserData {
     country?: string;
     pincode?: string; // Change to string
     otp?:string;
+    profileImage?:string;
+    newImage?:File;
 }
 
 export interface UserProfilePic{
@@ -23,5 +25,35 @@ export interface FetchProfilePicResponse{
         status:boolean;
         message:string;
         data:UserProfilePic;
+    }
+}
+
+export interface OrdersData{
+    si:number;
+    carName:string;
+    bookedDates:string;
+    amount:string;
+    status:string;
+}
+
+export interface FetchUserDataResponse{
+    fetchUserData:{
+        status:boolean;
+        message:string;
+        data:UserData
+    }
+}
+
+export interface UpdateProfilePictureResponse{
+    updateProfilePic:{
+        status:boolean;
+        message:string;
+    }
+}
+
+export interface UpdateUSerDetailsResponse{
+    updateUserDetails:{
+        status:boolean;
+        message:string;
     }
 }

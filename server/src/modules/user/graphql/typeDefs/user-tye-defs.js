@@ -12,7 +12,7 @@ const fetchUserTypeDefs = gql`
   }
 
   type UserData {
-    userId: Int!
+    userId: Int
   }
 
   type user {
@@ -29,6 +29,58 @@ const fetchUserTypeDefs = gql`
   type Mutation {
     getProfilePic(userId: Int!): ProfilePicResponse!
   }
+
+  type UserData {
+    name: String
+    email: String
+    phoneNumber: String
+    city: String
+    state: String
+    country: String
+    pincode: String
+    profileImage: String
+  }
+
+  type FetchUserDataResponse {
+    status: Boolean!
+    message: String!
+    data: UserData
+  }
+
+  type Query {
+    fetchUserData(id: Int!): FetchUserDataResponse!
+  }
+
+  type UpdateProfilePicResponse {
+    status: Boolean!
+    message: String!
+  }
+
+  type Mutation {
+    updateProfilePic(userId: Int!, profileImage: Upload!): UpdateProfilePicResponse!
+  }
+
+
+  type UpdateUserDetailsResponse {
+    status: Boolean!
+    message: String!
+  }
+
+  input UpdateUserDetailsInput {
+    name: String
+    email: String
+    password: String
+    city: String
+    state: String
+    country: String
+    pincode: String
+  }
+
+  type Mutation {
+    updateUserDetails(id: Int!, input: UpdateUserDetailsInput!): UpdateUserDetailsResponse!
+  }
+
+
 `;
 
 export default fetchUserTypeDefs;

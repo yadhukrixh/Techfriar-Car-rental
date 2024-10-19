@@ -2,7 +2,24 @@ import { UserController } from "../../controllers/user-controller.js";
 
 
 const fetchUserResolvers = {
+  Query: {
+
+    // fetch user data
+    fetchUserData: async (_, { id }) => {
+      try {
+        const user = await UserController.fetchUserdata(id);
+        return user;
+      }catch{
+        return{
+          status:false,
+          message:error
+        }
+      }
+    }
+
+    },
   Mutation: {
+    // get profile picture
     getProfilePic: async (_, { userId }) => {
       try {
         const user = await UserController.getProfileUrl(userId);
@@ -38,6 +55,31 @@ const fetchUserResolvers = {
         };
       }
     },
+
+    //update profile picture
+    updateProfilePic: async(_, {userId,profileImage}) => {
+      try{
+        const picUpdate = await UserController.updateProfilePic(userId,profileImage);
+        return picUpdate;
+      }catch(error){
+        console.error(error)
+      }
+    },
+
+    //update user profile
+    updateUserDetails: async(_,{id,input})=>{
+      try{
+        const updateDetails = await UserController.updateUserdetails(id,input);
+        return updateDetails;
+      }catch(error){
+        console.error(error)
+        return{
+          status:false,
+          message:error
+        }
+      }
+    }
+    
   },
 };
 

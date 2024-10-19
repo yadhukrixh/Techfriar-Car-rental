@@ -1,0 +1,77 @@
+.responsiveCard :global(.ant-card-body) {
+    min-width: 500px !important;
+    @media (max-width: 576px) {
+        max-width: 100dvw !important;
+        min-width: 100dvw !important;
+      padding: 12px;
+    }
+  }
+
+  .userProfileContainer{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .profileHeader {
+    max-width: 1400px;
+    display: flex;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .greetings{
+    display: flex;
+    flex-direction: column;
+  }
+
+  .userData{
+    max-width: 1400px;
+  }
+  .form{
+    padding: 10px;
+  }
+  .form input{
+    color: #000 !important;
+    font-size: 19px !important;
+    font-weight: 500;
+  }
+
+  .table{
+    overflow: scroll !important;
+  }
+
+  .tab{
+    display: flex;
+    align-items: center !important;
+    width: 100% !important;
+  }
+
+  .userProfileContainer{
+    padding: 10px;
+  }
+  
+  @media (max-width: 576px) {
+    .profileHeader {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+  }
+  
+  .userInfo {
+    margin-left: 24px;
+  }
+  
+  @media (max-width: 576px) {
+    .userInfo {
+      margin-left: 0;
+    }
+  }
+  
+  .container {
+    padding: 20px;
+    background-color: #f0f2f5;
+    min-height: 100vh;
+  }

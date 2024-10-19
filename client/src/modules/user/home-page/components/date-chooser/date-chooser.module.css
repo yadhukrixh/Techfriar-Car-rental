@@ -1,0 +1,155 @@
+.container {
+    margin-top: 60px;
+    text-align: center;
+    padding: 20px;
+    padding-left: 100px;
+    padding-right: 100px;
+}
+
+.container h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Increase the size of the date picker */
+.container :global(.ant-picker) {
+    font-size: 16px;
+    padding: 8px 12px;
+}
+
+.container :global(.ant-picker-range .ant-picker-active-bar) {
+    background-color: white !important;
+}
+
+/* Change font color to black */
+.container :global(.ant-picker-input > input) {
+    color: black !important;
+}
+
+/* Change border color to orange */
+.container :global(.ant-picker) {
+    border-color: #F97316;
+}
+
+/* Change calendar icon color to orange */
+.container :global(.ant-picker-suffix) {
+    color: #F97316;
+}
+
+/* Adjust the size of the calendar icon */
+.container :global(.ant-picker-suffix svg) {
+    width: 18px;
+    height: 18px;
+}
+
+/* Style for the selected date range */
+.container :global(.ant-picker-range-separator) {
+    color: #F97316;
+}
+
+/* Hover effect for better user experience */
+.container :global(.ant-picker:hover) {
+    border-color: #F97316;
+    /* A slightly darker shade of orange */
+}
+
+/* Active state styles */
+.container :global(.ant-picker-focused),
+.container :global(.ant-picker:focus) {
+    background-color: #F97316;
+    border-color: #F97316;
+    box-shadow: 0 0 0 2px rgba(255, 165, 0, 0.2);
+    /* Orange shadow for focus */
+}
+
+/* Change text color to white when active */
+.container :global(.ant-picker-focused .ant-picker-input > input),
+.container :global(.ant-picker:focus .ant-picker-input > input) {
+    color: white;
+}
+
+/* Change placeholder styles */
+.container :global(.ant-picker-input > input::placeholder) {
+    color: black !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+/* Ensure placeholder style consistency when focused */
+.container :global(.ant-picker-focused .ant-picker-input > input::placeholder),
+.container :global(.ant-picker:focus .ant-picker-input > input::placeholder) {
+    color: rgb(255, 255, 255) !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+}
+
+/* Change calendar icon to white when active */
+.container :global(.ant-picker-focused .ant-picker-suffix),
+.container :global(.ant-picker:focus .ant-picker-suffix) {
+    color: white;
+}
+
+/* Change separator color to white when active */
+.container :global(.ant-picker-focused .ant-picker-range-separator),
+.container :global(.ant-picker:focus .ant-picker-range-separator) {
+    color: white;
+}
+
+@media only screen and (min-width: 320px) and (max-width: 600px) {
+    .container {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    /* Ensure the date picker panel fits in mobile screens */
+    .container :global(.ant-picker-panels) {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex-direction: column !important;
+    }
+
+    /* Make sure the dropdown wrapper is responsive */
+    .container :global(.ant-picker-dropdown > .ant-picker-range-wrapper > .ant-picker-panels) {
+        max-width: 100% !important;
+        display: flex;
+        justify-content: center;
+        flex-direction: column;
+    }
+
+    /* Ensure the date panel layout works on smaller screens */
+    .container :global(.ant-picker-dropdown .ant-picker-panel-container) {
+        max-width: 100% !important;
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* Calendar panel adjustments for mobile */
+    .container :global(.ant-picker-calendar) {
+        max-width: 100%;
+        width: 100%;
+    }
+}
+
+@media only screen and (min-width: 600px) and (max-width: 1100px) {
+    .container {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+    .container :global(.ant-picker-panels) {
+        max-width: 100% !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+
+    .container :global(.ant-picker-dropdown .ant-picker-range-wrapper) {
+        max-width: 100% !important;
+        justify-content: center;
+    }
+
+    .container :global(.ant-picker-calendar) {
+        max-width: 100%;
+        width: 100%;
+    }
+}

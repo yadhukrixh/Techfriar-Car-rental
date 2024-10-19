@@ -5,14 +5,15 @@ import CarList from '../components/car-list/car-list';
 import Brands from '../components/brands/brands';
 import Featured from '../components/feaured/featured';
 import Testimonials from '../components/testimonials/testimonials';
-import BackButton from '@/themes/back-button/back-button';
+import DateChooser from '../components/date-chooser/date-chooser';
+
 
 const Home = () => {
   return (
     <div>
       <HeroCard />
+      <DateChooser />
       <Brands />
-      <CarList />
       <Featured />
       <Testimonials />
     </div>

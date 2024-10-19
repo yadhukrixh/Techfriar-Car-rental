@@ -10,19 +10,24 @@ import NavController from "../components/nav-controller/nav-controller";
 const NavBar = () => {
   // State to manage the visibility of the navList
   const [isNavVisible, setIsNavVisible] = useState<boolean>(false);
-  const [windowWidth, setWindowWidth] = useState<number>(window.innerWidth);
+  const [windowWidth, setWindowWidth] = useState<number>(0); // Initialize to 0
 
   // Function to toggle the visibility of the navList
   const navControl = () => {
     setIsNavVisible((prev) => !prev);
   };
 
-  // Listen for window resize to dynamically update window width
+  // Set the window width only on the client side
   useEffect(() => {
+    // Function to update the window width
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
 
+    // Set initial window width on component mount
+    setWindowWidth(window.innerWidth);
+
+    // Listen for window resize to dynamically update window width
     window.addEventListener("resize", handleResize);
 
     // Cleanup event listener on component unmount

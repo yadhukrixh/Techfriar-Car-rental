@@ -27,8 +27,6 @@ export class NavServices{
                 }
             })
 
-            console.log(data)
-
             if(data?.getProfilePic.status){
                 setUser(data?.getProfilePic.data);
             }

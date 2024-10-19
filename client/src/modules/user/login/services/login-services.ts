@@ -28,7 +28,7 @@ export class LoginClass{
             if(data?.userLogin.status){
                 Cookies.set('userId', (data.userLogin.data.userId).toString()|| '', { expires: 6 / 24, path: '/' });
                 Swal.fire({
-                    title: "User Registration Successfull!",
+                    title: "Login Successfull!",
                     text: data.userLogin.message,
                     icon: "success",
                     showConfirmButton: true
