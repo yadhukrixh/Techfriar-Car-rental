@@ -1,0 +1,9 @@
+.container {
+    font-family: Arial, sans-serif;
+    width: 100%;
+    overflow-y: scroll;
+}
+
+.container::-webkit-scrollbar {
+    display: none;
+}

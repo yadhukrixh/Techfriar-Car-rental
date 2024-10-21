@@ -1,42 +1,44 @@
-.navBarWrapper{
-    justify-content: space-around;
-    background-color: #fff;
-    display: flex;
-    align-items: center;
-    flex-direction: row;
-    width: 100%;
-    height: 90px;
-    z-index: 999;
+.navBarWrapper {
+  position: fixed;
+  justify-content: space-around;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+  width: 100%;
+  height: 90px;
+  z-index: 999;
+  transition: box-shadow 0.3s ease-in-out; /* Add transition for smooth effect */
 }
 
-.navList{
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+.navBarWrapper.scrolled {
+  box-shadow: rgba(0, 0, 0, 0.15) 0px 15px 25px, rgba(0, 0, 0, 0.05) 0px 5px 10px; /* Shadow on scroll */
 }
 
+.navList {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
 
 @media only screen and (min-width: 300px) and (max-width: 900px) {
+  .navBarWrapper {
+    padding-left: 20px;
+    padding-right: 20px;
+    justify-content: space-between;
+    z-index: 999;
+  }
 
-    .navBarWrapper{
-        padding-left: 20px;
-        padding-right: 20px;
-        justify-content: space-between;
-        z-index: 999;
-    }
-    
-    .navList{
-        padding: 20px;
-        flex-direction: column;
-        position: absolute;
-        background-color: #fff;
-        align-items: flex-start;
-        top: 70px;
-        right: 0;
-        row-gap: 30px;
-        z-index: 999;
-        box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
-    }
- 
- }
- 
+  .navList {
+    padding: 20px;
+    flex-direction: column;
+    position: absolute;
+    background-color: #fff;
+    align-items: flex-start;
+    top: 70px;
+    right: 0;
+    row-gap: 30px;
+    z-index: 999;
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+  }
+}

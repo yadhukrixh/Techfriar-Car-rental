@@ -8,37 +8,51 @@ import Logo from "../components/logo/logo";
 import NavController from "../components/nav-controller/nav-controller";
 
 const NavBar = () => {
-  // State to manage the visibility of the navList
   const [isNavVisible, setIsNavVisible] = useState<boolean>(false);
-  const [windowWidth, setWindowWidth] = useState<number>(0); // Initialize to 0
+  const [windowWidth, setWindowWidth] = useState<number>(0);
+  const [isScrolled, setIsScrolled] = useState<boolean>(false); // New state for scroll
 
-  // Function to toggle the visibility of the navList
+  // Toggle visibility of navList
   const navControl = () => {
     setIsNavVisible((prev) => !prev);
   };
 
-  // Set the window width only on the client side
+  // Update window width on resize
   useEffect(() => {
-    // Function to update the window width
     const handleResize = () => {
       setWindowWidth(window.innerWidth);
     };
 
-    // Set initial window width on component mount
     setWindowWidth(window.innerWidth);
 
-    // Listen for window resize to dynamically update window width
     window.addEventListener("resize", handleResize);
 
-    // Cleanup event listener on component unmount
     return () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
 
-  // Conditionally render based on windowWidth
+  // Monitor scroll to apply box-shadow when scrollY > 50
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 50) {
+        setIsScrolled(true);
+      } else {
+        setIsScrolled(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   return (
-    <div className={styles.navBarWrapper}>
+    <div
+      className={`${styles.navBarWrapper} ${isScrolled ? styles.scrolled : ""}`}
+    >
       <Logo />
       {windowWidth <= 900 ? (
         <>

@@ -1,0 +1,32 @@
+.carContainer{
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: hidden;
+    max-height: 85dvh;
+}
+
+.sideBar{
+    max-height: fit-content;
+}
+
+.carList{
+    height: 800px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+}
+
+.carList::-webkit-scrollbar{
+    display: none;
+}
+
+
+.mainContainer{
+    padding: 20px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+}
