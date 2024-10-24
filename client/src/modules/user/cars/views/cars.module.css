@@ -4,7 +4,16 @@
     flex-direction: column;
     align-items: center;
     overflow: hidden;
-    max-height: 85dvh;
+    height: max-content;
+    position: relative;
+}
+
+.filterationButton{
+    display: none;
+    z-index: 500;
+    position: absolute;
+    right: 10px;
+    bottom: 80px;
 }
 
 .sideBar{
@@ -12,7 +21,7 @@
 }
 
 .carList{
-    height: 800px;
+    height: 680px;
     width: 100%;
     display: flex;
     flex-direction: row;
@@ -25,8 +34,31 @@
 
 
 .mainContainer{
+    height: 100%;
     padding: 20px;
     width: 100%;
     display: flex;
     flex-direction: row;
+}
+
+@media(min-width:1250px) and (max-width:1500px) { 
+    .map{
+        display: none;
+    }
+}
+
+@media (min-width:300px) and (max-width:1250px) {
+    .map{
+        display: none;
+    }
+}
+
+@media (min-width:300px) and (max-width:1000px){
+    .sideBar{
+        display: none;
+    }
+
+    .filterationButton{
+        display: block;
+    }
 }

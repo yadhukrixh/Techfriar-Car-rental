@@ -1,0 +1,9 @@
+.locationContainer{
+    width: 20dvw;
+    height: 600px;
+}
+
+.buttons button{
+    margin: 10px;
+    width: 200px;
+}

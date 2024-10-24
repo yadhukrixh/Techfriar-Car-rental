@@ -1,115 +1,120 @@
 .filterMenu {
-  width: 250px;
-  padding: 20px;
-  background-color: #ffffff;
-  display: flex;
-  flex-direction: column;
-  row-gap: 10px;
-}
-
-.filterSection {
-  margin-bottom: 20px;
-}
-
-.sectionTitle {
-  font-size: 10px;
-  font-weight: bold;
-  color: #cbcbcb;
-  margin-bottom: 10px;
-}
-
-.filterOption {
-  display: flex;
-  align-items: center;
-  margin-bottom: 8px;
-  font-size: 18px;
-  font-weight: 500;
-  color: #000;
-  cursor: pointer;
-}
-
-.checkbox {
-  width: 18px;
-  height: 18px;
-  border: 2px solid #ddd;
-  border-radius: 4px;
-  margin-right: 10px;
-  cursor: pointer;
-  position: relative;
-  transition: all 0.2s ease-in-out;
-}
-
-.checkbox:checked {
-  background-color: #ff6b00;
-  border-color: #ff6b00;
-}
-
-.checkbox:checked::after {
-  content: '\2714';
-  font-style: normal;
-  position: absolute;
-  color: white;
-  font-size: 14px;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.optionLabel {
-  font-size: 16px;
-  color: #000000;
-  flex-grow: 1;
-}
-
-.optionCount {
-  font-size: 12px;
-  color: #999;
-}
-
-.priceSlider {
-  padding: 10px 0;
-}
-
-.priceLabel {
-  font-size: 14px;
-  color: #333;
-  margin-top: 10px;
-}
-
-/* Custom Slider Styles */
-.customSlider {
-  position: relative;
-  height: 4px;
-  width: 100%;
-  background-color: #e0e0e0;
-  cursor: pointer;
-  margin: 10px 0;
-}
-
-.customSliderTrack {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  background-color: #e0e0e0;
-}
-
-.customSliderFill {
-  position: absolute;
-  height: 100%;
-  background-color: #ff6b00;
-}
-
-.customSliderHandle {
-  position: absolute;
-  width: 16px;
-  height: 16px;
-  background-color: #ff6b00;
-  border-radius: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  cursor: grab;
-}
-
-.customSliderHandle:active {
-  cursor: grabbing;
-}
+    width: 250px;
+    padding: 20px;
+    background-color: #ffffff;
+    display: flex;
+    flex-direction: column;
+    row-gap: 10px;
+  }
+  
+  .sectionTitle {
+    font-size: 10px;
+    font-weight: bold;
+    color: #cbcbcb;
+    margin-bottom: 10px;
+  }
+  
+  .filterOption {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    font-size: 18px;
+    font-weight: 500;
+    color: #000;
+    cursor: pointer;
+  }
+  
+  .checkbox {
+    width: 18px;
+    height: 18px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    margin-right: 10px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s ease-in-out;
+  }
+  
+  .checkbox:checked {
+    background-color: #ff6b00;
+    border-color: #ff6b00;
+  }
+  
+  .checkbox:checked::after {
+    content: '\2714';
+    font-style: normal;
+    position: absolute;
+    color: white;
+    font-size: 14px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .optionLabel {
+    font-size: 12px;
+    color: #000000;
+    flex-grow: 1;
+  }
+  
+  .optionCount {
+    font-size: 12px;
+    color: #999;
+  }
+  
+  .priceLabel {
+    font-size: 14px;
+    color: #333;
+    margin-top: 10px;
+  }
+  
+  .sortButtons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+  }
+  
+  .sortButton {
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #333;
+  }
+  
+  .dateButton {
+    width: 100%;
+    padding: 10px;
+    background-color: #ff6b00;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .dateButton:hover {
+    background-color: #ff8533;
+  }
+  
+  .clearButton {
+    padding: 10px;
+    font-size: 14px;
+    color: #ff6b00;
+    background-color: transparent;
+    border: 2px solid #ff6b00;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .clearButton:hover {
+    background-color: #ff6b00;
+    color: white;
+  }
+  
+  .priceSlider {
+    margin-bottom: 20px;
+  }
+  

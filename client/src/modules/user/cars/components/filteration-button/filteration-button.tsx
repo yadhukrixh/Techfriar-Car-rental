@@ -5,7 +5,7 @@ const FilterationButton = () => {
   return (
     <div>
       <button className={styles.filterButton}>
-      <i className="ri-equalizer-line"></i>
+      <i className="ri-equalizer-3-line"></i>
       </button>
     </div>
   )

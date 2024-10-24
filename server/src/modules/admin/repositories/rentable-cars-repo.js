@@ -200,7 +200,6 @@ export class RentableCarsRepository {
         price: typeSenseData.pricePerDay,
       };
 
-      console.log(typeof formattedData.id);
 
       return {
         statu: true,

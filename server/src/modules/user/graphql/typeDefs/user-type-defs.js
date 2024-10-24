@@ -1,6 +1,6 @@
 import { gql } from "apollo-server-express";
 
-const fetchUserTypeDefs = gql`
+const handleUserTypeDefs = gql`
   type Mutation {
     userLogin(mobileNumber: String!, password: String!): UserLoginResponse
   }
@@ -83,4 +83,4 @@ const fetchUserTypeDefs = gql`
 
 `;
 
-export default fetchUserTypeDefs;
+export default handleUserTypeDefs;

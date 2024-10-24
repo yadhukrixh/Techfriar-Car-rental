@@ -1,7 +1,7 @@
 import { UserController } from "../../controllers/user-controller.js";
 
 
-const fetchUserResolvers = {
+const handleUserResolvers = {
   Query: {
 
     // fetch user data
@@ -83,4 +83,4 @@ const fetchUserResolvers = {
   },
 };
 
-export default fetchUserResolvers;
+export default handleUserResolvers;

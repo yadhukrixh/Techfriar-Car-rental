@@ -1,5 +1,5 @@
 .filterButton{
-    background-color: #F97316;
+    background-color: #000000;
     border: none;
     border-radius: 50%;
     width: 50px;
@@ -7,4 +7,5 @@
     color: #fff;
     font-size: 30px;
     font-weight: 700;
+    box-shadow: rgba(0, 0, 0, 0.56) 0px 22px 70px 4px;
 }

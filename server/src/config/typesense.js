@@ -52,4 +52,41 @@ async function createCollection() {
 
 createCollection();
 
+export const buildQuery = ({
+  selectedFuelTypes,
+  selectedTransmission,
+  selectedCapacities,
+  maxPrice,
+}) => {
+  const filterConditions = [];
+
+
+  // Fuel Type Filter
+  if (selectedFuelTypes && selectedFuelTypes.length > 0) {
+    const fuelTypeFilter = selectedFuelTypes.map(fuelType => `fuelType: "${fuelType.toLowerCase()}"`).join(' || ');
+    filterConditions.push(`(${fuelTypeFilter})`);
+  }
+
+  // Transmission Filter
+  if (selectedTransmission && selectedTransmission.length > 0) {
+    const transmissionFilter = selectedTransmission.map(transmission => `transmissionType: "${transmission.toLowerCase()}"`).join(' || ');
+    filterConditions.push(`(${transmissionFilter})`);
+  }
+
+  // Capacity Filter
+  if (selectedCapacities && selectedCapacities.length > 0) {
+    const capacityFilter = selectedCapacities.map(capacity => `numberOfSeats: ${capacity}`).join(' || ');
+    filterConditions.push(`(${capacityFilter})`);
+  }
+
+  // Price Filter
+  if (maxPrice) {
+    filterConditions.push(`price: <= ${maxPrice}`);
+  }
+
+
+  return filterConditions.length ? filterConditions.join(' && ') : '';
+};
+
+
 export default typesenseClient;
