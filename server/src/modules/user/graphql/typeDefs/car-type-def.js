@@ -9,7 +9,8 @@ const handleCarTypeDefs = gql`
       transmissionTypes: [String],
       capacities: [Int],
       maxPrice: Int,
-      sortType: String
+      sortType: String,
+      searchQuery: String
     ): FetchAvailableCarsResponse!
   }
 

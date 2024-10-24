@@ -55,7 +55,7 @@ const CarRentalCard: React.FC<CarRentalCardProps> = ({ car }) => {
           <p className={styles.price}>
             ₹ {car.pricePerDay.toLocaleString()}/Day
           </p>
-          <button className={styles.viewDealButton}>View Deal</button>
+          <button className={styles.viewDealButton}>Rent Now</button>
         </div>
       </div>
     </div>

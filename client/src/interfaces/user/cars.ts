@@ -21,12 +21,14 @@ export interface CarRentalListComponentProps{
 
 
 // car filteration props
-export interface FilterationComponentProps{
-    setMaxPrice:(data:number)=>void;
-    setFuelType:(data:string[])=>void;
-    setTransmission:(data:string[])=>void;
-    setCapacities:(data:number[])=>void;
-    setSortingType:(data:string)=>void;
+export interface FilterationComponentProps {
+    setMaxPrice: (data: number) => void;
+    setFuelType: (data: string[]) => void;
+    setTransmission: (data: string[]) => void;
+    setCapacities: (data: number[]) => void;
+    setSortingType: (data: string) => void;
+    selectedDates: string[]; // Changed to string[] to handle date range
+    setSelectedDates: (dates: string[]) => void; // Changed to accept string[]
 }
 
 

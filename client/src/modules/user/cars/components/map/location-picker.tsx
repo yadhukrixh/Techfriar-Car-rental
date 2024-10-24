@@ -4,6 +4,7 @@ import 'leaflet/dist/leaflet.css';
 import React, { useState } from 'react';
 import { message, Button } from 'antd';
 import styles from './location-picker.module.css';
+import Swal from 'sweetalert2';
 
 // Define your custom marker icons
 const companyIcon = new L.Icon({
@@ -48,7 +49,11 @@ const MapComponent: React.FC = () => {
           if (distance <= 20) {
             setSelectedLocation([latitude, longitude]); // Set user location
           } else {
-            message.warning("We only provide service in 20KM Radius!");
+            Swal.fire({
+              title: "Sorry..",
+              text: "We only provide services around 20 KM",
+              icon: "question"
+            });
           }
         },
         (error) => {
@@ -76,7 +81,11 @@ const MapComponent: React.FC = () => {
         if (distance <= 20) {
           setSelectedLocation([lat, lng]); // Set clicked location
         } else {
-          message.warning("We only provide service in 20KM Radius!");
+          Swal.fire({
+            title: "Sorry..",
+            text: "We only provide services around 20 KM",
+            icon: "question"
+          });
         }
       },
     });

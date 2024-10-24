@@ -9,7 +9,8 @@ export const FETCH_AVAILABLE_CARS = gql`
   $transmissionTypes: [String],
   $capacities: [Int],
   $maxPrice: Int,
-  $sortType: String
+  $sortType: String,
+  $searchQuery: String,
 ) {
   fetchAvailableCars(
     startDate: $startDate, 
@@ -18,7 +19,8 @@ export const FETCH_AVAILABLE_CARS = gql`
     transmissionTypes: $transmissionTypes,
     capacities: $capacities,
     maxPrice: $maxPrice,
-    sortType: $sortType
+    sortType: $sortType,
+    searchQuery: $searchQuery
   ) {
     status
     message

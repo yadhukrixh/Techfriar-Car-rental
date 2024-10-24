@@ -3,6 +3,7 @@ import { FormatImageUrl } from "../../../utils/format-image-url.js";
 import { CarRepository } from "../repositories/car-repo.js";
 
 export class CarsControllers {
+  // Fetch available cars
   static async fetchAvailablecars(
     startDate,
     endDate,
@@ -10,33 +11,36 @@ export class CarsControllers {
     transmissionTypes,
     capacities,
     maxPrice,
-    sortType
+    sortType,
+    searchQuery
   ) {
     try {
-
-      const query = buildQuery({
-        selectedFuelTypes:fuelTypes,
-        selectedTransmission:transmissionTypes,
-        selectedCapacities:capacities,
+      const filters = buildQuery({
+        selectedFuelTypes: fuelTypes,
+        selectedTransmission: transmissionTypes,
+        selectedCapacities: capacities,
         maxPrice: maxPrice,
       });
 
-      const response = await typesenseClient.collections('cars').documents().search({
-        q: '*',
-        query_by: 'name, brandName,fuelType,transmissionType', // Change this to the fields you want to search
-        filter_by: query,
-      });
+      const response = await typesenseClient
+        .collections("cars")
+        .documents()
+        .search({
+          q: searchQuery || "*", // Use the searchQuery or default to "*"
+          query_by: "name, brandName, fuelType, transmissionType",
+          filter_by: filters, // Apply filters
+        });
 
-      const carIds = response.hits.map(hit => parseInt(hit.document.id));
-
+      const carIds = response.hits.map((hit) => parseInt(hit.document.id));
 
       const fetchAvailableCars = await CarRepository.fetchAvailablecars(
         startDate,
         endDate
       );
 
-
-      const availableCars = fetchAvailableCars.data.filter(car => carIds.includes(car.id));
+      const availableCars = fetchAvailableCars.data.filter((car) =>
+        carIds.includes(car.id)
+      );
 
       if (fetchAvailableCars.status) {
         const availableCarsData = await Promise.all(
@@ -45,13 +49,13 @@ export class CarsControllers {
               id: car.id,
               name: car.name,
               description: car.description,
-              brandName: car.brand?.name, // Access brand name
+              brandName: car.brand?.name,
               brandLogo: await FormatImageUrl.formatImageUrl(
                 car.brand?.imageUrl
-              ), // Await the formatted brand logo URL
+              ),
               primaryImage: await FormatImageUrl.formatImageUrl(
                 car.primaryImageUrl
-              ), // Await the formatted primary image URL
+              ),
               secondaryImages: car.secondaryImages
                 ? await Promise.all(
                     car.secondaryImages.map(
@@ -59,7 +63,7 @@ export class CarsControllers {
                         await FormatImageUrl.formatImageUrl(imageUrl)
                     )
                   )
-                : [], // Only map if secondaryImage exists, else return an empty array
+                : [],
               year: car.year,
               fuelType: car.fuelType,
               transmissionType: car.transmissionType,

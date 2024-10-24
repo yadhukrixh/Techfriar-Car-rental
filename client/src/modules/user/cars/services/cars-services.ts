@@ -4,7 +4,7 @@ import { FetchAvailableCarsResponse, FetchedCarData } from "@/interfaces/user/ca
 import { DateFormatter } from "@/utils/date-formatter";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 
-export class CarServices{
+export class CarServices {
     private client: ApolloClient<NormalizedCacheObject>;
 
     constructor(
@@ -16,25 +16,21 @@ export class CarServices{
     // fetch all cars from database
 
     public fetchAvailableCars = async (
-        selectedDates: string | null,
+        selectedDates: string[] | null,
         price: number,
         selectedFuelTypes: string[],
         selectedTransmission: string[],
         selectedCapacities: number[], // Assuming you want to use integers for capacities
         sortType: string,
-        setCarList: (list: FetchedCarData[] | null) => void
+        setCarList: (list: FetchedCarData[] | null) => void,
+        searchQuery:string,
     ): Promise<void> => {
         try {
-            const dateFormatter = new DateFormatter();
-            
             if (selectedDates) {
-                const dateStrings = selectedDates.split(',').map(date => date.trim());
-                const rawStartDate = dateStrings[1];
-                const rawEnddate = dateStrings[3];
-    
-                const startDate = dateFormatter.formatDate(rawStartDate);
-                const endDate = dateFormatter.formatDate(rawEnddate);
-    
+
+                const startDate = selectedDates[0];
+                const endDate = selectedDates[1];
+
                 const { data } = await this.client.query<FetchAvailableCarsResponse>({
                     query: FETCH_AVAILABLE_CARS,
                     variables: {
@@ -45,18 +41,19 @@ export class CarServices{
                         capacities: selectedCapacities, // Corrected variable name
                         maxPrice: price,
                         sortType: sortType,
+                        searchQuery:searchQuery,
                     },
                 });
-    
+
                 if (data.fetchAvailableCars.status) {
                     setCarList(data?.fetchAvailableCars.data);
                 }
             }
-    
+
         } catch (error) {
             console.error("Error fetching available cars:", error);
         }
     };
-    
-    
+
+
 }

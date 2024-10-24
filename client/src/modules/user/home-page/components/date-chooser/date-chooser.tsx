@@ -36,7 +36,8 @@ const DateChooser: React.FC = () => {
 
   const handleNextPage = async() => {
     if(selectedDates){
-      router.push(`/cars?selectedDates=${selectedDates}`)
+      localStorage.setItem('selectedDates', JSON.stringify(selectedDates));
+      router.push('/cars')
     }
   }
 

@@ -3,20 +3,20 @@ import React, { useState } from 'react';
 import styles from './search-bar.module.css';
 
 interface SearchBarProps {
-  onSearch: (query: string) => void;
+  setSearchQuery:(query:string)=>void;
   placeholder?: string;
 }
 
-const SearchBar: React.FC<SearchBarProps> = ({ onSearch, placeholder = 'Search...' }) => {
-  const [searchQuery, setSearchQuery] = useState('');
+const SearchBar: React.FC<SearchBarProps> = ({ setSearchQuery, placeholder = 'Search...' }) => {
+  const [search, setSearch] = useState('');
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearch(event.target.value);
     setSearchQuery(event.target.value);
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    onSearch(searchQuery);
   };
 
   return (
@@ -25,7 +25,7 @@ const SearchBar: React.FC<SearchBarProps> = ({ onSearch, placeholder = 'Search..
         type="text"
         className={styles.searchInput}
         placeholder={placeholder}
-        value={searchQuery}
+        value={search}
         onChange={handleInputChange}
       />
       <button type="submit" className={styles.searchButton}>
