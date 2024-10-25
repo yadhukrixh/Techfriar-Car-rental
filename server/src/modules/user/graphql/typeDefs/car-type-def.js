@@ -35,6 +35,17 @@ const handleCarTypeDefs = gql`
     numberOfDoors: Int!
     pricePerDay: Int!
   }
+
+
+  type Query {
+    fetchCarById(id: Int!): FetchCarByIdResponse!
+  }
+
+  type FetchCarByIdResponse{
+    status: Boolean!
+    message:String!
+    data:CarData
+  }
 `;
 
 export default handleCarTypeDefs;

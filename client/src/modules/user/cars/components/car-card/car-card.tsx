@@ -5,9 +5,11 @@ import { FetchedCarData } from "@/interfaces/user/cars";
 
 interface CarRentalCardProps {
   car: FetchedCarData;
+  onClickFunction:(id:number)=>void;
 }
 
-const CarRentalCard: React.FC<CarRentalCardProps> = ({ car }) => {
+const CarRentalCard: React.FC<CarRentalCardProps> = ({ car,onClickFunction }) => {
+    
   return (
     <div className={styles.carCard}>
       <div className={styles.cardBody}>
@@ -55,7 +57,7 @@ const CarRentalCard: React.FC<CarRentalCardProps> = ({ car }) => {
           <p className={styles.price}>
             ₹ {car.pricePerDay.toLocaleString()}/Day
           </p>
-          <button className={styles.viewDealButton}>Rent Now</button>
+          <button className={styles.viewDealButton} onClick={()=>onClickFunction(car.id)}>View Car</button>
         </div>
       </div>
     </div>

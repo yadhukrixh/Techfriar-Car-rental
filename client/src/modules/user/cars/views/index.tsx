@@ -5,16 +5,19 @@ import Filteration from "../components/filteration/filteration";
 import SearchBar from "../components/search-bar/search-bar";
 import styles from "./cars.module.css";
 import GoogleMapPicker from "../components/map/location-picker";
-import CarRentalCards from "../components/car-list/car-list";
 import FilterationButton from "../components/filteration-button/filteration-button";
 import { FetchedCarData } from "@/interfaces/user/cars";
+import { Modal, Empty, Button } from "antd";
 import {
   ApolloClient,
   NormalizedCacheObject,
   useApolloClient,
 } from "@apollo/client";
 import { CarServices } from "../services/cars-services";
-import { Empty } from "antd";
+import { LatLngTuple } from "leaflet";
+import CarRentalList from "../components/car-list/car-list";
+import { useRouter } from "next/navigation";
+import Swal from "sweetalert2";
 
 const Cars = () => {
   const handleSearch = (query: string) => {
@@ -25,7 +28,7 @@ const Cars = () => {
   const [carList, setCarList] = useState<FetchedCarData[] | null>([]);
   const client = useApolloClient() as ApolloClient<NormalizedCacheObject>;
   const storedDates = localStorage.getItem("selectedDates");
-  const initialDates = storedDates ? JSON.parse(storedDates) : []; // Parse or set to []
+  const initialDates = storedDates ? JSON.parse(storedDates) : [];
 
   const [selectedDates, setSelectedDates] = useState<string[]>(initialDates);
   const carService = new CarServices(client);
@@ -37,6 +40,12 @@ const Cars = () => {
   const [selectedCapacities, setSelectedCapacities] = useState<number[]>([]);
   const [sortType, setSortType] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState<LatLngTuple | null>(
+    null
+  );
+  const router = useRouter();
+
+  const [isMapModalVisible, setIsMapModalVisible] = useState(false);
 
   useEffect(() => {
     const fetchCars = async () => {
@@ -63,6 +72,33 @@ const Cars = () => {
     searchQuery,
   ]);
 
+  const handleRentNow = (id: number) => {
+    if (selectedLocation === null) {
+      setIsMapModalVisible(true); // Show modal to select location
+    } else {
+      Swal.fire({
+        title: "Are you sure?",
+        html: `You won't be able to change Dates,<br> Delivery: ${
+          selectedDates[0].split("T")[0]
+        } <br> Return: ${selectedDates[1].split("T")[0]}`,
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#ff7f00",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, Rent Now!",
+      }).then((result) => {
+        if (result.isConfirmed) {
+          localStorage.setItem("selectedDates", JSON.stringify(selectedDates));
+          router.push(`/cars/${id}?location=${selectedLocation}`);
+        }
+      });
+    }
+  };
+
+  const handleModalClose = () => {
+    setIsMapModalVisible(false);
+  };
+
   return (
     <div className={styles.carContainer}>
       <SearchBar setSearchQuery={setSearchQuery} placeholder="Search cars..." />
@@ -80,18 +116,38 @@ const Cars = () => {
         </div>
         <div className={styles.carList}>
           {(carList?.length ?? 0) > 0 ? (
-            <CarRentalCards carList={carList} />
+            <CarRentalList carList={carList} onclickFunction={handleRentNow} />
           ) : (
-            <Empty description="No cars found" style={{width:"100%"}}/>
+            <Empty description="No cars found" style={{ width: "100%" }} />
           )}
           <div className={styles.map}>
-            <GoogleMapPicker />
+            <GoogleMapPicker
+              setLocation={setSelectedLocation}
+              location={selectedLocation}
+            />
           </div>
         </div>
       </div>
       <div className={styles.filterationButton}>
         <FilterationButton />
       </div>
+
+      {/* Map Modal */}
+      <Modal
+        title="Select Location"
+        visible={isMapModalVisible}
+        onCancel={handleModalClose}
+        footer={[
+          <Button key="close" onClick={handleModalClose}>
+            Close
+          </Button>,
+        ]}
+      >
+        <GoogleMapPicker
+          setLocation={setSelectedLocation}
+          location={selectedLocation}
+        />
+      </Modal>
     </div>
   );
 };

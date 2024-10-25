@@ -14,6 +14,19 @@ const handleCarResolver = {
                     message:error
                 }
             }
+        },
+
+        //fetch car by id
+        fetchCarById:async(_,{id})=>{
+            try{
+                const car = await CarsControllers.fetchCarById(id);
+                return car;
+            }catch(error){
+                return{
+                    status:false,
+                    message:"Internal server error"
+                }
+            }
         }
     }
 }

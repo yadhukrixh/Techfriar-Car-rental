@@ -1,4 +1,4 @@
-.carContainer{
+.carContainer {
     margin-top: 100px;
     display: flex;
     flex-direction: column;
@@ -8,7 +8,7 @@
     position: relative;
 }
 
-.filterationButton{
+.filterationButton {
     display: none;
     z-index: 500;
     position: absolute;
@@ -16,11 +16,11 @@
     bottom: 80px;
 }
 
-.sideBar{
+.sideBar {
     max-height: fit-content;
 }
 
-.carList{
+.carList {
     height: 680px;
     width: 100%;
     display: flex;
@@ -28,12 +28,11 @@
     gap: 30px;
 }
 
-.carList::-webkit-scrollbar{
+.carList::-webkit-scrollbar {
     display: none;
 }
 
-
-.mainContainer{
+.mainContainer {
     height: 100%;
     padding: 20px;
     width: 100%;
@@ -41,24 +40,24 @@
     flex-direction: row;
 }
 
-@media(min-width:1250px) and (max-width:1500px) { 
-    .map{
+@media (min-width: 1250px) and (max-width: 1500px) {
+    .map {
         display: none;
     }
 }
 
-@media (min-width:300px) and (max-width:1250px) {
-    .map{
+@media (min-width: 300px) and (max-width: 1250px) {
+    .map {
         display: none;
     }
 }
 
-@media (min-width:300px) and (max-width:1000px){
-    .sideBar{
+@media (min-width: 300px) and (max-width: 1000px) {
+    .sideBar {
         display: none;
     }
 
-    .filterationButton{
+    .filterationButton {
         display: block;
     }
 }

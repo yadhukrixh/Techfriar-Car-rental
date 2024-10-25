@@ -90,4 +90,50 @@ export class CarsControllers {
       throw error;
     }
   }
+
+  //fetch car by id
+  static async fetchCarById(id) {
+    try {
+      const car = await CarRepository.fetchCarById(id);
+      if (!car.status) {
+        return car;
+      }
+
+      const formattedCar = {
+        id: car.data.id,
+        name: car.data.name,
+        description: car.data.description,
+        brandName: car.data.brand.name,
+        brandLogo: await FormatImageUrl.formatImageUrl(car.data.brand.imageUrl),
+        primaryImage: await FormatImageUrl.formatImageUrl(
+          car.data.primaryImageUrl
+        ),
+        secondaryImages: car.data.secondaryImages
+          ? await Promise.all(
+              car.data.secondaryImages.map(
+                async (imageUrl) =>
+                  await FormatImageUrl.formatImageUrl(imageUrl)
+              )
+            )
+          : [],
+        year:car.data.year,
+        fuelType:car.data.fuelType,
+        transmissionType:car.data.transmissionType,
+        numberOfSeats:car.data.numberOfSeats,
+        numberOfDoors:car.data.numberOfDoors,
+        pricePerDay:car.data.pricePerDay
+      };
+
+      return{
+        ...car,
+        data:formattedCar
+      }
+    } catch (error) {
+      console.error(error);
+      return{
+        status:false,
+        message:"Failed to fetch car"
+      }
+    }
+  }
 }

@@ -17,6 +17,7 @@ export interface FetchedCarData {
 // car list compoonent props
 export interface CarRentalListComponentProps{
     carList:FetchedCarData[] | null;
+    onclickFunction:(id:number)=>void;
 }
 
 
@@ -38,5 +39,15 @@ export interface FetchAvailableCarsResponse {
         status: boolean;
         message: string;
         data: FetchedCarData[] | null; // Nullable in case no cars are available
+    }
+}
+
+
+// interface for the fetch cars by id
+export interface FetchCarByIdResponse {
+    fetchCarById:{
+        status:boolean;
+        message:string;
+        data:FetchedCarData;
     }
 }

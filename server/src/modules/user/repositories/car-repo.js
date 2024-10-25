@@ -2,7 +2,7 @@ import Brands from "../../admin/models/brands-models.js";
 import AllCars from "../../admin/models/cars-models.js";
 import Orders from "../../admin/models/orders-model.js";
 import RentableCars from "../../admin/models/rentable-cars-models.js";
-import { Op } from 'sequelize';
+import { Op } from "sequelize";
 
 export class CarRepository {
   //fech available cars
@@ -73,6 +73,40 @@ export class CarRepository {
       }
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  // fetch car by id
+  static async fetchCarById(id) {
+    try {
+      const car = await AllCars.findByPk(id, {
+        include: [
+          {
+            model: Brands, // Include the associated Brand model
+            as: "brand", // Use the alias defined in the model association
+            attributes: ["name", "imageUrl"], // Fetch only brand name and logo URL
+          },
+        ],
+      });
+
+      if (!car) {
+        return {
+          status: false,
+          message: "Car not found",
+        };
+      }
+
+      return {
+        status: true, // Changed to true since the car was found
+        message: "Car found",
+        data: car.dataValues,
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        status: false,
+        message: error.message || "An error occurred", // Provide a default message if error.message is undefined
+      };
     }
   }
 }

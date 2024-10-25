@@ -1,106 +1,160 @@
 "use client";
 import React, { useEffect, useState } from "react";
+import { Image as AntdImage, Tag } from "antd"; // Import Ant Design Image
 import styles from "./car-details.module.css";
-import BackButton from "@/themes/back-button/back-button";
+import { FetchedCarData } from "@/interfaces/user/cars";
+import {
+  ApolloClient,
+  NormalizedCacheObject,
+  useApolloClient,
+} from "@apollo/client";
+import { CarBookingServices } from "../../services/car-booking-services";
+import { useParams } from "next/navigation";
+import ReviewComponent from "../user-review/user-review";
+import { style } from "framer-motion/client";
 
-interface CarDetailProps {
-  id?: string;
-  make: string;
-  model: string;
-  year: number;
-  price: number;
-  description: string;
-  images: string[];
-  type: string;
-  seats: string;
-  gear: string;
-  doors:number;
-  rating: number;
+// Define the types for the image and product details
+interface ProductImage {
+  url: string;
+  alt: string;
 }
 
-const car ={
-    make: "Nissan",
-    model: "GT-R",
-    year: 2023,
-    price: 80,
-    description:
-      "NISMO has become the embodiment of Nissan’s outstanding performance.",
-    images: [
-      "/images/cars/car.svg",
-      "/images/cars/car.svg",
-      "/images/cars/car.svg",
-      "/images/cars/car.svg",
-      "/images/cars/car.svg",
-      "/images/cars/car.svg",
-      "/images/cars/car.svg",
-      "/images/cars/car.svg",
-      "/images/cars/car.svg",
-      
-    ],
-    type: "Sport",
-    seats:"4",
-    transmission:"Manual",
-    doors:"2",
-    fuel: "Petrol",
+interface ProductDetails {
+  id: string;
+  title: string;
+  brand: string;
+  price: number;
+  originalPrice?: number;
+  rating: number;
+  reviewCount: number;
+}
+
+const ProductDetails: React.FC = () => {
+  const client = useApolloClient() as ApolloClient<NormalizedCacheObject>;
+  const carBookingService = new CarBookingServices(client);
+  const { id } = useParams();
+  const [selectedImage, setSelectedImage] = useState<number>(0);
+  const [quantity, setQuantity] = useState<number>(1);
+  const [car, setCar] = useState<FetchedCarData>();
+  const allImages = [car?.primaryImage, ...(car?.secondaryImages ?? [])];
+
+  useEffect(() => {
+    const fetchCar = async () => {
+      await carBookingService.fetchCarData(id, setCar);
+    };
+
+    fetchCar();
+  }, [id]);
+
+  const product: ProductDetails = {
+    id: "1",
+    title: "Premium Wireless Headphones",
+    brand: "AudioTech",
+    price: 199.99,
+    originalPrice: 249.99,
     rating: 4.5,
+    reviewCount: 2547,
   };
 
-  const CarDetail = () => {
-    const [currentImage, setCurrentImage] = useState(0);
-
-    const handleNextImage = () => {
-        setCurrentImage((prev) => (prev + 1) % car.images.length);
-    };
-
-    const handlePrevImage = () => {
-        setCurrentImage((prev) => (prev === 0 ? car.images.length - 1 : prev - 1));
-    };
-
-    return (
-        <div className={styles.container}>
-            {/* Car Main Information Section */}
-            <div className={styles.imageContainer}>
-                <div className={styles.mainImage}>
-                    <img src={car.images[currentImage]} alt={`${car.make} ${car.model}`} />
-                </div>
-                <div className={styles.thumbnailContainer}>
-                    {car.images.map((image, index) => (
-                        <img
-                            key={index}
-                            src={image}
-                            alt="thumbnail"
-                            className={currentImage === index ? styles.activeThumbnail : ''}
-                            onClick={() => setCurrentImage(index)}
-                        />
-                    ))}
-                </div>
+  return (
+    <div className={styles.container}>
+      <div className={styles.detailsGrid}>
+        {/* Left Column - Image Gallery */}
+        <div className={styles.imageGallery}>
+          <div className={styles.mainImage}>
+            <AntdImage
+              src={allImages[selectedImage]}
+              className={styles.imageContainer}
+              preview={true} // Disable default preview to maintain custom functionality
+            />
+          </div>
+          <div className={styles.thumbnails}>
+            {allImages.map((image, index) => (
+              <div
+                key={index}
+                className={`${styles.thumbnail} ${
+                  selectedImage === index ? styles.selected : ""
+                }`}
+                onClick={() => setSelectedImage(index)}
+              >
+                <AntdImage
+                  src={image}
+                  width={60}
+                  height={60}
+                  preview={false} // Disable default preview
+                />
+              </div>
+            ))}
+          </div>
+          <div className={styles.extraInfo}>
+            <div className={styles.listElement}>
+              <img src="/icons/door.svg" alt="" />
+              <p>{car?.numberOfDoors} DOORS</p>
             </div>
-
-            {/* Car Details Section */}
-            <div className={styles.detailsContainer}>
-                <h1>{`${car.make} ${car.model}`}</h1>
-                <p className={styles.rating}>
-                    {'★'.repeat(Math.round(car.rating))}{' '}
-                    <span className={styles.reviews}>({}+ Reviewer)</span>
-                </p>
-                <p className={styles.description}>{car.description}</p>
-                <div className={styles.specs}>
-                    <div><img src="/icons/gear.svg" alt="" /> {car.transmission}</div>
-                    <div><img src="/icons/seat.svg" alt="" /> {car.seats}</div>
-                    <div><img src="/icons/door.svg" alt="" /> {car.doors}</div>
-                    <div><img src="/icons/fuel.svg" alt="" /> {car.fuel}</div>
-                </div>
-                <div className={styles.priceContainer}>
-                    <span className={styles.price}>${car.price}/day</span>
-                    <span className={styles.oldPrice}>${}</span>
-                </div>
-                <div className={styles.buttons}>
-                    <button className={styles.rentButton}>Rent Now</button>
-                    <button className={styles.wishlistButton}>Add to Wishlist</button>
-                </div>
+            <div className={styles.listElement}>
+              <img src="/icons/seat.svg" alt="" />
+              <p>{car?.numberOfSeats} SEATS</p>
             </div>
+            <div className={styles.listElement}>
+              <img src="/icons/fuel.svg" alt="" />
+              <p>{car?.fuelType.toUpperCase()}</p>
+            </div>
+            <div className={styles.listElement}>
+              <img src="/icons/gear.svg" alt="" />
+              <p>{car?.transmissionType.toUpperCase()}</p>
+            </div>
+          </div>
         </div>
-    );
+
+        {/* Middle Column - Product Info */}
+        <div className={styles.carInfo}>
+          <h1 className={styles.title}>{car?.name}-{car?.year}</h1>
+          <div className={styles.brand}>
+            <Tag className={styles.customTag} color="success">
+              <img
+                src={car?.brandLogo}
+                alt="Custom Icon"
+                className="tag-icon"
+              />
+              {car?.brandName}
+            </Tag>
+          </div>
+
+          <div className={styles.rating}>
+            <div className={styles.stars}>
+              {"★".repeat(Math.floor(product.rating))}
+              {"☆".repeat(5 - Math.floor(product.rating))}
+            </div>
+            <span className={styles.reviewCount}>
+              {product.reviewCount.toLocaleString()} ratings
+            </span>
+          </div>
+
+          <div className={styles.priceSection}>
+            <div className={styles.price}>
+              <span className={styles.currency}>₹</span>
+              <span className={styles.amount}>
+                {car?.pricePerDay.toFixed(2)}
+              </span>
+            </div>
+          </div>
+
+          <div className={styles.description}>
+            <h2>About this item</h2>
+            <p>{car?.description}</p>
+          </div>
+
+          <button className={styles.rentNowButton}>Rent Now</button>
+          <button className={styles.cancelButton}>Cancel</button>
+        </div>
+
+        {/* Right Column - Buy Box */}
+        <div className={styles.reviewBox}>
+          <ReviewComponent />
+        </div>
+      </div>
+    </div>
+  );
 };
 
-export default CarDetail;
+export default ProductDetails;

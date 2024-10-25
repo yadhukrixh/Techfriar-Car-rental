@@ -41,6 +41,10 @@ const Orders = sequelize.define('Order', {
     },
     onDelete: 'SET NULL', // If transaction is deleted, set the transactionId to NULL
   },
+  deliveryLocation: {
+    type: DataTypes.STRING, // New column for delivery location
+    allowNull: true, // Adjust as needed (set to false if it's a required field)
+  },
 });
 
 export default Orders;

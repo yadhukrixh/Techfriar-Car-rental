@@ -1,0 +1,187 @@
+/* Review.module.css */
+.reviewSection {
+    max-width: 800px;
+    margin: 20px auto;
+    padding-top: 5px !important;
+    padding: 24px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .reviewTitle {
+    font-size: 24px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 0;
+    text-align: center;
+  }
+
+
+  
+  .reviewStats {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 24px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    margin-bottom: 32px;
+  }
+  
+  .averageRating {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 150px;
+  }
+  
+  .ratingNumber {
+    font-size: 48px;
+    font-weight: 700;
+    color: #333;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  
+  .stars {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 8px;
+  }
+  
+  .starFilled {
+    fill: #ffc107;
+    color: #ffc107;
+  }
+  
+  .starEmpty {
+    fill: #e0e0e0;
+    color: #e0e0e0;
+  }
+  
+  .totalReviews {
+    color: #666;
+    font-size: 14px;
+  }
+  
+  .ratingBreakdown {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .ratingBarContainer {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  .ratingLabel {
+    min-width: 40px;
+    color: #666;
+    font-size: 14px;
+  }
+  
+  .barWrapper {
+    flex-grow: 1;
+    height: 8px;
+    width: 50px;
+    background-color: #e0e0e0;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  
+  .barFill {
+    height: 100%;
+    background-color: #5e2ddc;
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+  
+  .ratingCount {
+    min-width: 40px;
+    color: #666;
+    font-size: 14px;
+    text-align: right;
+  }
+  
+  .reviewList {
+    max-height: 200px;
+    overflow: scroll;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-top: 24px;
+  }
+
+  .reviewList::-webkit-scrollbar{
+    display: none;
+  }
+  
+  .reviewCard {
+    padding: 16px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    background-color: #ffffff;
+  }
+  
+  .reviewHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  
+  .reviewHeader h4 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: #333;
+  }
+  
+  .verifiedTag {
+    font-size: 12px;
+    color: #00a65a;
+    background-color: #e8f5e9;
+    padding: 4px 8px;
+    border-radius: 4px;
+  }
+  
+  .reviewRating {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 8px;
+  }
+  
+  .reviewText {
+    margin: 0;
+    color: #666;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .barFill {
+    height: 100%;
+    background-color: #5e2ddc; /* Ensure this is the color you want */
+    border-radius: 4px;
+    transition: width 0.3s ease;
+  }
+  
+  
+  @media (max-width: 768px) {
+    .reviewStats {
+      flex-direction: column;
+      gap: 24px;
+      padding: 16px;
+    }
+  
+    .averageRating {
+      min-width: auto;
+    }
+  
+    .reviewSection {
+      padding: 16px;
+    }
+  }
