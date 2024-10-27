@@ -31,6 +31,7 @@ const handleUserTypeDefs = gql`
   }
 
   type UserData {
+    id:Int!
     name: String
     email: String
     phoneNumber: String

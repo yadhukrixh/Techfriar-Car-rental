@@ -28,6 +28,20 @@ const handleCarResolver = {
                 }
             }
         }
+    },
+
+    Mutation :{
+        createBooking: async (_, { input }) => {
+            try{
+                const bookCar = await CarsControllers.createBooking(input);
+                return bookCar;
+            }catch(error){
+                return{
+                    status:false,
+                    message:error
+                }
+            }
+        }
     }
 }
 

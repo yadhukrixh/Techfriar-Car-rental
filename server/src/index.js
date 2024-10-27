@@ -7,10 +7,11 @@ import { startApolloServer } from './config/apollo-server.js';
 import { graphqlUploadExpress } from 'graphql-upload';
 
 import  './config/typesense.js';
+import { defineAssociations } from './modules/admin/models/transactions-model.js';
 
 dotenv.config();
 
-
+defineAssociations()
 
 const app = express();
 

@@ -51,3 +51,14 @@ export interface FetchCarByIdResponse {
         data:FetchedCarData;
     }
 }
+
+//ccreate booking
+export interface CreateBookingResponse{
+    createBooking:{
+        status:boolean;
+        message:string;
+        data:{
+            bookingId:number;
+        }
+    }
+}

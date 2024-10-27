@@ -3,6 +3,7 @@ import AllCars from "../../admin/models/cars-models.js";
 import Orders from "../../admin/models/orders-model.js";
 import RentableCars from "../../admin/models/rentable-cars-models.js";
 import { Op } from "sequelize";
+import { Transactions } from "../../admin/models/transactions-model.js";
 
 export class CarRepository {
   //fech available cars
@@ -11,7 +12,7 @@ export class CarRepository {
       // Step 1: Fetch all bookedCarIds that overlap with the given date range
       const overlappingOrders = await Orders.findAll({
         where: {
-          [Op.or]: [
+          [Op.and]: [
             {
               bookedDates: {
                 [Op.overlap]: [startDate, endDate], // Check for date overlap
@@ -19,6 +20,18 @@ export class CarRepository {
             },
           ],
         },
+        include: [
+          {
+            model: Transactions,
+            as: "transaction", // Use alias set in Orders model
+            required: true,
+            where: {
+              status: {
+                [Op.in]: ["success", "pending"], // Check for both success and pending statuses
+              },
+            },
+          },
+        ],
         attributes: ["bookedCarId"], // Only fetch bookedCarId field
       });
 
@@ -109,4 +122,145 @@ export class CarRepository {
       };
     }
   }
+
+  // Check if a car model is available on the given dates
+  static async checkCarAvailability(carModelId, dates) {
+    try {
+      // Step 1: Fetch all rentable cars for the given car model ID
+      const rentableCars = await RentableCars.findAll({
+        where: {
+          carId: carModelId,
+          activeStatus: true,
+        },
+        attributes: ["id"],
+      });
+
+      // Extract rentable car IDs from the fetched cars
+      const rentableCarIds = rentableCars.map((car) => car.id);
+
+      // Step 2: Find bookings for these rentable cars with date overlap and valid status
+      const conflictingOrders = await Orders.findAll({
+        where: {
+          bookedCarId: {
+            [Op.in]: rentableCarIds,
+          },
+          bookedDates: {
+            [Op.overlap]: dates, // Check for overlapping dates
+          },
+        },
+        include: [
+          {
+            model: Transactions,
+            as: "transaction",
+            required: true,
+            where: {
+              status: {
+                [Op.in]: ["pending", "success"],
+              },
+            },
+          },
+        ],
+        attributes: ["bookedCarId"], // Only fetch bookedCarId
+      });
+
+      // Step 3: Determine available rentable cars by excluding conflicted ones
+      const conflictingCarIds = conflictingOrders.map(
+        (order) => order.bookedCarId
+      );
+      const availableRentableCars = rentableCars.filter(
+        (car) => !conflictingCarIds.includes(car.id)
+      );
+
+      if (availableRentableCars.length === 0) {
+        // If all rentable cars have conflicting dates, return as fully booked
+        return {
+          status: false,
+          message: "High traffic, SomeOne else booked your car!",
+        };
+      }
+
+      // Step 4: Return a randomly available rentable car ID
+      const randomAvailableCar =
+        availableRentableCars[
+          Math.floor(Math.random() * availableRentableCars.length)
+        ];
+      return {
+        status: true,
+        message: "Car available",
+        rentableCarId: randomAvailableCar.id, // Return the ID of an available rentable car
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        status: false,
+        message:
+          error.message || "An error occurred while checking car availability",
+      };
+    }
+  }
+
+  // create transaction
+  static async createTransaction(userId, amount) {
+    try {
+      // Create a new transaction with status 'pending'
+      const transaction = await Transactions.create({
+        userId: userId,
+        amount: amount,
+        status: "pending",
+        date: new Date(), // Date defaults to now, but adding explicitly for clarity
+      });
+
+      // Return a success response with the created transaction details
+      return {
+        status: true,
+        message: "Transaction created successfully",
+        transactionId: transaction.dataValues.id,
+      };
+    } catch (error) {
+      console.error("Error creating transaction:", error);
+      return {
+        status: false,
+        message: error.message || "Error creating transaction",
+      };
+    }
+  }
+
+  // create booking
+  static async createBooking(
+    userId,
+    bookedDates,
+    bookedRentableId,
+    transactionId,
+    deliveryLocation,
+    returnLocation,
+    secondaryMobileNumber
+  ) {
+    try {
+      const booking = await Orders.create({
+        userId: userId,
+        bookedDates: bookedDates,
+        bookedCarId: bookedRentableId,
+        transactionId: transactionId,
+        deliveryLocation: deliveryLocation,
+        returnLocation: returnLocation,
+        secondaryMobileNumber: secondaryMobileNumber,
+        date: new Date(), // Explicitly setting the date, but it defaults to now
+      });
+  
+      return {
+        status: true,
+        message: "Booking created successfully",
+        data: {
+          orderId:booking.dataValues.id
+        }
+      };
+    } catch (error) {
+      console.error("Error creating booking:", error);
+      return {
+        status: false,
+        message: error.message || "Failed to create booking",
+      };
+    }
+  }
+  
 }

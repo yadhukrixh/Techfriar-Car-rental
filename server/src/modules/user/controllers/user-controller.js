@@ -87,6 +87,7 @@ export class  UserController{
             }
 
             const formattedUser = {
+                id:id,
                 name:userData.data.name,
                 email:userData.data.email,
                 phoneNumber:userData.data.phoneNumber,

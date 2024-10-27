@@ -136,4 +136,34 @@ export class CarsControllers {
       }
     }
   }
+
+  //book cars
+  static async createBooking(input){
+    try{
+      const { userId, bookedDates, carModelId, deliveryLocation, returnLocation, secondaryMobileNumber, amount } = input;
+      const formattedDates = bookedDates.map(dateStr => new Date(dateStr));
+      const checkAvailablecar = await CarRepository.checkCarAvailability(carModelId,formattedDates);
+
+      //manage concurent bookings
+      if(!checkAvailablecar.status){
+        return checkAvailablecar
+      }
+
+      // create transaction
+      const transaction = await CarRepository.createTransaction(userId,amount)
+      if(!transaction.status){
+        return transaction;
+      }
+
+      // create bookings
+      const booking = await CarRepository.createBooking(userId,formattedDates,checkAvailablecar.rentableCarId,transaction.transactionId,deliveryLocation,returnLocation,secondaryMobileNumber);
+      return booking
+
+    }catch(error){
+      return{
+        status:false,
+        message:error
+      }
+    }
+  }
 }

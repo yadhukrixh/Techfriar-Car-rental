@@ -6,6 +6,7 @@ export const FETCH_USER_DATA = gql`
       status
       message
       data {
+        id
         name
         email
         phoneNumber

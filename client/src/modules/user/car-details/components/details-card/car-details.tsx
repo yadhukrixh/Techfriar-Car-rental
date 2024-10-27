@@ -11,50 +11,45 @@ import {
 import { CarBookingServices } from "../../services/car-booking-services";
 import { useParams } from "next/navigation";
 import ReviewComponent from "../user-review/user-review";
-import { style } from "framer-motion/client";
+import BillingForm from "../billing-info/billing-info";
+import { UserServices } from "@/modules/user/dashboard/services/user-services";
+import { UserData } from "@/interfaces/user/user-details";
 
-// Define the types for the image and product details
-interface ProductImage {
-  url: string;
-  alt: string;
-}
-
-interface ProductDetails {
-  id: string;
-  title: string;
-  brand: string;
-  price: number;
-  originalPrice?: number;
-  rating: number;
-  reviewCount: number;
-}
-
-const ProductDetails: React.FC = () => {
+const CarDetailedView: React.FC = () => {
   const client = useApolloClient() as ApolloClient<NormalizedCacheObject>;
   const carBookingService = new CarBookingServices(client);
+  const userService = new UserServices(client);
   const { id } = useParams();
   const [selectedImage, setSelectedImage] = useState<number>(0);
-  const [quantity, setQuantity] = useState<number>(1);
   const [car, setCar] = useState<FetchedCarData>();
+  const [selectedDates, setSelectedDates] = useState<Date[]>([]);
+  const [totalPrice, setTotalPrice] = useState<Number>();
+  const [showBillingStatus, setShowBillingStatus] = useState(false);
   const allImages = [car?.primaryImage, ...(car?.secondaryImages ?? [])];
+  const [userData,setUserData] = useState<UserData>({});
+
+  const handleRentNow  = () => {
+    setShowBillingStatus(!showBillingStatus);
+  }
 
   useEffect(() => {
     const fetchCar = async () => {
       await carBookingService.fetchCarData(id, setCar);
+      await carBookingService.getSelectedDates(setSelectedDates);
     };
 
     fetchCar();
   }, [id]);
 
-  const product: ProductDetails = {
-    id: "1",
-    title: "Premium Wireless Headphones",
-    brand: "AudioTech",
-    price: 199.99,
-    originalPrice: 249.99,
-    rating: 4.5,
-    reviewCount: 2547,
-  };
+  useEffect(() => {
+    // Calculate total price when selectedDates or car changes
+    const pricePerDay = car?.pricePerDay || 0; // Default to 0 if car is null or undefined
+    setTotalPrice(pricePerDay * selectedDates.length); // Calculate total price
+    const fetchUser = async() => {
+      await userService.fetchUserData(setUserData);
+    }
+    fetchUser();
+  }, [selectedDates, car]);
 
   return (
     <div className={styles.container}>
@@ -87,65 +82,69 @@ const ProductDetails: React.FC = () => {
             ))}
           </div>
           <div className={styles.extraInfo}>
-            <div className={styles.listElement}>
+            <Tag color="orange" className={styles.listElement}>
               <img src="/icons/door.svg" alt="" />
               <p>{car?.numberOfDoors} DOORS</p>
-            </div>
-            <div className={styles.listElement}>
+            </Tag>
+            <Tag color="orange" className={styles.listElement}>
               <img src="/icons/seat.svg" alt="" />
               <p>{car?.numberOfSeats} SEATS</p>
-            </div>
-            <div className={styles.listElement}>
+            </Tag>
+            <Tag color="orange" className={styles.listElement}>
               <img src="/icons/fuel.svg" alt="" />
               <p>{car?.fuelType.toUpperCase()}</p>
-            </div>
-            <div className={styles.listElement}>
+            </Tag>
+            <Tag color="orange" className={styles.listElement}>
               <img src="/icons/gear.svg" alt="" />
               <p>{car?.transmissionType.toUpperCase()}</p>
-            </div>
+            </Tag>
           </div>
         </div>
 
         {/* Middle Column - Product Info */}
         <div className={styles.carInfo}>
-          <h1 className={styles.title}>{car?.name}-{car?.year}</h1>
-          <div className={styles.brand}>
-            <Tag className={styles.customTag} color="success">
-              <img
-                src={car?.brandLogo}
-                alt="Custom Icon"
-                className="tag-icon"
-              />
-              {car?.brandName}
-            </Tag>
-          </div>
+          <h1 className={styles.title}>
+            {car?.name}-{car?.year}
+          </h1>
 
-          <div className={styles.rating}>
-            <div className={styles.stars}>
-              {"★".repeat(Math.floor(product.rating))}
-              {"☆".repeat(5 - Math.floor(product.rating))}
-            </div>
-            <span className={styles.reviewCount}>
-              {product.reviewCount.toLocaleString()} ratings
-            </span>
-          </div>
+          {!showBillingStatus ? (
+            <>
+              <div className={styles.brand}>
+                <Tag className={styles.customTag} color="success">
+                  <img
+                    src={car?.brandLogo}
+                    alt="Custom Icon"
+                    className="tag-icon"
+                  />
+                  {car?.brandName}
+                </Tag>
+              </div>
 
-          <div className={styles.priceSection}>
-            <div className={styles.price}>
-              <span className={styles.currency}>₹</span>
-              <span className={styles.amount}>
-                {car?.pricePerDay.toFixed(2)}
-              </span>
-            </div>
-          </div>
+              <div className={styles.rating}>
+                <span className={styles.reviewCount}>
+                  ₹{car?.pricePerDay} / Day
+                </span>
+              </div>
 
-          <div className={styles.description}>
-            <h2>About this item</h2>
-            <p>{car?.description}</p>
-          </div>
+              <div className={styles.priceSection}>
+                Total Price:
+                <div className={styles.price}>
+                  <span className={styles.currency}>₹</span>
+                  <span className={styles.amount}>
+                    {totalPrice?.toFixed(2)}
+                  </span>
+                </div>
+              </div>
 
-          <button className={styles.rentNowButton}>Rent Now</button>
-          <button className={styles.cancelButton}>Cancel</button>
+              <div className={styles.description}>
+                <h2>About this item</h2>
+                <p>{car?.description}</p>
+              </div>
+
+              <button className={styles.rentNowButton} onClick={handleRentNow}>Rent Now</button>
+              <button className={styles.cancelButton}>Cancel</button>
+            </>
+          ):<BillingForm carModelId={car?.id} userData={userData} dates={selectedDates} amount={totalPrice}/>}
         </div>
 
         {/* Right Column - Buy Box */}
@@ -157,4 +156,4 @@ const ProductDetails: React.FC = () => {
   );
 };
 
-export default ProductDetails;
+export default CarDetailedView;

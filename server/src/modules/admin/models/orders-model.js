@@ -2,23 +2,23 @@ import { DataTypes } from 'sequelize';
 import sequelize from '../../../config/postgres.js';
 import Users from '../../user/models/user-model.js';
 import RentableCars from './rentable-cars-models.js';
-import Transactions from './transactions-model.js';
+import { Transactions } from './transactions-model.js';
 
 const Orders = sequelize.define('Order', {
   date: {
     type: DataTypes.DATE,
     allowNull: false,
-    defaultValue: DataTypes.NOW, // Automatically sets the current date and time when the order is created
+    defaultValue: DataTypes.NOW,
   },
   bookedDates: {
-    type: DataTypes.ARRAY(DataTypes.DATE), // Store multiple dates as an array
+    type: DataTypes.ARRAY(DataTypes.DATE),
     allowNull: false,
   },
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: Users, // Reference to Users table
+      model: Users,
       key: 'id',
     },
     onDelete: 'CASCADE',
@@ -27,7 +27,7 @@ const Orders = sequelize.define('Order', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: RentableCars, // Reference to RentableCars table
+      model: RentableCars,
       key: 'id',
     },
     onDelete: 'CASCADE',
@@ -36,15 +36,28 @@ const Orders = sequelize.define('Order', {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: Transactions, // Reference to Transactions table
+      model: Transactions,
       key: 'id',
     },
-    onDelete: 'SET NULL', // If transaction is deleted, set the transactionId to NULL
+    onDelete: 'SET NULL',
   },
   deliveryLocation: {
-    type: DataTypes.STRING, // New column for delivery location
-    allowNull: true, // Adjust as needed (set to false if it's a required field)
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  returnLocation: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  secondaryMobileNumber: {
+    type: DataTypes.STRING,
+    allowNull: true,
   },
 });
+
+// Define associations
+Orders.belongsTo(Users, { foreignKey: 'userId', onDelete: 'CASCADE' });
+Orders.belongsTo(RentableCars, { foreignKey: 'bookedCarId', onDelete: 'CASCADE' });
+Orders.belongsTo(Transactions, { foreignKey: 'transactionId', as: 'transaction', onDelete: 'SET NULL' });
 
 export default Orders;

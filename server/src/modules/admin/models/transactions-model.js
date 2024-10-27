@@ -1,43 +1,52 @@
+// src/modules/admin/models/transactions-model.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../../../config/postgres.js';
 import Users from '../../user/models/user-model.js';
+import Orders from './orders-model.js'; // Import Orders here
 
 const Transactions = sequelize.define('Transaction', {
   id: {
     type: DataTypes.INTEGER,
     primaryKey: true,
-    autoIncrement: true, // Automatically increments the id
+    autoIncrement: true,
   },
   date: {
     type: DataTypes.DATE,
-    allowNull: false, // The date when the transaction occurred
-    defaultValue: DataTypes.NOW, // Defaults to the current date
+    allowNull: false,
+    defaultValue: DataTypes.NOW,
   },
   userId: {
     type: DataTypes.INTEGER,
     allowNull: false,
     references: {
-      model: Users, // Connects to the Users table
-      key: 'id',    // The userId references the 'id' field in Users
+      model: Users,
+      key: 'id',
     },
-    onDelete: 'CASCADE', // If the user is deleted, their transactions are also deleted
+    onDelete: 'CASCADE',
   },
   method: {
-    type: DataTypes.ENUM('card', 'upi', 'netbanking', 'wallet', 'other'), // List of payment methods
-    allowNull: false,
+    type: DataTypes.ENUM('card', 'upi', 'netbanking', 'wallet', 'other'),
+    allowNull: true,
   },
   razorpayId: {
     type: DataTypes.STRING,
-    allowNull: false, // Unique Razorpay transaction ID
+    allowNull: true,
   },
   status: {
-    type: DataTypes.ENUM('pending', 'success', 'canceled', 'refunded'), // Transaction status
+    type: DataTypes.ENUM('pending', 'success', 'canceled', 'refunded'),
     allowNull: false,
   },
   amount: {
     type: DataTypes.FLOAT,
-    allowNull: false, // Transaction amount
+    allowNull: false,
   },
 });
 
-export default Transactions;
+// Define associations in a separate function to avoid circular dependency issues
+const defineAssociations = () => {
+  Orders.hasMany(Transactions, { foreignKey: 'transactionId', as: 'transactions' });
+  Transactions.belongsTo(Orders, { foreignKey: 'transactionId', as: 'order' });
+};
+
+// Export the model and the function
+export { Transactions, defineAssociations };

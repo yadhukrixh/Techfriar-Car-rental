@@ -1,23 +1,40 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Form, Input, Button, message } from 'antd';
 import styles from './login.module.css';
 import { ApolloClient, NormalizedCacheObject, useApolloClient } from "@apollo/client";
 import { LoginClass } from '../services/login-services';
+import { useRouter, useSearchParams } from 'next/navigation';
+import Swal from 'sweetalert2';
 
 const LoginPage = () => {
   const client = useApolloClient() as ApolloClient<NormalizedCacheObject>;
   const [form] = Form.useForm();
   const [loading, setLoading] = useState(false);
   const loginClass = new LoginClass(client);
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const loginRequired = searchParams.get('loginRequired'); // Get 'loginRequired' parameter
+
+    if (loginRequired) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: "Please login to rent a car",
+      }).then(() => {
+        router.replace('/login'); // Clean up URL after showing the alert
+      });
+    }
+  }, [router, searchParams]);
 
   const onFinish = async (values: { phoneNumber: string; password: string }) => {
     setLoading(true);
     try {
-      
       await new Promise(resolve => setTimeout(resolve, 1000));
-      await loginClass.loginUser(form.getFieldValue("phoneNumber"),form.getFieldValue("password"))
-      // You can add navigation logic here
+      await loginClass.loginUser(form.getFieldValue("phoneNumber"), form.getFieldValue("password"));
+      // Add navigation logic here if needed
     } catch (error) {
       message.error('Login failed. Please try again.');
     } finally {

@@ -20,10 +20,7 @@ import { useRouter } from "next/navigation";
 import Swal from "sweetalert2";
 
 const Cars = () => {
-  const handleSearch = (query: string) => {
-    console.log("Searching for:", query);
-    // Implement your search logic here
-  };
+
 
   const [carList, setCarList] = useState<FetchedCarData[] | null>([]);
   const client = useApolloClient() as ApolloClient<NormalizedCacheObject>;

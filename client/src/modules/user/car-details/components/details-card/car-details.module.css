@@ -72,8 +72,8 @@
     flex-direction: row;
   }
   .listElement img{
-    width: 20px;
-    height: 20px;
+    width: 15px;
+    height: 15px;
   }
   /* Product Info Styles */
   .carInfo {
@@ -81,6 +81,7 @@
     justify-content: center;
     flex-direction: column;
     padding: 0 20px;
+    width: 100%;
   }
   
   .title {
@@ -147,6 +148,12 @@
     margin-bottom: 20px;
     text-align: justify;
   }
+
+  .description p{
+    text-align: left;
+    font-size: 13px;
+    color: #3a3838;
+  }
   
   .description h2 {
     font-size: 18px;
@@ -178,22 +185,19 @@
   }
   
   .cancelButton {
-    background-color: #B8001F;
-    border-color: #FCD200;
+    background-color: #fff;
+    border: 2px solid;
+    color: #B8001F;
+    border-color: #B8001F;
   }
   
   .rentNowButton {
+    border: 2px solid #F97316;
     background-color: #F97316;
     border-color: #FF8F00;
   }
-  
-  .cancelButton:hover {
-    background-color: #F7CA00;
-  }
-  
-  .rentNowButton:hover {
-    background-color: #FA8900;
-  }
+
+
   
   /* Responsive Design */
   @media (max-width: 1024px) {
