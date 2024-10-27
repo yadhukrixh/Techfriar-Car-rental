@@ -1,0 +1,101 @@
+.container {
+    margin: 0;
+  }
+  
+  .title {
+    text-align: center;
+    margin-bottom: 24px !important;
+  }
+  
+  .content {
+    width: 100%;
+  }
+  
+  .radioGroup {
+    width: 100%;
+  }
+  
+  .radioSpace {
+    width: 100%;
+  }
+  
+  .paymentOption {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #d9d9d9;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    margin-bottom: 8px;
+  }
+  
+  .paymentOption:not(.disabled):hover {
+    background-color: #f5f5f5;
+  }
+  
+  .paymentOption.selected {
+    border-color: #ff7c18;
+    background-color: #fff5e6;
+  }
+  
+  .paymentOption.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background-color: #f5f5f5;
+  }
+  
+  .radio {
+    width: 100%;
+    display: flex !important;
+    align-items: center;
+  }
+  
+  .paymentLogo {
+    height: 20px;
+    object-fit: contain;
+    margin-left: 8px;
+  }
+  
+  .paymentText {
+    margin-left: 8px;
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.85);
+  }
+  
+  .consentContainer {
+    margin-top: 24px;
+  }
+  
+  .consentText {
+    font-size: 14px;
+    color: rgba(0, 0, 0, 0.85);
+  }
+  
+  .payButton {
+    height: 40px;
+    font-size: 16px;
+    background-color: #ff7c18;
+  }
+
+  .payButton:hover{
+    background-color: #ff7c18 !important;
+  }
+
+  .cancelButton{
+    background-color: #fff;
+    border: 2px solid red !important;
+    color: red;
+  }
+
+  .cancelButton:hover{
+    background-color: red !important;
+    color: #fff;
+  }
+  
+  /* Override Ant Design radio button styles */
+  .radio :global(.ant-radio) {
+    top: 0;
+  }
+  
+  .radio :global(.ant-radio-disabled + span) {
+    color: rgba(0, 0, 0, 0.25);
+  }

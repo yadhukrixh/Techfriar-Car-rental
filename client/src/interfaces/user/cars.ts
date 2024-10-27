@@ -62,3 +62,31 @@ export interface CreateBookingResponse{
         }
     }
 }
+
+//create razorpay order
+export interface CreateRazorPayOrderResponse{
+    createRazorPayOrder:{
+        status:boolean;
+        message:string;
+        data:{
+            orderId:string;
+        }
+    }
+}
+
+//verify payment response
+export interface VerifyPaymentResponse{
+    verifyPayment:{
+        status:boolean;
+        message:string;
+    }
+}
+
+//update booking resoponse
+export interface UpdateBookingResponse{
+    updateBooking:{
+        status:boolean;
+        message:string;
+    }
+}
+

@@ -33,7 +33,7 @@ const Transactions = sequelize.define('Transaction', {
     allowNull: true,
   },
   status: {
-    type: DataTypes.ENUM('pending', 'success', 'canceled', 'refunded'),
+    type: DataTypes.ENUM('pending', 'success', 'canceled', 'failed', 'refunded'),
     allowNull: false,
   },
   amount: {

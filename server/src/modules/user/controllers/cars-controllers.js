@@ -1,6 +1,9 @@
 import typesenseClient, { buildQuery } from "../../../config/typesense.js";
 import { FormatImageUrl } from "../../../utils/format-image-url.js";
 import { CarRepository } from "../repositories/car-repo.js";
+import crypto from "crypto";
+import { razorpay } from "../../../config/razorpay.js";
+
 
 export class CarsControllers {
   // Fetch available cars
@@ -116,49 +119,137 @@ export class CarsControllers {
               )
             )
           : [],
-        year:car.data.year,
-        fuelType:car.data.fuelType,
-        transmissionType:car.data.transmissionType,
-        numberOfSeats:car.data.numberOfSeats,
-        numberOfDoors:car.data.numberOfDoors,
-        pricePerDay:car.data.pricePerDay
+        year: car.data.year,
+        fuelType: car.data.fuelType,
+        transmissionType: car.data.transmissionType,
+        numberOfSeats: car.data.numberOfSeats,
+        numberOfDoors: car.data.numberOfDoors,
+        pricePerDay: car.data.pricePerDay,
       };
 
-      return{
+      return {
         ...car,
-        data:formattedCar
-      }
+        data: formattedCar,
+      };
     } catch (error) {
       console.error(error);
-      return{
-        status:false,
-        message:"Failed to fetch car"
-      }
+      return {
+        status: false,
+        message: "Failed to fetch car",
+      };
     }
   }
 
   //book cars
-  static async createBooking(input){
-    try{
-      const { userId, bookedDates, carModelId, deliveryLocation, returnLocation, secondaryMobileNumber, amount } = input;
-      const formattedDates = bookedDates.map(dateStr => new Date(dateStr));
-      const checkAvailablecar = await CarRepository.checkCarAvailability(carModelId,formattedDates);
+  static async createBooking(input) {
+    try {
+      const {
+        userId,
+        bookedDates,
+        carModelId,
+        deliveryLocation,
+        returnLocation,
+        secondaryMobileNumber,
+        amount,
+      } = input;
+      const formattedDates = bookedDates.map((dateStr) => new Date(dateStr));
+      const checkAvailablecar = await CarRepository.checkCarAvailability(
+        carModelId,
+        formattedDates
+      );
 
       //manage concurent bookings
-      if(!checkAvailablecar.status){
-        return checkAvailablecar
+      if (!checkAvailablecar.status) {
+        return checkAvailablecar;
       }
 
       // create transaction
-      const transaction = await CarRepository.createTransaction(userId,amount)
-      if(!transaction.status){
+      const transaction = await CarRepository.createTransaction(userId, amount);
+      if (!transaction.status) {
         return transaction;
       }
 
       // create bookings
-      const booking = await CarRepository.createBooking(userId,formattedDates,checkAvailablecar.rentableCarId,transaction.transactionId,deliveryLocation,returnLocation,secondaryMobileNumber);
-      return booking
+      const booking = await CarRepository.createBooking(
+        userId,
+        formattedDates,
+        checkAvailablecar.rentableCarId,
+        transaction.transactionId,
+        deliveryLocation,
+        returnLocation,
+        secondaryMobileNumber
+      );
+      return booking;
+    } catch (error) {
+      return {
+        status: false,
+        message: error,
+      };
+    }
+  }
 
+  //create razor pay order
+  static async createRazorPayOrder(amount) {
+    try {
+
+      const order = await razorpay.orders.create({
+        amount: amount * 100, // Convert to paise
+        currency: "INR",
+        payment_capture: 1, // Auto-capture payment
+      });
+
+      return {
+        status: true,
+        message: "Razorpay order created",
+        data: {
+          orderId: order.id,
+        },
+      };
+    } catch (error) {
+      return { status: false, message: "Order creation failed" };
+    }
+  }
+
+  //verify the razor pay order
+  static async verifyPayment(orderId, paymentId, signature) {
+    try {
+      const generatedSignature = crypto
+        .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+        .update(orderId + "|" + paymentId)
+        .digest("hex");
+
+      if (generatedSignature === signature) {
+        // Update payment status in your database
+        const payment = await this.fetchPaymentDetails(paymentId);
+        console.log(payment);
+        return { status: true, message: "Payment verified successfully" };
+      } else {
+        return { status: false, message: "Payment verification failed" };
+      }
+    } catch (error) {
+      return {
+        status: false,
+        message: error,
+      };
+    }
+  }
+
+  //fetch payment details
+  static async fetchPaymentDetails(paymentId) {
+    try {
+      const payment = await razorpay.payments.fetch(paymentId);
+      return payment; // Return the payment details
+    } catch (error) {
+      console.error("Error fetching payment details:", error);
+      throw new Error("Failed to fetch payment details");
+    }
+  }
+
+  //update booking
+  static async updateBooking(bookingId,paymentId,verifiedStatus){
+    try{
+
+      //pass into the repo
     }catch(error){
       return{
         status:false,

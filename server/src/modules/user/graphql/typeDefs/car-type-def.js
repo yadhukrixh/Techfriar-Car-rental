@@ -57,7 +57,7 @@ const handleCarTypeDefs = gql`
   }
 
   type BookingResponse {
-    status: String!
+    status: Boolean!
     message: String!
     data: BookingData
   }
@@ -68,6 +68,31 @@ const handleCarTypeDefs = gql`
 
   type Mutation {
     createBooking(input: CreateBookingInput!): BookingResponse!
+
+    createRazorPayOrder(amount: Int!): OrderResponse!
+
+    verifyPayment(
+      orderId: String!
+      paymentId: String!
+      signature: String!
+    ): DefaultResponse!
+
+    updateBooking(bookingId:Int!,paymentId:String!,verifiedStatus:Boolean!):DefaultResponse!
+  }
+
+  type OrderResponse {
+    status: Boolean!
+    message: String!
+    data: Order
+  }
+
+  type Order {
+    orderId: String
+  }
+
+  type DefaultResponse {
+    status: Boolean!
+    message: String
   }
 `;
 

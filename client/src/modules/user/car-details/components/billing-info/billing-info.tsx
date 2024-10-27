@@ -13,9 +13,11 @@ interface BillingFormProps {
   carModelId:number | undefined;
   onSubmit?: (formData: any) => void;
   amount:Number | undefined;
+  setShowPayment:(status:boolean)=>void;
+  setBookingId:(id:number)=>void;
 }
 
-export default function BillingForm({ userData, onSubmit, dates, carModelId , amount}: BillingFormProps) {
+export default function BillingForm({ userData, onSubmit, dates, carModelId , amount, setShowPayment,setBookingId}: BillingFormProps) {
   const client = useApolloClient() as ApolloClient<NormalizedCacheObject>;
   const carBookingService = new CarBookingServices(client);
   const [returnLocationType, setReturnLocationType] = useState<'delivery' | 'company' | 'custom'>('delivery');
@@ -31,7 +33,7 @@ export default function BillingForm({ userData, onSubmit, dates, carModelId , am
       returnLocationType === 'delivery' ? location?.toString() : 'company';
 
       setLoading(true)
-      await carBookingService.createBooking(userData.id,dates,carModelId,location,returnLocation,values.secondaryMobile,amount);
+      await carBookingService.createBooking(userData.id,dates,carModelId,location,returnLocation,values.secondaryMobile,amount,setShowPayment,setBookingId);
       setLoading(false)
     
     if (onSubmit) {
