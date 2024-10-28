@@ -70,6 +70,22 @@
     cursor: pointer;
     transition: background-color 0.2s;
   }
+
+  .cancelButton{
+    padding: 5px;
+    border-radius: 10px;
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border: 2px solid red;
+    color: red;
+    background-color: #fff;
+  }
+
+  .cancelButton:hover{
+    border-color: red !important;
+    color: red !important;
+  }
   
   .submitButton:hover {
     background-color: #F97316 !important;

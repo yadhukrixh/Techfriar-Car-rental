@@ -58,7 +58,7 @@ export interface CreateBookingResponse{
         status:boolean;
         message:string;
         data:{
-            bookingId:number;
+            orderId:number;
         }
     }
 }
@@ -85,6 +85,14 @@ export interface VerifyPaymentResponse{
 //update booking resoponse
 export interface UpdateBookingResponse{
     updateBooking:{
+        status:boolean;
+        message:string;
+    }
+}
+
+//cancel booking interface
+export interface CancelBookingResponse{
+    cancelBooking:{
         status:boolean;
         message:string;
     }

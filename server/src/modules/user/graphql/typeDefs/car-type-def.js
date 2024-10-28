@@ -78,6 +78,8 @@ const handleCarTypeDefs = gql`
     ): DefaultResponse!
 
     updateBooking(bookingId:Int!,paymentId:String!,verifiedStatus:Boolean!):DefaultResponse!
+
+    cancelBooking(bookingId:Int!):DefaultResponse!
   }
 
   type OrderResponse {

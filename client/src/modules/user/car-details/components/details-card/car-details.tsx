@@ -3,11 +3,7 @@ import React, { useEffect, useState } from "react";
 import { Image as AntdImage, message, Tag } from "antd"; // Import Ant Design Image
 import styles from "./car-details.module.css";
 import { FetchedCarData } from "@/interfaces/user/cars";
-import {
-  ApolloClient,
-  NormalizedCacheObject,
-  useApolloClient,
-} from "@apollo/client";
+import { ApolloClient, NormalizedCacheObject, useApolloClient } from "@apollo/client";
 import { CarBookingServices } from "../../services/car-booking-services";
 import { useParams } from "next/navigation";
 import ReviewComponent from "../user-review/user-review";
@@ -17,25 +13,25 @@ import { UserData } from "@/interfaces/user/user-details";
 import PaymentInfo from "../payment-info/payment-info";
 
 const CarDetailedView: React.FC = () => {
+  // Apollo client and services initialization
   const client = useApolloClient() as ApolloClient<NormalizedCacheObject>;
   const carBookingService = new CarBookingServices(client);
   const userService = new UserServices(client);
+  
+  // URL parameters
   const { id } = useParams();
+
+  // State management
   const [selectedImage, setSelectedImage] = useState<number>(0);
   const [car, setCar] = useState<FetchedCarData>();
   const [selectedDates, setSelectedDates] = useState<Date[]>([]);
   const [totalPrice, setTotalPrice] = useState<number>();
   const [showBillingStatus, setShowBillingStatus] = useState(false);
-  const allImages = [car?.primaryImage, ...(car?.secondaryImages ?? [])];
   const [userData, setUserData] = useState<UserData>({});
-  const [showPayment, setShowpayment] = useState(true);
-  const [bookingId,setBookingId] = useState<number>();
+  const [showPayment, setShowPayment] = useState(false);
+  const [bookingId, setBookingId] = useState<number>();
   const [razorpayLoaded, setRazorpayLoaded] = useState(false);
-
-  //handle rent now
-  const handleRentNow = () => {
-    setShowBillingStatus(!showBillingStatus);
-  };
+  const [carBooked, setCarBooked] = useState(false);
 
   // Load Razorpay SDK
   useEffect(() => {
@@ -49,47 +45,45 @@ const CarDetailedView: React.FC = () => {
     loadRazorpayScript();
   }, []);
 
-  // handle payment
-  const handlePayment = async(amount:number | undefined) => {
-    await carBookingService.handlePayment(amount,bookingId);
-  }
-
-  // fetch car
+  // Fetch car data
   useEffect(() => {
     const fetchCar = async () => {
       await carBookingService.fetchCarData(id, setCar);
       await carBookingService.getSelectedDates(setSelectedDates);
     };
-
     fetchCar();
   }, [id]);
 
-  // calculate total price
+  // Fetch user data and calculate total price
   useEffect(() => {
-    // Calculate total price when selectedDates or car changes
-    const pricePerDay = car?.pricePerDay || 0; // Default to 0 if car is null or undefined
-    setTotalPrice(pricePerDay * selectedDates.length); // Calculate total price
-    const fetchUser = async () => {
+    const fetchUserData = async () => {
       await userService.fetchUserData(setUserData);
     };
-    fetchUser();
+    
+    const pricePerDay = car?.pricePerDay || 0; // Default to 0 if car is null or undefined
+    setTotalPrice(pricePerDay * selectedDates.length); // Calculate total price
+    fetchUserData();
   }, [selectedDates, car]);
 
-  // show payment
-  useEffect(() => {
-    if (showPayment) {
-      message.warning({
-        content: "Please Do not refresh This Page !",
-        duration: 0, // Set duration to 0 to keep it visible
-        style: {
-          position: "absolute",
-          top: "150px", // Set the top position
-          left: "50%", // Center horizontally
-          transform: "translateX(-50%)", // Adjust for perfect centering
-        },
-      });
-    }
-  }, [showPayment]);
+
+  //handle cancel
+  const handleCancel = async() => {
+    await carBookingService.cancelBooking(bookingId);
+  }
+  
+
+  // Handle payment process
+  const handlePayment = async (amount: number | undefined) => {
+    await carBookingService.handlePayment(amount, bookingId, setCarBooked);
+  };
+
+  // Toggle billing status visibility
+  const handleRentNow = () => {
+    setShowBillingStatus(prev => !prev);
+  };
+
+  // Prepare image gallery
+  const allImages = [car?.primaryImage, ...(car?.secondaryImages ?? [])];
 
   return (
     <div className={styles.container}>
@@ -100,23 +94,21 @@ const CarDetailedView: React.FC = () => {
             <AntdImage
               src={allImages[selectedImage]}
               className={styles.imageContainer}
-              preview={true} // Disable default preview to maintain custom functionality
+              preview={true}
             />
           </div>
           <div className={styles.thumbnails}>
             {allImages.map((image, index) => (
               <div
                 key={index}
-                className={`${styles.thumbnail} ${
-                  selectedImage === index ? styles.selected : ""
-                }`}
+                className={`${styles.thumbnail} ${selectedImage === index ? styles.selected : ""}`}
                 onClick={() => setSelectedImage(index)}
               >
                 <AntdImage
                   src={image}
                   width={60}
                   height={60}
-                  preview={false} // Disable default preview
+                  preview={false}
                 />
               </div>
             ))}
@@ -147,15 +139,11 @@ const CarDetailedView: React.FC = () => {
             {car?.name}-{car?.year}
           </h1>
 
-          {!showBillingStatus ? (
+          {!showBillingStatus || carBooked ? (
             <>
               <div className={styles.brand}>
                 <Tag className={styles.customTag} color="success">
-                  <img
-                    src={car?.brandLogo}
-                    alt="Custom Icon"
-                    className="tag-icon"
-                  />
+                  <img src={car?.brandLogo} alt="Brand Logo" className="tag-icon" />
                   {car?.brandName}
                 </Tag>
               </div>
@@ -170,9 +158,7 @@ const CarDetailedView: React.FC = () => {
                 Total Price:
                 <div className={styles.price}>
                   <span className={styles.currency}>₹</span>
-                  <span className={styles.amount}>
-                    {totalPrice?.toFixed(2)}
-                  </span>
+                  <span className={styles.amount}>{totalPrice?.toFixed(2)}</span>
                 </div>
               </div>
 
@@ -180,11 +166,26 @@ const CarDetailedView: React.FC = () => {
                 <h2>About this item</h2>
                 <p>{car?.description}</p>
               </div>
-
-              <button className={styles.rentNowButton} onClick={handleRentNow}>
-                Rent Now
-              </button>
-              <button className={styles.cancelButton}>Cancel</button>
+              {!carBooked ? (
+                <>
+                  <button className={styles.rentNowButton} onClick={handleRentNow}>
+                    Rent Now
+                  </button>
+                  <button
+                    className={styles.cancelButton}
+                    onClick={() => {
+                      window.location.href = "/cars";
+                    }}
+                  >
+                    Back
+                  </button>
+                </>
+              ) : (
+                <button className={styles.completed}>
+                  <img src="/icons/car.gif" className={styles.carGif} alt="Car on the way" />
+                  Car is On the way
+                </button>
+              )}
             </>
           ) : !showPayment ? (
             <BillingForm
@@ -192,15 +193,21 @@ const CarDetailedView: React.FC = () => {
               userData={userData}
               dates={selectedDates}
               amount={totalPrice}
-              setShowPayment={setShowpayment}
+              setShowPayment={setShowPayment}
               setBookingId={setBookingId}
+              setShowBilling={setShowBillingStatus}
             />
           ) : (
-            <PaymentInfo amount={totalPrice} setShowPaymentInfo={setShowpayment} handlePayment={handlePayment}/>
+            <PaymentInfo
+              amount={totalPrice}
+              setShowPaymentInfo={setShowPayment}
+              handlePayment={handlePayment}
+              cancelBooking={handleCancel}
+            />
           )}
         </div>
 
-        {/* Right Column - Buy Box */}
+        {/* Right Column - Review Box */}
         <div className={styles.reviewBox}>
           <ReviewComponent />
         </div>

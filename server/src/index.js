@@ -5,6 +5,7 @@ import sequelize from './config/postgres.js';
 import { runSeed } from './config/seed.js';
 import { startApolloServer } from './config/apollo-server.js';
 import { graphqlUploadExpress } from 'graphql-upload';
+import orderCleanupCorn from './utils/cron-function.js';
 
 import  './config/typesense.js';
 import { defineAssociations } from './modules/admin/models/transactions-model.js';
@@ -27,6 +28,8 @@ app.get('/', (req, res) => {
 const PORT = process.env.PORT || 3400;
 
 startApolloServer(app); // Start Apollo Server
+
+orderCleanupCorn.start()
 
 app.listen(PORT, async () => {
   console.log(`Server is running on port ${PORT}`);

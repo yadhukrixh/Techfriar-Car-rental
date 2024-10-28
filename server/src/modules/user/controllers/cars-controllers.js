@@ -248,8 +248,22 @@ export class CarsControllers {
   //update booking
   static async updateBooking(bookingId,paymentId,verifiedStatus){
     try{
+      const paymentDetails = await this.fetchPaymentDetails(paymentId);
+      const updateBooking = await CarRepository.updateBooking(bookingId,paymentDetails.method,paymentDetails.order_id,verifiedStatus);
+      return updateBooking;
+    }catch(error){
+      return{
+        status:false,
+        message:error
+      }
+    }
+  }
 
-      //pass into the repo
+  //cancel booking
+  static async cancelBooking(bookingId){
+    try{
+      const cancelBooking = await CarRepository.cancelBooking(bookingId);
+      return cancelBooking;
     }catch(error){
       return{
         status:false,

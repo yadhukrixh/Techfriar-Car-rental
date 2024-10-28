@@ -1,233 +1,300 @@
 /* product.module.css */
 .container {
-    width: 100%;
-    padding: 30px;
-  }
-  
+  width: 100%;
+  padding: 30px;
+}
+
+.detailsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  justify-content: space-around;
+  justify-items: center;
+  gap: 20px;
+}
+
+/* Image Gallery Styles */
+.imageGallery {
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  justify-content: center;
+  top: 20px;
+  width: 100%;
+}
+
+.mainImage {
+  margin-bottom: 10px;
+  border: 1px solid #eee;
+}
+
+.imageContainer {
+  width: 500px;
+}
+
+.thumbnails {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.thumbnail {
+  border: 1px solid #ddd;
+  cursor: pointer;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+}
+
+.thumbnail:hover,
+.thumbnail.selected {
+  opacity: 1;
+  border-color: #e77600;
+}
+
+.extraInfo {
+  margin-top: 50px;
+  gap: 10px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  width: 100%;
+  color: #000000;
+  font-weight: 500;
+}
+
+.listElement {
+  padding-right: 5px;
+  padding-left: 5 px;
+  border-radius: 10px;
+  border: 1px solid #ffa41c;
+  gap: 5px;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
+}
+
+.listElement img {
+  width: 15px;
+  height: 15px;
+}
+
+/* Product Info Styles */
+.carInfo {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  padding: 0 20px;
+  width: 100%;
+}
+
+.title {
+  font-size: 24px;
+  margin: 0 0 8px;
+}
+
+.brand {
+  color: #0066c0;
+  margin-bottom: 8px;
+}
+
+.customTag {
+  font-weight: 500;
+  display: flex;
+  padding: 2px;
+  gap: 5px;
+  width: max-content;
+  height: max-content;
+}
+
+.customTag img {
+  width: 20px;
+  height: 20px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.stars {
+  color: #ffa41c;
+  margin-right: 8px;
+}
+
+.reviewCount {
+  color: #0066c0;
+}
+
+.priceSection {
+  margin: 16px 0;
+}
+
+.price {
+  font-size: 28px;
+  color: #B12704;
+}
+
+.currency {
+  font-size: 14px;
+  vertical-align: top;
+}
+
+.originalPrice {
+  color: #565959;
+  text-decoration: line-through;
+  margin-left: 8px;
+}
+
+.description {
+  margin-top: 20px;
+  margin-bottom: 20px;
+  text-align: justify;
+}
+
+.description p {
+  text-align: left;
+  font-size: 13px;
+  color: #3a3838;
+}
+
+.description h2 {
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+
+
+
+/* Buy Box Styles */
+.reviewBox {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 14px 18px;
+  width: 100%;
+}
+
+
+.cancelButton,
+.rentNowButton {
+  color: #fff;
+  font-weight: 500;
+  width: 100%;
+  padding: 8px 10px;
+  border-radius: 10px;
+  border: none;
+  margin-bottom: 10px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.cancelButton {
+  background-color: #fff;
+  border: 2px solid;
+  color: #B8001F;
+  border-color: #B8001F;
+}
+
+.rentNowButton {
+  border: 2px solid #F97316;
+  background-color: #F97316;
+  border-color: #FF8F00;
+}
+
+.completed {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  outline: none;
+  gap: 20px;
+  color: #fff;
+  font-weight: 600;
+  font-size: 26px;
+  background-color: #06D001;
+}
+
+.carGif {
+  width: 60px;
+}
+
+
+
+/* Responsive Design */
+@media (max-width: 1230px) {
   .detailsGrid {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    justify-content: space-around;
-    justify-items: center;
-    gap: 20px;
+    grid-template-columns: 1fr 1fr;
   }
-  
-  /* Image Gallery Styles */
+
   .imageGallery {
-    display: flex;
     flex-direction: column;
-    position: sticky;
-    justify-content: center;
-    top: 20px;
-    width: 100%;
-  }
-  
-  .mainImage {
-    margin-bottom: 10px;
-    border: 1px solid #eee;
   }
 
-  .imageContainer{
-    width: 500px;
-  }
-  
   .thumbnails {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-  }
-  
-  .thumbnail {
-    border: 1px solid #ddd;
-    cursor: pointer;
-    opacity: 0.6;
-    transition: opacity 0.2s;
-  }
-  
-  .thumbnail:hover,
-  .thumbnail.selected {
-    opacity: 1;
-    border-color: #e77600;
-  }
-  
-  .extraInfo{
-    margin-top: 50px;
-    gap: 10px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    width: 100%;
-    color: #000000;
-    font-weight: 500;
-  }
-
-  .listElement {
-    padding-right: 5px;
-    padding-left: 5 px;
-    border-radius: 10px;
-    border: 1px solid #ffa41c;
-    gap: 5px;
-    display: flex;
-    align-items: center;
     flex-direction: row;
   }
-  .listElement img{
-    width: 15px;
-    height: 15px;
-  }
-  /* Product Info Styles */
-  .carInfo {
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    padding: 0 20px;
-    width: 100%;
-  }
-  
-  .title {
-    font-size: 24px;
-    margin: 0 0 8px;
-  }
-  
-  .brand {
-    color: #0066c0;
-    margin-bottom: 8px;
-  }
 
-  .customTag{
-    font-weight: 500;
-    display: flex;
-    padding: 2px;
-    gap: 5px;
-    width: max-content;
-    height: max-content;
-  }
-
-  .customTag img{
-    width: 20px;
-    height: 20px;
-  }
-  
-  .rating {
-    display: flex;
-    align-items: center;
-    margin-bottom: 16px;
-  }
-  
-  .stars {
-    color: #ffa41c;
-    margin-right: 8px;
-  }
-  
-  .reviewCount {
-    color: #0066c0;
-  }
-  
-  .priceSection {
-    margin: 16px 0;
-  }
-  
-  .price {
-    font-size: 28px;
-    color: #B12704;
-  }
-  
-  .currency {
-    font-size: 14px;
-    vertical-align: top;
-  }
-  
-  .originalPrice {
-    color: #565959;
-    text-decoration: line-through;
-    margin-left: 8px;
-  }
-  
-  .description {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    text-align: justify;
-  }
-
-  .description p{
-    text-align: left;
-    font-size: 13px;
-    color: #3a3838;
-  }
-  
-  .description h2 {
-    font-size: 18px;
-    margin-bottom: 12px;
-  }
-  
-
-  
-  /* Buy Box Styles */
   .reviewBox {
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    padding: 14px 18px;
-    width: 100%;
+    grid-column: span 2;
   }
-  
-  
-  .cancelButton,
-  .rentNowButton {
-    color: #fff;
-    font-weight: 500;
-    width: 100%;
-    padding: 8px 10px;
-    border-radius: 20px;
-    border: none;
-    margin-bottom: 10px;
-    cursor: pointer;
-    font-size: 14px;
-  }
-  
-  .cancelButton {
-    background-color: #fff;
-    border: 2px solid;
-    color: #B8001F;
-    border-color: #B8001F;
-  }
-  
-  .rentNowButton {
-    border: 2px solid #F97316;
-    background-color: #F97316;
-    border-color: #FF8F00;
+}
+
+@media (min-width:450px) and (max-width: 768px) {
+  .detailsGrid {
+    max-width: 100%;
+    grid-template-columns: 1fr;
   }
 
+  .reviewBox {
+    grid-column: auto;
+  }
 
-  
-  /* Responsive Design */
-  @media (max-width: 1024px) {
-    .detailsGrid {
-      grid-template-columns: 1fr 1fr;
-    }
+  .imageGallery {
+    position: static;
+  }
+}
 
-    .imageGallery{
-        flex-direction: column;
-    }
+@media (max-width:450px) {
+  .detailsGrid {
+    grid-template-columns: 1fr;
+  }
 
-    .thumbnails{
-        flex-direction: row;
-    }
-    
-    .reviewBox {
-      grid-column: span 2;
-    }
+  .reviewBox {
+    grid-column: auto;
+  }
+
+  .imageGallery {
+    position: static;
+  }
+
+  .container{
+    padding: 5px;
+    max-width: 100%;
+  }
+
+  .carInfo{
+    padding: 5px;
+  }
+
+  .mainImage{
+    max-width: 100dvw;
+  }
+
+  .thumbnails{
+    gap: 0;
+  }
+
+  .extraInfo{
+    margin-top: 25px;
+    gap: 2px;
+  }
+
+  .listElement{
+    font-size: 8px;
+  }
+
+  .listElement img{
+    width: 10px;
+    height: 10px;
   }
   
-  @media (max-width: 768px) {
-    .detailsGrid {
-      grid-template-columns: 1fr;
-    }
-    
-    .reviewBox {
-      grid-column: auto;
-    }
-    
-    .imageGallery {
-      position: static;
-    }
-  }
+}

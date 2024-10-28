@@ -11,13 +11,13 @@ interface BillingFormProps {
   userData: UserData;
   dates?: Date[];
   carModelId:number | undefined;
-  onSubmit?: (formData: any) => void;
   amount:Number | undefined;
   setShowPayment:(status:boolean)=>void;
   setBookingId:(id:number)=>void;
+  setShowBilling:(status:boolean)=>void;
 }
 
-export default function BillingForm({ userData, onSubmit, dates, carModelId , amount, setShowPayment,setBookingId}: BillingFormProps) {
+export default function BillingForm({ userData, dates, carModelId , amount, setShowPayment,setBookingId,setShowBilling}: BillingFormProps) {
   const client = useApolloClient() as ApolloClient<NormalizedCacheObject>;
   const carBookingService = new CarBookingServices(client);
   const [returnLocationType, setReturnLocationType] = useState<'delivery' | 'company' | 'custom'>('delivery');
@@ -36,15 +36,6 @@ export default function BillingForm({ userData, onSubmit, dates, carModelId , am
       await carBookingService.createBooking(userData.id,dates,carModelId,location,returnLocation,values.secondaryMobile,amount,setShowPayment,setBookingId);
       setLoading(false)
     
-    if (onSubmit) {
-      onSubmit({
-        secondaryMobile: values.secondaryMobile,
-        deliveryLocation: values.deliveryLocation,
-        returnLocation,
-        returnLocationType,
-      });
-      
-    }
   };
 
   const handleLocationSelect = (value: string) => {
@@ -61,6 +52,11 @@ export default function BillingForm({ userData, onSubmit, dates, carModelId , am
   const handleModalCancel = () => {
     setIsModalVisible(false);
   };
+
+  const handleBack = () =>{
+    console.log("haiii")
+    setShowBilling(false);
+  }
 
   return (
     <Form className={styles.billingForm} onFinish={handleSubmit} layout="vertical">
@@ -84,7 +80,7 @@ export default function BillingForm({ userData, onSubmit, dates, carModelId , am
         </div>
         <button className={styles.locationButton} onClick={() => {
           window.open(`https://www.google.com/maps/place/${location}`, '_blank');
-        }}><i className="ri-eye-line"></i> Delivery Location</button>
+        }} type='button'><i className="ri-eye-line"></i> Delivery Location</button>
       </div>
 
       <div className={styles.section}>
@@ -122,7 +118,7 @@ export default function BillingForm({ userData, onSubmit, dates, carModelId , am
               <Radio value="custom">Custom Location</Radio>
             </Radio.Group>
             {customReturnLocation &&
-                <button onClick={() => { setIsModalVisible(true); }} className={styles.locationButton}><i className="ri-edit-2-line"></i> Return Locaion</button>
+                <button onClick={() => { setIsModalVisible(true); }} className={styles.locationButton} type='button'><i className="ri-edit-2-line"></i> Return Locaion</button>
             }
           </Form.Item>
         </div>
@@ -139,6 +135,9 @@ export default function BillingForm({ userData, onSubmit, dates, carModelId , am
         <Form.Item>
           <Button type="primary" htmlType="submit"  loading={loading} className={styles.submitButton}>
             Submit
+          </Button>
+          <Button onClick={handleBack}  loading={loading} className={styles.cancelButton}>
+            Cancel
           </Button>
         </Form.Item>
       </div>

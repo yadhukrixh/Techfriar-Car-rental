@@ -3,13 +3,13 @@ import { CREATE_RAZORPAY_ORDER } from "@/graphql/user/mutations/create-booking/c
 import { UPDATE_BOOKING } from "@/graphql/user/mutations/create-booking/update-booking/update-booking";
 import { VERIFY_PAYMENT } from "@/graphql/user/mutations/create-booking/verify-payment/verify-payment";
 import { FETCH_CAR_BY_ID } from "@/graphql/user/queries/fetch-available-cars/fetch-car-by-id";
-import { CreateBookingResponse, CreateRazorPayOrderResponse, FetchCarByIdResponse, FetchedCarData, UpdateBookingResponse, VerifyPaymentResponse } from "@/interfaces/user/cars";
-import { FetchUserDataResponse, UserData } from "@/interfaces/user/user-details";
+import { CancelBookingResponse, CreateBookingResponse, CreateRazorPayOrderResponse, FetchCarByIdResponse, FetchedCarData, UpdateBookingResponse, VerifyPaymentResponse } from "@/interfaces/user/cars";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
+import confetti from 'canvas-confetti';
 import { message } from "antd";
-import { error } from "console";
-import { LatLngTuple } from "leaflet";
+
 import Swal from "sweetalert2";
+import { CANCEL_BOOKING } from "@/graphql/user/mutations/create-booking/cancel-booking/cancel-booking";
 
 export class CarBookingServices {
     private client: ApolloClient<NormalizedCacheObject>;
@@ -100,33 +100,46 @@ export class CarBookingServices {
         setBookingId: (id: number) => void
     ): Promise<void> => {
         try {
-            const formattedDates = bookedDates?.map(date => date.toISOString());
-            const input = {
-                userId,
-                bookedDates: formattedDates,
-                carModelId,
-                deliveryLocation,
-                returnLocation,
-                secondaryMobileNumber,
-                amount
-            };
-            const { data } = await this.client.mutate<CreateBookingResponse>({
-                mutation: CREATE_BOOKING,
-                variables: {
-                    input,
-                },
-            });
-
-            if (!(data?.createBooking.status)) {
-                Swal.fire({
-                    icon: "error",
-                    title: "Oops...",
-                    text: `${data?.createBooking.message}`,
-                });
-            } else {
-                setBookingId(data.createBooking.data.bookingId);
-                setShowPayment(true);
-            }
+            Swal.fire({
+                title: "Are you sure?",
+                text: "You won't be able to edit these!",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#3085d6",
+                cancelButtonColor: "#d33",
+                confirmButtonText: "Continue"
+              }).then(async(result) => {
+                if (result.isConfirmed) {
+                    const formattedDates = bookedDates?.map(date => date.toISOString());
+                    const input = {
+                        userId,
+                        bookedDates: formattedDates,
+                        carModelId,
+                        deliveryLocation,
+                        returnLocation,
+                        secondaryMobileNumber,
+                        amount
+                    };
+                    const { data } = await this.client.mutate<CreateBookingResponse>({
+                        mutation: CREATE_BOOKING,
+                        variables: {
+                            input,
+                        },
+                    });
+        
+                    if (!(data?.createBooking.status)) {
+                        Swal.fire({
+                            icon: "error",
+                            title: "Oops...",
+                            text: `${data?.createBooking.message}`,
+                        });
+                    } else {
+                        setBookingId(data.createBooking.data.orderId);
+                        setShowPayment(true);
+                    }
+                }
+              });
+            
         } catch (error) {
             console.error(error);
         }
@@ -135,10 +148,11 @@ export class CarBookingServices {
     //handle payment 
     public handlePayment = async (
         amount: number | undefined,
-        bookingId: number | undefined
+        bookingId: number | undefined,
+        setcarBooked:(status:boolean)=>void
     ): Promise<void> => {
         try {
-            await this.createRazorPayOrder(amount, bookingId)
+            await this.createRazorPayOrder(amount, bookingId,setcarBooked)
         } catch (error) {
             console.error(error)
         }
@@ -148,7 +162,8 @@ export class CarBookingServices {
     //create razorpay order
     public createRazorPayOrder = async (
         amount: number | undefined,
-        bookingId: number | undefined
+        bookingId: number | undefined,
+        setcarBooked:(status:boolean)=>void
     ): Promise<void> => {
         // Check if amount is defined
         if (amount === undefined) {
@@ -175,7 +190,7 @@ export class CarBookingServices {
                     handler: async (response: any) => { // Specify the type for response or use 'any'
                         try {
                             const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = response;
-                            await this.verifyPayment(razorpay_order_id, razorpay_payment_id, razorpay_signature, bookingId);
+                            await this.verifyPayment(razorpay_order_id, razorpay_payment_id, razorpay_signature, bookingId,setcarBooked);
                         } catch (error) {
                             console.error(error)
                         }
@@ -199,7 +214,8 @@ export class CarBookingServices {
         razorpay_order_id: string,
         razorpay_payment_id: string,
         razorpay_signature: string,
-        bookingId: number | undefined
+        bookingId: number | undefined,
+        setcarBooked:(status:boolean)=>void
     ): Promise<void> => {
         try {
             const { data } = await this.client.mutate<VerifyPaymentResponse>({
@@ -211,7 +227,18 @@ export class CarBookingServices {
                 }
             })
             if (data) {
-                await this.updateBooking(bookingId,razorpay_payment_id,data.verifyPayment.status);
+                await this.updateBooking(bookingId, razorpay_payment_id, data.verifyPayment.status);
+                if (data.verifyPayment.status) {
+                    const triggerConfetti = () => {
+                        confetti({
+                            particleCount: 100,
+                            spread: 100,
+                            origin: { y: 0.6 }, // Adjust origin for where the confetti appears
+                        });
+                    };
+                    triggerConfetti();
+                    setcarBooked(true);
+                }
             }
         } catch (error) {
             console.error(error)
@@ -220,24 +247,50 @@ export class CarBookingServices {
 
     //Update booking status
     public updateBooking = async (
-        bookingId:number | undefined,
-        razorpay_payment_id:string,
-        verifiedStatus:boolean
-    ):Promise<void> => {
-        try{
-            const {data} = await this.client.mutate<UpdateBookingResponse>({
-                mutation:UPDATE_BOOKING,
-                variables:{
-                    bookingId:bookingId,
-                    paymentId:razorpay_payment_id,
-                    verifiedStatus:verifiedStatus
+        bookingId: number | undefined,
+        razorpay_payment_id: string,
+        verifiedStatus: boolean
+    ): Promise<void> => {
+        try {
+            const { data } = await this.client.mutate<UpdateBookingResponse>({
+                mutation: UPDATE_BOOKING,
+                variables: {
+                    bookingId: bookingId,
+                    paymentId: razorpay_payment_id,
+                    verifiedStatus: verifiedStatus
                 }
             })
-        }catch(error){
+        } catch (error) {
             console.error(error)
         }
     }
 
+    //cancel booking
+    public cancelBooking = async (
+        bookingId:number | undefined
+    ):Promise<void> => {
+        try{
+            const {data} = await this.client.mutate<CancelBookingResponse>({
+                mutation:CANCEL_BOOKING,
+                variables:{
+                    bookingId:bookingId
+                }
+            })
+            if(data?.cancelBooking.status){
+                message.success({
+                    content: "Booking Canceled",
+                    style: {
+                      position: "absolute",
+                      top: "150px", // Set the top position
+                      left: "50%", // Center horizontally
+                      transform: "translateX(-50%)", // Adjust for perfect centering
+                    },
+                  });
+            }
+        }catch(error){
+            console.error(error)
+        }
+    }
 
 
 

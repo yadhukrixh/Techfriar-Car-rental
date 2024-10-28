@@ -246,13 +246,13 @@ export class CarRepository {
         secondaryMobileNumber: secondaryMobileNumber,
         date: new Date(), // Explicitly setting the date, but it defaults to now
       });
-  
+
       return {
         status: true,
         message: "Booking created successfully",
         data: {
-          orderId:booking.dataValues.id
-        }
+          orderId: booking.dataValues.id,
+        },
       };
     } catch (error) {
       console.error("Error creating booking:", error);
@@ -262,5 +262,132 @@ export class CarRepository {
       };
     }
   }
+
+  // update booking
+  static async updateBooking(bookingId, method, orderId, verifiedStatus) {
+    try {
+      // Find the booking/order by ID
+      const order = await Orders.findByPk(bookingId, {
+        include: [{ model: Transactions, as: "transaction" }],
+      });
+
+      if (!order) {
+        return {
+          status: false,
+          message: "Order not found",
+        };
+      }
+
+      // Update the transaction associated with this order
+      const transaction = await Transactions.findOne({
+        where: { id: order.transactionId },
+      });
+
+      if (transaction) {
+        await transaction.update({
+          method,
+          razorpayId: orderId, // Assuming 'orderId' refers to 'razorpayId'
+          status: verifiedStatus ? "success" : "failed", // Update based on verification status
+        });
+      }
+
+      return {
+        status: true,
+        message: "Order and transaction updated successfully",
+      };
+    } catch (error) {
+      console.error(error);
+      return {
+        status: false,
+        message: "Error updating order and transaction",
+      };
+    }
+  }
+
+  //cancel pending orders
+  static async cancelPendingOrders() {
+    try {
+      const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
+
+      // Find orders older than 15 minutes
+      const ordersToCancel = await Orders.findAll({
+        where: {
+          date: { [Op.lte]: fifteenMinutesAgo },
+        },
+        include: [
+          {
+            model: Transactions,
+            as: "transaction",
+            where: { status: "pending" },
+          },
+        ],
+      });
+
+      if (ordersToCancel.length === 0) {
+        return;
+      }
+
+      // Update each associated transaction's status to "canceled"
+      const transactionIds = ordersToCancel.map(
+        (order) => order.transaction.id
+      );
+      const [updatedCount] = await Transactions.update(
+        { status: "canceled" },
+        {
+          where: {
+            id: { [Op.in]: transactionIds },
+            status: "pending",
+          },
+        }
+      );
+
+      if (updatedCount > 0) {
+        console.log(
+          `Order cleanup: ${updatedCount} pending transactions have been canceled.`
+        );
+      }
+    } catch (error) {
+      console.error("Error in cancelPendingOrders:", error);
+    }
+  }
+
+  //cancelBooking
+  static async cancelBooking(bookingId) {
+    try {
+      // Fetch the order by primary key and include the transaction with pending status
+      const order = await Orders.findByPk(bookingId, {
+        include: [
+          {
+            model: Transactions,
+            as: "transaction",
+            where: { status: "pending" },
+          },
+        ],
+      });
   
+      // Check if order and transaction exist
+      if (!order || !order.transaction) {
+        return {
+          status: false,
+          message: 'Order or pending transaction not found',
+        };
+      }
+  
+      // Update the transaction's status to 'canceled'
+      await Transactions.update(
+        { status: "canceled" },
+        { where: { id: order.transaction.id } }
+      );
+  
+      return {
+        status: true,
+        message: 'Booking and transaction successfully canceled',
+      };
+    } catch (error) {
+      return {
+        status: false,
+        message: error.message,
+      };
+    }
+  }
 }

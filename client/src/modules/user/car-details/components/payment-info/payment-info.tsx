@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Radio, Checkbox, Button, Card, Alert, Space, Typography } from 'antd';
+import { Radio, Checkbox, Button, Card, Alert, Space, Typography, Tag } from 'antd';
 import type { RadioChangeEvent } from 'antd/es/radio';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import styles from './payment-info.module.css';
@@ -10,9 +10,10 @@ interface PaymentProps {
   amount: number | undefined; // Use number instead of Number
   setShowPaymentInfo:(status:boolean)=>void;
   handlePayment:(amount:number | undefined)=>void;
+  cancelBooking:()=>void;
 }
 
-const PaymentInfo: React.FC<PaymentProps> = ({ amount, setShowPaymentInfo,handlePayment }) => {
+const PaymentInfo: React.FC<PaymentProps> = ({ amount, setShowPaymentInfo,handlePayment,cancelBooking }) => {
   const [selectedPayment, setSelectedPayment] = useState<string | null>(null);
   const [consent, setConsent] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
@@ -50,6 +51,7 @@ const PaymentInfo: React.FC<PaymentProps> = ({ amount, setShowPaymentInfo,handle
 
   const handleCancel = () => {
     setShowPaymentInfo(false);
+    cancelBooking()
   }
 
   return (
@@ -57,6 +59,10 @@ const PaymentInfo: React.FC<PaymentProps> = ({ amount, setShowPaymentInfo,handle
       <Title level={3} className={styles.title}>
         Amount to Pay: {amount !== undefined ? new Intl.NumberFormat('en-US', { style: 'currency', currency: 'INR' }).format(amount) : 'N/A'}
       </Title>
+      <div className={styles.tagDiv}>
+      {/* < Tag color="warning"><i className="ri-error-warning-line"></i>Please do not refresh the page until the payment completed!</Tag> */}
+      </div>
+      
 
       <Space direction="vertical" size="large" className={styles.content}>
         {error && (
