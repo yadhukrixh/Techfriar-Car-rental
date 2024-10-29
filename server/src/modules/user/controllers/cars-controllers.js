@@ -76,7 +76,7 @@ export class CarsControllers {
             };
           })
         );
-
+        
         return {
           status: fetchAvailableCars.status,
           message: fetchAvailableCars.message,
@@ -221,7 +221,6 @@ export class CarsControllers {
       if (generatedSignature === signature) {
         // Update payment status in your database
         const payment = await this.fetchPaymentDetails(paymentId);
-        console.log(payment);
         return { status: true, message: "Payment verified successfully" };
       } else {
         return { status: false, message: "Payment verification failed" };

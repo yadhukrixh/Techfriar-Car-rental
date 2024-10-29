@@ -15,6 +15,7 @@ const typesenseClient = new Typesense.Client({
   connectionTimeoutSeconds: 2,
 });
 
+// Car Schema
 const carSchema = {
   name: "cars",
   fields: [
@@ -26,31 +27,57 @@ const carSchema = {
     { name: "transmissionType", type: "string", facet: true },
     { name: "numberOfSeats", type: "int32", facet: true },
     { name: "numberOfDoors", type: "int32", facet: true },
-    { name: "price", type: "float", facet: true }, // Include price field
+    { name: "price", type: "float", facet: true },
   ],
-  default_sorting_field: "price", // Set default sorting by price
+  default_sorting_field: "price",
 };
 
-// Function to create the collection if it doesn't already exist
-async function createCollection() {
+// Updated Order Schema
+const orderSchema = {
+  name: "orders",
+  fields: [
+    { name: "orderId", type: "string", facet: false }, // Unique primary key
+    { name: "userId", type: "string", facet: true },
+    { name: "method", type: "string", facet: true },
+    { name: "orderStatus", type: "string", facet: true },
+    { name: "completionStatus", type: "string", facet: true },
+    { name: "amount", type: "float", facet: true },
+    { name: "bookedDates", type: "string[]", facet: true },
+    { name: "brandName", type: "string", facet: true },
+    { name: "carName", type: "string", facet: true },
+    { name: "registrationNumber", type: "string", facet: true },
+  ],
+  default_sorting_field: "amount",
+};
+
+// Function to create collections if they don't already exist
+async function createCollections() {
   try {
     const existingCollections = await typesenseClient.collections().retrieve();
-    const collectionExists = existingCollections.some(
-      (collection) => collection.name === "cars"
-    );
 
-    if (!collectionExists) {
+    // Check if 'cars' collection exists
+    if (!existingCollections.some((collection) => collection.name === "cars")) {
       await typesenseClient.collections().create(carSchema);
       console.log("Cars collection created successfully.");
     } else {
       console.log("Cars collection already exists.");
     }
+
+    // Check if 'orders' collection exists
+    if (
+      !existingCollections.some((collection) => collection.name === "orders")
+    ) {
+      await typesenseClient.collections().create(orderSchema);
+      console.log("Orders collection created successfully.");
+    } else {
+      console.log("Orders collection already exists.");
+    }
   } catch (error) {
-    console.error("Error creating or checking collection:", error);
+    console.error("Error creating or checking collections:", error);
   }
 }
 
-createCollection();
+createCollections();
 
 export const buildQuery = ({
   selectedFuelTypes,
@@ -72,7 +99,9 @@ export const buildQuery = ({
   // Transmission Filter
   if (selectedTransmission && selectedTransmission.length > 0) {
     const transmissionFilter = selectedTransmission
-      .map((transmission) => `transmissionType: "${transmission.toLowerCase()}"`)
+      .map(
+        (transmission) => `transmissionType: "${transmission.toLowerCase()}"`
+      )
       .join(" || ");
     filterConditions.push(`(${transmissionFilter})`);
   }
@@ -104,8 +133,8 @@ export const searchCarsWithFilters = async ({
       .documents()
       .search({
         q: searchQuery,
-        query_by: "name, brandName, fuelType, transmissionType", // Fields to search
-        filter_by: filters, // Apply filters here
+        query_by: "name, brandName, fuelType, transmissionType",
+        filter_by: filters,
       });
 
     return {

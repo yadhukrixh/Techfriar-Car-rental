@@ -4,6 +4,7 @@ import Orders from "../../admin/models/orders-model.js";
 import RentableCars from "../../admin/models/rentable-cars-models.js";
 import { Op } from "sequelize";
 import { Transactions } from "../../admin/models/transactions-model.js";
+import OrderStatus from "../../admin/models/order-status-model.js";
 
 export class CarRepository {
   //fech available cars
@@ -264,7 +265,7 @@ export class CarRepository {
   }
 
   // update booking
-  static async updateBooking(bookingId, method, orderId, verifiedStatus) {
+  static async updateBooking(bookingId, method,orderId, verifiedStatus) {
     try {
       // Find the booking/order by ID
       const order = await Orders.findByPk(bookingId, {
@@ -289,6 +290,13 @@ export class CarRepository {
           razorpayId: orderId, // Assuming 'orderId' refers to 'razorpayId'
           status: verifiedStatus ? "success" : "failed", // Update based on verification status
         });
+      }
+
+      if(verifiedStatus){
+        const orderStatus = await OrderStatus.create({
+          orderId:bookingId,
+          status:"upcoming"
+        })
       }
 
       return {

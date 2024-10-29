@@ -91,7 +91,6 @@ const handleCarResolver = {
     //update booking
     updateBooking: async(_, { bookingId,paymentId,verifiedStatus }) => {
         try{
-            console.log(bookingId);
             const updateBooking = await CarsControllers.updateBooking(bookingId,paymentId,verifiedStatus);
             return updateBooking;
         }catch(error){

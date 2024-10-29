@@ -3,6 +3,8 @@ import sequelize from '../../../config/postgres.js';
 import Users from '../../user/models/user-model.js';
 import RentableCars from './rentable-cars-models.js';
 import { Transactions } from './transactions-model.js';
+import OrderStatus from './order-status-model.js';
+
 
 const Orders = sequelize.define('Order', {
   date: {
@@ -59,5 +61,7 @@ const Orders = sequelize.define('Order', {
 Orders.belongsTo(Users, { foreignKey: 'userId', onDelete: 'CASCADE' });
 Orders.belongsTo(RentableCars, { foreignKey: 'bookedCarId', onDelete: 'CASCADE' });
 Orders.belongsTo(Transactions, { foreignKey: 'transactionId', as: 'transaction', onDelete: 'SET NULL' });
+Orders.hasOne(OrderStatus, { foreignKey: 'orderId' }); // Establish one-to-one relationship with OrderStatus
 
+// Export the Orders model
 export default Orders;

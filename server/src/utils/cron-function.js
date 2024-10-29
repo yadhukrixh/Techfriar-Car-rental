@@ -1,6 +1,7 @@
 // src/cron/orderCron.js
 import cron from 'node-cron';
 import { CarRepository } from '../modules/user/repositories/car-repo.js';
+import { AdminOrderControllers } from '../modules/admin/controllers/orders-controllers.js';
 
 class OrderCleanupCron {
   constructor() {
@@ -14,6 +15,7 @@ class OrderCleanupCron {
     if (!this.job) {
       this.job = cron.schedule('* * * * *', async () => {
         await CarRepository.cancelPendingOrders();
+        await AdminOrderControllers.addOrdersToTypesense();
       });
     }
   }
