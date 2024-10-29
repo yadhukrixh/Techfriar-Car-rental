@@ -1,7 +1,9 @@
 import { UPDATE_USER_DETAILS_MUTATION } from "@/graphql/user/mutations/update-profile/update-details";
 import { UPDATE_PROFILE_PICTURE } from "@/graphql/user/mutations/update-profile/update-profile-picture";
+import { FETCH_ALL_ORDERS_USER } from "@/graphql/user/queries/fetch-orders/fetch-all-orders-user";
 import { FETCH_USER_DATA } from "@/graphql/user/queries/fetch-user/fetch-user";
-import { FetchUserDataResponse, OrdersData, UpdateProfilePictureResponse, UpdateUSerDetailsResponse, UserData } from "@/interfaces/user/user-details";
+import { OrderData } from "@/interfaces/user/orders";
+import { FetchOrdersResponse, FetchUserDataResponse, UpdateProfilePictureResponse, UpdateUSerDetailsResponse, UserData } from "@/interfaces/user/user-details";
 import { CookieClass } from "@/utils/cookies";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import Swal from "sweetalert2";
@@ -55,10 +57,22 @@ export class UserServices {
 
     //fetch orders
     public fetchOrders = async (
-        setOrders: (order: OrdersData) => void
+        userId:number | undefined,
+        setOrders: (order: OrderData[]) => void,
+        timePeriod:string | undefined,
+        searchQuery:string | undefined,
+        orderStatus:string | undefined
     ): Promise<void> => {
         try {
-
+            const {data} = await this.client.query<FetchOrdersResponse>({
+                query:FETCH_ALL_ORDERS_USER,
+                variables:{
+                    id:userId,
+                    timePeriod:timePeriod,
+                    searchQuery:searchQuery,
+                    orderStatus:orderStatus
+                }
+            })
         } catch (error) {
             console.error(error)
         }

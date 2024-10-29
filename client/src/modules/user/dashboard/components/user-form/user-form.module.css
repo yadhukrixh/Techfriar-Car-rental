@@ -8,6 +8,7 @@
   }
 
   .userProfileContainer{
+    margin-top: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -37,6 +38,11 @@
     color: #000 !important;
     font-size: 19px !important;
     font-weight: 500;
+  }
+
+  .orderHistory{
+    height: max-content;
+    width: 100%;
   }
 
   .table{

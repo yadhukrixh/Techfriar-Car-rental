@@ -1,4 +1,5 @@
 import { message } from "antd";
+import { OrderData } from "./orders";
 
 export interface UserData {
     id?:number;
@@ -29,13 +30,7 @@ export interface FetchProfilePicResponse{
     }
 }
 
-export interface OrdersData{
-    si:number;
-    carName:string;
-    bookedDates:string;
-    amount:string;
-    status:string;
-}
+
 
 export interface FetchUserDataResponse{
     fetchUserData:{
@@ -56,5 +51,13 @@ export interface UpdateUSerDetailsResponse{
     updateUserDetails:{
         status:boolean;
         message:string;
+    }
+}
+
+export interface FetchOrdersResponse{
+    fetchAllOrderOfUser:{
+        status:boolean;
+        message:string;
+        data:OrderData[];
     }
 }

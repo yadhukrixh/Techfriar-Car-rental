@@ -1,43 +1,14 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {
-  Form,
-  Input,
-  Button,
-  Upload,
-  message,
-  Table,
-  Tooltip,
-  Empty,
-  Tabs,
-  Card,
-  Avatar,
-  Row,
-  Col,
-} from "antd";
-import {
-  UserOutlined,
-  CameraOutlined,
-  EditOutlined,
-  SaveOutlined,
-  CloseOutlined,
-  LockOutlined,
-  PhoneOutlined,
-  EnvironmentOutlined,
-  MailOutlined,
-  DownloadOutlined,
-} from "@ant-design/icons";
+import {Form,Input,Button,Upload, message,Tooltip,Empty,Tabs, Card,Avatar,Row,Col} from "antd";
+import { UserOutlined, CameraOutlined,EditOutlined, SaveOutlined, CloseOutlined,LockOutlined, PhoneOutlined,EnvironmentOutlined,MailOutlined,DownloadOutlined} from "@ant-design/icons";
 import { motion } from "framer-motion";
 import styles from "./user-form.module.css";
 import { UserData } from "@/interfaces/user/user-details";
-import {
-  ApolloClient,
-  NormalizedCacheObject,
-  useApolloClient,
-} from "@apollo/client";
+import {ApolloClient,NormalizedCacheObject,useApolloClient} from "@apollo/client";
 import { UserServices } from "../../services/user-services";
 import { OrderData } from "@/interfaces/user/orders";
-import { input } from "framer-motion/client";
+import OrderHistory from "../order-history/order-history";
 
 const { TabPane } = Tabs;
 
@@ -46,8 +17,12 @@ const UserProfile = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [userData, setUserData] = useState<UserData | undefined>(undefined); // Change to allow null
   const client = useApolloClient() as ApolloClient<NormalizedCacheObject>;
-  const [orderHistory,setOrderHistory] = useState<OrderData[]>([]);
+  const [orderHistory, setOrderHistory] = useState<OrderData[]>([]);
   const userService = new UserServices(client);
+  const [showUserDetails, setShowUserDetails] = useState(true);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [orderStatus, setOrderStatus] = useState("");
+  const [timePeriod, setTimePeriod] = useState("");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -61,8 +36,6 @@ const UserProfile = () => {
       form.setFieldsValue(userData); // Set form values only when userData is available
     }
   }, [userData]); // Run this effect whenever userData changes
-
-
 
   const [showPasswordFields, setShowPasswordFields] = useState(false);
 
@@ -99,13 +72,12 @@ const UserProfile = () => {
     }
   };
 
-  const columns = [
-    { title: "SI No", dataIndex: "siNo", key: "siNo" },
-    { title: "Car Name", dataIndex: "carName", key: "carName" },
-    { title: "Booked Dates", dataIndex: "bookedDates", key: "bookedDates" },
-    { title: "Amount", dataIndex: "amount", key: "amount" },
-    { title: "Status", dataIndex: "status", key: "status" },
-  ];
+  // fetch order history
+  useEffect(()=>{
+    const fetchOrderHistory = async() =>{
+      await userService.fetchOrders(userData?.id,setOrderHistory,timePeriod,searchQuery,orderStatus)
+    }
+  },[timePeriod,searchQuery,orderStatus])
 
   const renderUserDetails = () => (
     <motion.div
@@ -301,23 +273,20 @@ const UserProfile = () => {
             <span>Order History</span>
             {orderHistory.length > 0 && (
               <Button
-              type="primary"
-              icon={<DownloadOutlined />}
-              // onClick={()} // Add your function here
-            >
-              Download
-            </Button>
+                type="primary"
+                icon={<DownloadOutlined />}
+                // onClick={()} // Add your function here
+              >
+                Download
+              </Button>
             )}
           </div>
         }
       >
-        {orderHistory.length > 0 ? (
-          <Table
-            columns={columns}
-            dataSource={orderHistory}
-            pagination={false}
-            className={styles.table}
-          />
+        {orderHistory.length == 0 ? (
+          <div className={styles.orderHistory}>
+            <OrderHistory orderList={orderHistory} setSearchQuery={setSearchQuery} setOrderStatus={setOrderStatus} setTimePeriod={setTimePeriod} />
+          </div>
         ) : (
           <Empty description="No orders found" />
         )}
@@ -325,30 +294,40 @@ const UserProfile = () => {
     </motion.div>
   );
 
+  const handleTabChange = (key: string) => {
+    setShowUserDetails(key === "1");
+  };
+
   return (
     <div className={styles.userProfileContainer}>
-      <div className={styles.profileHeader}>
-        <Avatar
-          size={100}
-          icon={<CameraOutlined />}
-          src={userData?.profileImage || ""}
-          style={{ marginBottom: 16 }}
-        />
-        <div className={styles.greetings}>
-          <h1>Hello, {userData?.name}</h1>
-          <Upload
-            name="profileImage"
-            showUploadList={false}
-            action="/upload" // Replace with your actual upload endpoint
-            onChange={handleImageUpload}
-          >
-            <Button icon={<CameraOutlined />} style={{ marginBottom: 16 }}>
-              Change Profile Picture
-            </Button>
-          </Upload>
+      {showUserDetails && (
+        <div className={styles.profileHeader}>
+          <Avatar
+            size={100}
+            icon={<CameraOutlined />}
+            src={userData?.profileImage || ""}
+            style={{ marginBottom: 16 }}
+          />
+          <div className={styles.greetings}>
+            <h1>Hello, {userData?.name}</h1>
+            <Upload
+              name="profileImage"
+              showUploadList={false}
+              action="/upload" // Replace with your actual upload endpoint
+              onChange={handleImageUpload}
+            >
+              <Button icon={<CameraOutlined />} style={{ marginBottom: 16 }}>
+                Change Profile Picture
+              </Button>
+            </Upload>
+          </div>
         </div>
-      </div>
-      <Tabs defaultActiveKey="1" className={styles.tab}>
+      )}
+      <Tabs
+        defaultActiveKey="1"
+        className={styles.tab}
+        onChange={handleTabChange}
+      >
         <TabPane tab="Personal Details" key="1" className={styles.tab}>
           {renderUserDetails()}
         </TabPane>

@@ -20,7 +20,7 @@ class BrandController {
     } catch (error) {
       return {
         status: false,
-        message: "Failed to fetch data",
+        message: "Failed to fetch data"
       };
     }
   }

@@ -54,7 +54,6 @@ export default function BillingForm({ userData, dates, carModelId , amount, setS
   };
 
   const handleBack = () =>{
-    console.log("haiii")
     setShowBilling(false);
   }
 

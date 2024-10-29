@@ -1,7 +1,7 @@
 export interface OrderData{
-    siNo:number;
+    orderId:number;
     carName:string;
-    bookedDates:string;
-    amount:string;
-    status:string;
+    image:string;
+    registrationNumber:string;
+    brandname:string;
 }

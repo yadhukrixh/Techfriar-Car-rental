@@ -61,7 +61,6 @@ export class ManageRentablecars{
                     }
                 });
             } else {
-                console.log(data)
                 Swal.fire({
                     title: "Error",
                     text: data?.addRentableCar.message,
