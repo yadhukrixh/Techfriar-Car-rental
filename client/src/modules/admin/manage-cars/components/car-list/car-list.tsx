@@ -1,6 +1,6 @@
 "use client";
 import React, { FC, useState } from "react";
-import { Row, Col, message } from "antd";
+import { Row, Col } from "antd";
 import { CarData } from "@/interfaces/admin/cars";
 import CarCard from "../car-card/car-card";
 import styles from "./car-list.module.css";
@@ -26,7 +26,7 @@ const CarList: FC<CarListProps> = ({ cars }) => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingCarData, setEditingCarData] = useState<CarData>();
 
-  const handleOpenModal = (carData?: any) => {
+  const handleOpenModal = (carData?: CarData) => {
     setEditingCarData(carData); // Pass car data to edit or null to add new car
     setIsModalVisible(true); // Show the modal
   };
@@ -35,13 +35,13 @@ const CarList: FC<CarListProps> = ({ cars }) => {
     setIsModalVisible(false); // Hide the modal
   };
 
-  const handleSaveCarData = (carData: any) => {
+  const handleSaveCarData = (carData: CarData) => {
     // Here, you would handle the saving of car data to the backend or perform other logic
     console.log('Car data to save:', carData);
     setIsModalVisible(false); // Close the modal after saving
   };
 
-  const handleEdit = (carData: any) => {
+  const handleEdit = (carData: CarData) => {
     setEditingCarData(carData);
     handleOpenModal(carData)
   };

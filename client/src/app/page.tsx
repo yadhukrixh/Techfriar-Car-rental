@@ -1,4 +1,3 @@
-
 import Home from "@/modules/user/home-page/views";
 import styles from "./page.module.css";
 

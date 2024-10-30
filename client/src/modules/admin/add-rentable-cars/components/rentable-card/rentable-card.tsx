@@ -36,7 +36,7 @@ const RentableCard: React.FC<CarCardProps> = ({
       setLoading(true);
       setActiveStatus(!activeStatus);
       await manageRentableCars.changeActiveStatus(id, checked);
-    } catch (error) {
+    } catch{
       message.error("Failed to update status");
     } finally {
       setLoading(false);
@@ -55,7 +55,7 @@ const RentableCard: React.FC<CarCardProps> = ({
       // Here you can send the updated registration number to the server.
       await manageRentableCars.editRegistrationNumber(id,newRegistrationNumber)
       setIsModalVisible(false);
-    } catch (error) {
+    } catch {
       message.error("Failed to update registration number");
     } finally {
       setLoading(false);

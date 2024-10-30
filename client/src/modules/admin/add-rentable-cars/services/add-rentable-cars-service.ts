@@ -7,7 +7,7 @@ import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import { message } from "antd";
 import Swal from "sweetalert2";
 
-export class ManageRentablecars{
+export class ManageRentablecars {
     private client: ApolloClient<NormalizedCacheObject>;
     constructor(
         client: ApolloClient<NormalizedCacheObject>
@@ -17,32 +17,32 @@ export class ManageRentablecars{
 
     // fetch car data for add rentables
     public fetchCar = async (
-        setCarData:(data:RentableModel)=>void,
-        id?:number
-        ):Promise<void> => {
-        try{
-            const {data} = await this.client.query<FetchRentablecarsResponse>({
-                query:FETCH_RENTABLE_CAR,
-                variables:{id},
+        setCarData: (data: RentableModel) => void,
+        id?: number
+    ): Promise<void> => {
+        try {
+            const { data } = await this.client.query<FetchRentablecarsResponse>({
+                query: FETCH_RENTABLE_CAR,
+                variables: { id },
             })
-            if(data.fetchRentablecars.status){
+            if (data.fetchRentablecars.status) {
                 setCarData(data.fetchRentablecars.data);
             }
 
-        }catch(error){
+        } catch (error) {
             console.error(error);
         }
     }
 
     // add rentable carData
-    public addrentableCar = async(
-        registrationNumber:string,
-        carId?:number
-    ):Promise<void> => {
-        try{
+    public addrentableCar = async (
+        registrationNumber: string,
+        carId?: number
+    ): Promise<void> => {
+        try {
             const { data } = await this.client.mutate<AddRentableCarResponse>({
-                mutation:ADD_RENTABLE_CAR,
-                variables:{
+                mutation: ADD_RENTABLE_CAR,
+                variables: {
                     registrationNumber: registrationNumber,
                     carId: carId
                 }
@@ -72,46 +72,54 @@ export class ManageRentablecars{
                     }
                 });
             }
-        }catch(error){
+        } catch (error) {
             console.error(error);
         }
     }
 
     // change active status of the rentable car
     public changeActiveStatus = async (
-        id:number,
-        status:boolean
-    ):Promise<void> => {
-        try{
-            const {data} = await this.client.mutate<ChangeActiveStatusResponse>({
-                mutation:CHANGE_ACTIVE_STATUS,
-                variables:{id,status}
+        id: number,
+        status: boolean
+    ): Promise<void> => {
+        try {
+            const { data } = await this.client.mutate<ChangeActiveStatusResponse>({
+                mutation: CHANGE_ACTIVE_STATUS,
+                variables: { id, status }
             })
 
-            if(data?.changeActiveStatus.status){
+            if (data?.changeActiveStatus.status) {
                 message.success(data.changeActiveStatus.message);
-            }else{
-                message.error(data?.changeActiveStatus.message);
+            } else {
+                Swal.fire({
+                    icon: "error",
+                    title: "Oops...",
+                    text: data?.changeActiveStatus.message
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        window.location.reload();
+                    }
+                });
             }
-        }catch(error){
+        } catch (error) {
             console.log(error)
         }
     }
 
     // edit registration number
-    public editRegistrationNumber = async(
-        id:number,
-        registrationNumber:string
-    ):Promise<void> => {
-        try{
-            const {data} = await this.client.mutate<EditRegistrationNumberResponse>({
-                mutation:EDIT_REGISTRTION_NUMBER,
-                variables:{
-                    id:id,
-                    registrationNumber:registrationNumber
+    public editRegistrationNumber = async (
+        id: number,
+        registrationNumber: string
+    ): Promise<void> => {
+        try {
+            const { data } = await this.client.mutate<EditRegistrationNumberResponse>({
+                mutation: EDIT_REGISTRTION_NUMBER,
+                variables: {
+                    id: id,
+                    registrationNumber: registrationNumber
                 }
             });
-            if(data?.editRegistrationNumber.status){
+            if (data?.editRegistrationNumber.status) {
                 Swal.fire({
                     title: "Success!",
                     text: data.editRegistrationNumber.message,
@@ -122,7 +130,7 @@ export class ManageRentablecars{
                         window.location.reload()
                     }
                 });
-            }else{
+            } else {
                 Swal.fire({
                     title: "Error!",
                     text: data?.editRegistrationNumber.message,
@@ -134,7 +142,7 @@ export class ManageRentablecars{
                     }
                 });
             }
-        }catch(error){
+        } catch (error) {
             console.log(error)
         }
     }

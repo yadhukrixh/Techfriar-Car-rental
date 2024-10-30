@@ -73,6 +73,9 @@ export class UserServices {
                     orderStatus:orderStatus
                 }
             })
+            if(data.fetchAllOrderOfUser.status){
+                console.log("success");
+            }
         } catch (error) {
             console.error(error)
         }

@@ -29,13 +29,13 @@ const LoginPage = () => {
     }
   }, [router, searchParams]);
 
-  const onFinish = async (values: { phoneNumber: string; password: string }) => {
+  const onFinish = async () => {
     setLoading(true);
     try {
       await new Promise(resolve => setTimeout(resolve, 1000));
       await loginClass.loginUser(form.getFieldValue("phoneNumber"), form.getFieldValue("password"));
       // Add navigation logic here if needed
-    } catch (error) {
+    } catch {
       message.error('Login failed. Please try again.');
     } finally {
       setLoading(false);

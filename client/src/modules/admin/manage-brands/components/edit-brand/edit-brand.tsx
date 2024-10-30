@@ -9,6 +9,7 @@ import styles from "./edit-brand.module.css";
 import InputComponent from "@/themes/input-component/input-component";
 import { AddBrandClass } from "@/modules/admin/add-brand/services/add-brand-service";
 import { ManageBrandsClass } from "../../services/manage-brands-services";
+import { RcFile, UploadChangeParam } from "antd/es/upload";
 
 // Props for the EditBrandModal component
 interface EditBrandModalProps {
@@ -28,7 +29,7 @@ const EditBrand: FC<EditBrandModalProps> = ({
   const [newCountry, setNewCountry] = useState<string>(brand.country);
   const [countries, setCountries] = useState<string[]>([]); // Country options state
   const [newLogo, setNewLogo] = useState<File | null>(null);
-  const [logo, setLogo] = useState<string>(brand.logoUrl); // State for logo URL
+  const logo = brand.logoUrl;
 
   const brandClass = new AddBrandClass();
   const manageBrandClass = new ManageBrandsClass(client);
@@ -38,17 +39,17 @@ const EditBrand: FC<EditBrandModalProps> = ({
     const fetchCountries = async () => {
       try {
         await brandClass.fetchCountries(client, setCountries);
-      } catch (error) {
+      } catch {
         message.error("Failed to fetch countries.");
       }
     };
-
+    
     fetchCountries();
   }, [client]);
 
   // Handle form submission
   const handleUpdateBrand = async (
-    id: Number,
+    id: number,
     name: string,
     country: string,
     image: File | null
@@ -62,15 +63,18 @@ const EditBrand: FC<EditBrandModalProps> = ({
   };
 
   // Handle file upload for brand logo
-  const handleFileChange = (info: any) => {
+  const handleFileChange = (info: UploadChangeParam) => {
     console.log(info); // Log the info object for debugging
     const { fileList } = info; // Destructure fileList from info
-
+  
     // Check if there are any files in the fileList
     if (fileList.length > 0) {
       const latestFile = fileList[0]; // Get the first file (assuming only one is uploaded)
-      setNewLogo(latestFile.originFileObj); // Set the actual file object
-      message.success(`${latestFile.name} file uploaded successfully`);
+      
+      if (latestFile.originFileObj) {
+        setNewLogo(latestFile.originFileObj as RcFile); // Set the actual file object with proper type assertion
+        message.success(`${latestFile.name} file uploaded successfully`);
+      }
     } else {
       setNewLogo(null); // Reset state if no files are selected
       message.info("Brand logo removed."); // Optional: notify user if no file

@@ -2,7 +2,6 @@ import { DELETE_BRAND } from "@/graphql/admin/mutations/brands/delete-brand-muta
 import { UPDATE_BRAND } from "@/graphql/admin/mutations/brands/edit-brand-mutation";
 import { BRANDS_QUERY } from "@/graphql/admin/queries/brands/brands-query";
 import { Brand, DeleteBrandResponse, GetBrandsResponse, UpdateBrandResponse } from "@/interfaces/admin/brands";
-import client from "@/lib/apollo-client";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import Swal from "sweetalert2";
 
@@ -25,9 +24,9 @@ export class ManageBrandsClass {
                 query: BRANDS_QUERY,
             });
             if (data.getBrands.status) {
-                const formattedBrands: Brand[] = data.getBrands.data.map((brand: any) => ({
+                const formattedBrands: Brand[] = data.getBrands.data.map((brand: Brand) => ({
                     id: Number(brand.id),         // Converting string id to number
-                    logoUrl: brand.imageUrl,      // Mapping imageUrl to logoUrl
+                    logoUrl: brand.logoUrl,      // Mapping imageUrl to logoUrl
                     name: brand.name,             // Directly mapping name
                     country: brand.country,
                     numberOfCars: (brand.numberOfCars)
@@ -43,7 +42,7 @@ export class ManageBrandsClass {
 
     // delete brand
     public deleteBrand = async (
-        brandId: Number,
+        brandId: number,
     ): Promise<void> => {
         try {
             Swal.fire({
@@ -97,7 +96,7 @@ export class ManageBrandsClass {
 
     // Update brand Data
     public updateBrand = async (
-        id: Number,
+        id: number,
         name: string,
         country: string,
         image: File | null,

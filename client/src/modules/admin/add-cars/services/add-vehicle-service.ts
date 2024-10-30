@@ -3,7 +3,7 @@ import { BRANDS_QUERY } from "@/graphql/admin/queries/brands/brands-query";
 import { Brand, GetBrandsResponse } from "@/interfaces/admin/brands";
 import { AddCarResponse } from "@/interfaces/admin/vehicles";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
-import { message } from "antd";
+import { message, UploadFile } from "antd";
 import Swal from "sweetalert2";
 
 export class AddVehicleClass {
@@ -18,9 +18,9 @@ export class AddVehicleClass {
             });
 
             if (data.getBrands.status) {
-                const formattedBrands:Brand[] = data.getBrands.data.map((brand: any) => ({
+                const formattedBrands:Brand[] = data.getBrands.data.map((brand: Brand) => ({
                     id: Number(brand.id),         // Converting string id to number
-                    logoUrl: brand.imageUrl,      // Mapping imageUrl to logoUrl
+                    logoUrl: brand.logoUrl,      // Mapping imageUrl to logoUrl
                     name: brand.name,             // Directly mapping name
                     country:brand.country,
                 }));
@@ -36,29 +36,34 @@ export class AddVehicleClass {
 
     // Handle file changes for primary and other images
     public handleFileChange = (
-        info: any,
+        info: {
+            fileList: Array<{
+                name: string;
+                originFileObj: File;
+            }>;
+        },
         type: string,
         setPrimaryImage: React.Dispatch<React.SetStateAction<File | null>>,
         setOtherImages: React.Dispatch<React.SetStateAction<File[]>>
     ) => {
-        const { fileList } = info; // Destructure fileList from info
-
+        const { fileList } = info;
+    
         if (type === "primary") {
             if (fileList.length > 0) {
-                const latestFile = fileList[0];
+                const latestFile = fileList[0].originFileObj;  // Access the originFileObj
                 setPrimaryImage(latestFile);
-                message.success(`${latestFile.name} primary image uploaded successfully`);
+                message.success(`${fileList[0].name} primary image uploaded successfully`);
             } else {
-                setPrimaryImage(null); // Reset state if no files are selected
+                setPrimaryImage(null);
                 message.info("Please select a primary image.");
             }
         } else if (type === "other") {
             if (fileList.length > 0) {
-                const files = fileList.map((file: any) => file.originFileObj);
+                const files = fileList.map((file) => file.originFileObj);
                 setOtherImages(files);
                 message.success("Other images uploaded successfully.");
             } else {
-                setOtherImages([]); // Reset state if no other images are selected
+                setOtherImages([]);
                 message.info("Please select other images.");
             }
         }
@@ -69,16 +74,16 @@ export class AddVehicleClass {
         client: ApolloClient<NormalizedCacheObject>,
         vehicleName: string,
         description: string,
-        primaryImage: any, // Adjust to handle the raw file
-        otherImages: any[], // Adjust to handle raw files
+        primaryImage: UploadFile, // Adjust to handle the raw file
+        otherImages: UploadFile[], // Adjust to handle raw files
         selectedBrand: number,
         quantity: number,
         selectedYear: number | null,
         fuelType: string | null,
         transmissionType: string | null,
-        seatNum: Number,
-        doorNum: Number,
-        pricePerDay: Number
+        seatNum: number,
+        doorNum: number,
+        pricePerDay: number
     ): Promise<void> => {
         try {
             // Extract the raw file from Ant Design's Upload component

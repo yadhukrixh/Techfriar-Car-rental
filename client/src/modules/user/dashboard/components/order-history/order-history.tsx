@@ -11,7 +11,7 @@ interface OrderHistoryProps{
     setTimePeriod:(period:string)=>void;
 }
 
-const OrderHistory: React.FC<OrderHistoryProps> = ({orderList,setSearchQuery,setOrderStatus,setTimePeriod}) => {
+const OrderHistory: React.FC<OrderHistoryProps> = ({setSearchQuery,setOrderStatus,setTimePeriod}) => {
     
   return (
     <div className={styles.orderHistoryContainer}>

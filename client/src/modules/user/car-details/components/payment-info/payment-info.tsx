@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Radio, Checkbox, Button, Card, Alert, Space, Typography, Tag } from 'antd';
+import { Radio, Checkbox, Button, Card, Alert, Space, Typography } from 'antd';
 import type { RadioChangeEvent } from 'antd/es/radio';
 import { InfoCircleOutlined } from '@ant-design/icons';
 import styles from './payment-info.module.css';

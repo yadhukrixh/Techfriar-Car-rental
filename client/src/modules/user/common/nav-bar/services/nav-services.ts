@@ -23,7 +23,7 @@ export class NavServices{
             const {data} = await this.client.mutate<FetchProfilePicResponse>({
                 mutation:PROFILE_PIC_MUTATION,
                 variables:{
-                    userId:2,
+                    userId:userId,
                 }
             })
 

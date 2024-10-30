@@ -9,7 +9,7 @@ import {
 import L, { LatLngTuple } from "leaflet";
 import "leaflet/dist/leaflet.css";
 import React, { useState } from "react";
-import { message, Button } from "antd";
+import {  Button } from "antd";
 import styles from "./location-picker.module.css";
 import Swal from "sweetalert2";
 

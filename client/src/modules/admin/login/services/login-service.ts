@@ -54,8 +54,8 @@ export class AdminLoginService {
           } else {
             this.setError(data?.adminLogin.message || 'Invalid email or password');
           }
-        } catch (error: any) {
-          this.setError(error.message || 'Error logging in. Please try again.');
+        } catch  {
+          this.setError('Error logging in. Please try again.');
         }
       };
   }

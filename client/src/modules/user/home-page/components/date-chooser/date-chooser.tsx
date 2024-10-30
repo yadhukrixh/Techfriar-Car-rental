@@ -1,11 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { DatePicker } from "antd";
 import dayjs, { Dayjs } from "dayjs";
 import styles from "./date-chooser.module.css";
 import "antd/dist/reset.css";
 import { useRouter } from "next/navigation";
-import axios from "axios";
 const { RangePicker } = DatePicker;
 
 const DateChooser: React.FC = () => {

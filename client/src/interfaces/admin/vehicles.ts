@@ -1,7 +1,3 @@
-import { Brand } from "./brands";
-
-
-
 
 export interface AddCarResponse {
     addCar:{

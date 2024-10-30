@@ -1,7 +1,6 @@
 
 import { FETCH_AVAILABLE_CARS } from "@/graphql/user/queries/fetch-available-cars/fetch-available-cars";
 import { FetchAvailableCarsResponse, FetchedCarData } from "@/interfaces/user/cars";
-import { DateFormatter } from "@/utils/date-formatter";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 
 export class CarServices {

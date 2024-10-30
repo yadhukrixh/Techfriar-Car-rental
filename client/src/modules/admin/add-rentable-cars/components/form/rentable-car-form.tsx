@@ -7,12 +7,10 @@ import {
   useApolloClient,
 } from "@apollo/client";
 import { ManageRentablecars } from "../../services/add-rentable-cars-service";
-import { RentableModel, RentableCar } from "@/interfaces/admin/rentable-cars";
-import { Card, Button, Switch, Input, message, Empty, Tooltip } from "antd";
+import { RentableModel } from "@/interfaces/admin/rentable-cars";
+import {  Button, Input, message, Empty, Tooltip } from "antd";
 import {
   PlusOutlined,
-  EditOutlined,
-  DeleteOutlined,
   SaveOutlined,
 } from "@ant-design/icons";
 import Image from "next/image";
@@ -30,7 +28,7 @@ const AddRentableForm = () => {
   const [showAddNew, setShowAddNew] = useState(false);
   const [newRegistration, setNewRegistration] = useState("");
   const [loading, setLoading] = useState(false);
-  const [activeStatus,setActiveStatus] = useState<boolean>(true);
+  // const [activeStatus,setActiveStatus] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchCarData = async () => {
@@ -53,7 +51,7 @@ const AddRentableForm = () => {
       await addRentableCars.addrentableCar(newRegistration,carData?.id)
       setShowAddNew(false);
       setNewRegistration("");
-    } catch (error) {
+    } catch {
       message.error("Failed to add new car");
     } finally {
       setLoading(false);

@@ -7,16 +7,31 @@ import { CancelBookingResponse, CreateBookingResponse, CreateRazorPayOrderRespon
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import confetti from 'canvas-confetti';
 import { message } from "antd";
-
 import Swal from "sweetalert2";
 import { CANCEL_BOOKING } from "@/graphql/user/mutations/create-booking/cancel-booking/cancel-booking";
+
+// Define the type for Razorpay options, which will be used in createRazorPayOrder
+interface RazorpayOptions {
+    key: string;
+    amount: number;
+    currency: string;
+    name: string;
+    order_id: string;
+    handler: (response: RazorpayResponse) => Promise<void>;
+    theme: { color: string };
+}
+
+// Define the structure of Razorpay response to replace 'any' type in handler function
+interface RazorpayResponse {
+    razorpay_order_id: string;
+    razorpay_payment_id: string;
+    razorpay_signature: string;
+}
 
 export class CarBookingServices {
     private client: ApolloClient<NormalizedCacheObject>;
 
-    constructor(
-        client: ApolloClient<NormalizedCacheObject>
-    ) {
+    constructor(client: ApolloClient<NormalizedCacheObject>) {
         this.client = client;
     }
 
@@ -26,68 +41,47 @@ export class CarBookingServices {
         setCar: (car: FetchedCarData) => void
     ): Promise<void> => {
         try {
-            if (typeof (id) === "string") {
-                const carId = parseInt(id, 10)
+            if (typeof id === "string") {
+                const carId = parseInt(id, 10);
                 const { data } = await this.client.query<FetchCarByIdResponse>({
                     query: FETCH_CAR_BY_ID,
-                    variables: {
-                        id: carId
-                    }
+                    variables: { id: carId },
                 });
 
                 if (data.fetchCarById.status) {
                     setCar(data.fetchCarById.data);
                 }
             }
-
-
         } catch (error) {
-            console.error(error)
-        }
-    }
-
-    //generate dates
-    public getSelectedDates = async (
-        setDate: (date: Date[]) => void
-    ): Promise<void> => {
-        // Fetch the dates from local storage
-        const selectedDatesString = localStorage.getItem('selectedDates');
-
-        // Parse the string into an array of Date objects
-        if (selectedDatesString !== null) {
-
-            const selectedDates = JSON.parse(selectedDatesString);
-
-            // Check if the retrieved dates are valid
-            if (!selectedDates || selectedDates.length !== 2) {
-                console.error('Invalid date range stored in localStorage');
-                setDate([]); // Set an empty array if dates are invalid
-                return;
-            }
-
-            const startDate = new Date(selectedDates[0]);
-            const endDate = new Date(selectedDates[1]);
-
-            // Function to generate an array of dates between startDate and endDate
-            const generateDateRange = (start: Date, end: Date): Date[] => {
-                const dates: Date[] = [];
-                const currentDate = new Date(start);
-
-                while (currentDate <= end) {
-                    dates.push(new Date(currentDate)); // Push a copy of the current date
-                    currentDate.setDate(currentDate.getDate() + 1); // Increment date by 1 day
-                }
-
-                return dates;
-            };
-
-            // Generate the array of dates and update state
-            const totalDates = generateDateRange(startDate, endDate);
-            setDate(totalDates);
+            console.error(error);
         }
     };
 
-    //Create booking
+    // generate dates
+    public getSelectedDates = async (setDate: (date: Date[]) => void): Promise<void> => {
+        const selectedDatesString = localStorage.getItem("selectedDates");
+        if (selectedDatesString) {
+            const selectedDates = JSON.parse(selectedDatesString);
+            if (selectedDates && selectedDates.length === 2) {
+                const [startDate, endDate] = selectedDates.map((d: string) => new Date(d));
+                const generateDateRange = (start: Date, end: Date): Date[] => {
+                    const dates: Date[] = [];
+                    const currentDate = new Date(start);
+                    while (currentDate <= end) {
+                        dates.push(new Date(currentDate));
+                        currentDate.setDate(currentDate.getDate() + 1);
+                    }
+                    return dates;
+                };
+                setDate(generateDateRange(startDate, endDate));
+            } else {
+                console.error("Invalid date range stored in localStorage");
+                setDate([]);
+            }
+        }
+    };
+
+    // Create booking
     public createBooking = async (
         userId: number | undefined,
         bookedDates: Date[] | undefined,
@@ -95,7 +89,7 @@ export class CarBookingServices {
         deliveryLocation: string | null,
         returnLocation: string | null | undefined,
         secondaryMobileNumber: string,
-        amount: Number | undefined,
+        amount: number | undefined,
         setShowPayment: (status: boolean) => void,
         setBookingId: (id: number) => void
     ): Promise<void> => {
@@ -107,93 +101,69 @@ export class CarBookingServices {
                 showCancelButton: true,
                 confirmButtonColor: "#3085d6",
                 cancelButtonColor: "#d33",
-                confirmButtonText: "Continue"
-              }).then(async(result) => {
+                confirmButtonText: "Continue",
+            }).then(async (result) => {
                 if (result.isConfirmed) {
-                    const formattedDates = bookedDates?.map(date => date.toISOString());
-                    const input = {
-                        userId,
-                        bookedDates: formattedDates,
-                        carModelId,
-                        deliveryLocation,
-                        returnLocation,
-                        secondaryMobileNumber,
-                        amount
-                    };
+                    const formattedDates = bookedDates?.map((date) => date.toISOString());
+                    const input = { userId, bookedDates: formattedDates, carModelId, deliveryLocation, returnLocation, secondaryMobileNumber, amount };
                     const { data } = await this.client.mutate<CreateBookingResponse>({
                         mutation: CREATE_BOOKING,
-                        variables: {
-                            input,
-                        },
+                        variables: { input },
                     });
-        
-                    if (!(data?.createBooking.status)) {
-                        Swal.fire({
-                            icon: "error",
-                            title: "Oops...",
-                            text: `${data?.createBooking.message}`,
-                        });
-                    } else {
+
+                    if (data?.createBooking.status) {
                         setBookingId(data.createBooking.data.orderId);
                         setShowPayment(true);
+                    } else {
+                        Swal.fire({ icon: "error", title: "Oops...", text: `${data?.createBooking.message}` });
                     }
                 }
-              });
-            
+            });
         } catch (error) {
             console.error(error);
         }
     };
 
-    //handle payment 
+    // handle payment
     public handlePayment = async (
         amount: number | undefined,
         bookingId: number | undefined,
-        setcarBooked:(status:boolean)=>void
+        setCarBooked: (status: boolean) => void
     ): Promise<void> => {
         try {
-            await this.createRazorPayOrder(amount, bookingId,setcarBooked)
+            await this.createRazorPayOrder(amount, bookingId, setCarBooked);
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
-    }
+    };
 
-
-    //create razorpay order
+    // create Razorpay order
     public createRazorPayOrder = async (
         amount: number | undefined,
         bookingId: number | undefined,
-        setcarBooked:(status:boolean)=>void
+        setCarBooked: (status: boolean) => void
     ): Promise<void> => {
-        // Check if amount is defined
         if (amount === undefined) {
-            message.error('Amount is required for payment.');
+            message.error("Amount is required for payment.");
             return;
         }
 
         try {
             const { data } = await this.client.mutate<CreateRazorPayOrderResponse>({
                 mutation: CREATE_RAZORPAY_ORDER,
-                variables: {
-                    amount: amount
-                }
+                variables: { amount },
             });
 
-            // Check if order creation was successful
             if (data?.createRazorPayOrder.status && data.createRazorPayOrder.data.orderId) {
-                const options = {
-                    key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
-                    amount: amount * 100, // Convert to paise
-                    currency: 'INR',
-                    name: 'Rentalia',
+                const options: RazorpayOptions = {
+                    key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "",
+                    amount: amount * 100,
+                    currency: "INR",
+                    name: "Rentalia",
                     order_id: data.createRazorPayOrder.data.orderId,
-                    handler: async (response: any) => { // Specify the type for response or use 'any'
-                        try {
-                            const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = response;
-                            await this.verifyPayment(razorpay_order_id, razorpay_payment_id, razorpay_signature, bookingId,setcarBooked);
-                        } catch (error) {
-                            console.error(error)
-                        }
+                    handler: async (response: RazorpayResponse) => {
+                        const { razorpay_order_id, razorpay_payment_id, razorpay_signature } = response;
+                        await this.verifyPayment(razorpay_order_id, razorpay_payment_id, razorpay_signature, bookingId, setCarBooked);
                     },
                     theme: { color: "#e77600" },
                 };
@@ -201,11 +171,11 @@ export class CarBookingServices {
                 const razorpay = new (window as any).Razorpay(options);
                 razorpay.open();
             } else {
-                message.error('Order creation failed');
+                message.error("Order creation failed");
             }
         } catch (error) {
             console.error(error);
-            message.error('An error occurred while processing the payment.');
+            message.error("An error occurred while processing the payment.");
         }
     };
 
@@ -215,83 +185,56 @@ export class CarBookingServices {
         razorpay_payment_id: string,
         razorpay_signature: string,
         bookingId: number | undefined,
-        setcarBooked:(status:boolean)=>void
+        setCarBooked: (status: boolean) => void
     ): Promise<void> => {
         try {
             const { data } = await this.client.mutate<VerifyPaymentResponse>({
                 mutation: VERIFY_PAYMENT,
-                variables: {
-                    orderId: razorpay_order_id,
-                    paymentId: razorpay_payment_id,
-                    signature: razorpay_signature,
-                }
-            })
+                variables: { orderId: razorpay_order_id, paymentId: razorpay_payment_id, signature: razorpay_signature },
+            });
             if (data) {
                 await this.updateBooking(bookingId, razorpay_payment_id, data.verifyPayment.status);
                 if (data.verifyPayment.status) {
-                    const triggerConfetti = () => {
-                        confetti({
-                            particleCount: 100,
-                            spread: 100,
-                            origin: { y: 0.6 }, // Adjust origin for where the confetti appears
-                        });
-                    };
-                    triggerConfetti();
-                    setcarBooked(true);
+                    confetti({ particleCount: 100, spread: 100, origin: { y: 0.6 } });
+                    setCarBooked(true);
                 }
             }
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
-    }
+    };
 
-    //Update booking status
+    // Update booking status
     public updateBooking = async (
         bookingId: number | undefined,
         razorpay_payment_id: string,
         verifiedStatus: boolean
     ): Promise<void> => {
         try {
-            const { data } = await this.client.mutate<UpdateBookingResponse>({
+            await this.client.mutate<UpdateBookingResponse>({
                 mutation: UPDATE_BOOKING,
-                variables: {
-                    bookingId: bookingId,
-                    paymentId: razorpay_payment_id,
-                    verifiedStatus: verifiedStatus
-                }
-            })
+                variables: { bookingId, paymentId: razorpay_payment_id, verifiedStatus },
+            });
         } catch (error) {
-            console.error(error)
+            console.error(error);
         }
-    }
+    };
 
-    //cancel booking
-    public cancelBooking = async (
-        bookingId:number | undefined
-    ):Promise<void> => {
-        try{
-            const {data} = await this.client.mutate<CancelBookingResponse>({
-                mutation:CANCEL_BOOKING,
-                variables:{
-                    bookingId:bookingId
-                }
-            })
-            if(data?.cancelBooking.status){
+    // cancel booking
+    public cancelBooking = async (bookingId: number | undefined): Promise<void> => {
+        try {
+            const { data } = await this.client.mutate<CancelBookingResponse>({
+                mutation: CANCEL_BOOKING,
+                variables: { bookingId },
+            });
+            if (data?.cancelBooking.status) {
                 message.success({
                     content: "Booking Canceled",
-                    style: {
-                      position: "absolute",
-                      top: "150px", // Set the top position
-                      left: "50%", // Center horizontally
-                      transform: "translateX(-50%)", // Adjust for perfect centering
-                    },
-                  });
+                    style: { position: "absolute", top: "150px", left: "50%", transform: "translateX(-50%)" },
+                });
             }
-        }catch(error){
-            console.error(error)
+        } catch (error) {
+            console.error(error);
         }
-    }
-
-
-
+    };
 }

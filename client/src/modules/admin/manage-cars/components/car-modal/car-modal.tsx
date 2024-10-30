@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Modal, Input, Select, Upload, Button, Typography } from "antd";
 import { UploadOutlined } from "@ant-design/icons";
-import { RcFile, UploadFile } from "antd/es/upload/interface";
+import { UploadFile } from "antd/es/upload/interface";
 import { CarData } from "@/interfaces/admin/cars";
 import styles from "./car-modal.module.css";
 import QuantitySelector from "@/themes/quantity-selector/quantity-selector";
@@ -31,11 +31,10 @@ const { Title } = Typography;
 const CarModal: React.FC<CarModalProps> = ({
   visible,
   onCancel,
-  onSave,
   carData,
 }) => {
   const [name, setName] = useState<string>("");
-  const [pricePerDay,setPricePerday] = useState<Number>(0);
+  const [pricePerDay,setPricePerday] = useState<number>(0);
   const [description, setDescription] = useState<string>("");
   const [brandName, setBrandName] = useState<string | undefined>(undefined);
   const [primaryImage, setPrimaryImage] = useState<UploadFile[]>([]);

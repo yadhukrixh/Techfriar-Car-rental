@@ -9,23 +9,20 @@ import { ManageBrandsClass } from '../../services/manage-brands-services';
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import EditBrand from '../edit-brand/edit-brand';
 
-
-
 // Props interface for the BrandTable component
 interface BrandTableProps {
   brandData: Brand[]; // An array of Brand objects
-  client:ApolloClient<NormalizedCacheObject>;
+  client: ApolloClient<NormalizedCacheObject>;
 }
 
-const BrandTable:FC<BrandTableProps> = ({brandData,client}) => {
-  
+const BrandTable: FC<BrandTableProps> = ({ brandData, client }) => {
   const [selectedBrand, setSelectedBrand] = useState<Brand | null>(null); // State for the selected brand
   const [isModalVisible, setIsModalVisible] = useState(false); // State for modal visibility
+
   const handleModalClose = () => {
     setIsModalVisible(false); // Close the modal
     setSelectedBrand(null); // Reset selected brand
   };
-
 
   const manageBrandsClass = new ManageBrandsClass(client);
 
@@ -34,15 +31,15 @@ const BrandTable:FC<BrandTableProps> = ({brandData,client}) => {
       title: 'SI No',
       dataIndex: 'index',
       key: 'index',
-      render: (_: any, __: Brand, index: number) => index + 1, // Auto-increment SI No
-      responsive: [ 'sm', 'md', 'lg'] as ( 'sm' | 'md' | 'lg')[],
+      render: (_: unknown, __: Brand, index: number) => index + 1, // Auto-increment SI No
+      responsive: ['sm', 'md', 'lg'] as ('sm' | 'md' | 'lg')[],
     },
     {
       title: 'Logo',
       dataIndex: 'logoUrl', // Updated to match the Brand interface
       key: 'logoUrl',
       render: (logoUrl: string) => <Image width={50} src={logoUrl} alt="Brand Logo" />,
-      responsive: [ 'sm', 'md', 'lg'] as ( 'sm' | 'md' | 'lg')[],
+      responsive: ['sm', 'md', 'lg'] as ('sm' | 'md' | 'lg')[],
     },
     {
       title: 'Brand Name',
@@ -65,7 +62,7 @@ const BrandTable:FC<BrandTableProps> = ({brandData,client}) => {
     {
       title: 'Actions',
       key: 'actions',
-      render: (_: any, record: Brand) => (
+      render: (_: unknown, record: Brand) => (
         <Space size="middle">
           <Button
             type="primary"
@@ -92,34 +89,32 @@ const BrandTable:FC<BrandTableProps> = ({brandData,client}) => {
     setIsModalVisible(true); // Show the modal
   };
 
-  
-
-
-
   // Map over the brand data to create the table rows
-  const mappedBrandData = brandData.map((brand: Brand, index: number) => ({
+  const mappedBrandData = brandData.map((brand: Brand) => ({
     ...brand,
     key: brand.id, // Use the brand ID as the key for table row
   }));
 
   return (
     <div>
-    <div className={styles.brandTable}>
-      <Table
-        columns={columns}
-        dataSource={mappedBrandData} // Use mapped data here
-        pagination={{ pageSize: 10 }}
-        rowKey={(record) => record.id.toString()} // Ensure the rowKey is a string
-        scroll={{ x: 500 }}
-        className={styles.table}
-      />
-    </div>
-    {selectedBrand && (
-      <EditBrand visible={isModalVisible}
-      onClose={handleModalClose}
-      brand={selectedBrand}
-      client={client}  />
-    )}
+      <div className={styles.brandTable}>
+        <Table
+          columns={columns}
+          dataSource={mappedBrandData} // Use mapped data here
+          pagination={{ pageSize: 10 }}
+          rowKey={(record) => record.id.toString()} // Ensure the rowKey is a string
+          scroll={{ x: 500 }}
+          className={styles.table}
+        />
+      </div>
+      {selectedBrand && (
+        <EditBrand
+          visible={isModalVisible}
+          onClose={handleModalClose}
+          brand={selectedBrand}
+          client={client}
+        />
+      )}
     </div>
   );
 };

@@ -83,8 +83,8 @@ export class RentableCarsController {
       } else {
         // Fetch future orders
         const fetchFutureOrders = await OrdersRepository.fetchFutureOrders(id);
+        
         const futureOrders = fetchFutureOrders.data || [];
-
 
         // Directly deactivate the car if there are no future bookings
         if (futureOrders.length === 0) {
@@ -96,7 +96,7 @@ export class RentableCarsController {
         }
 
         for (const order of futureOrders) {
-          let bookedDates = order.bookedDates;
+          let bookedDates = order.dataValues.bookedDates;
 
           // Ensure bookedDates is an array
           if (!Array.isArray(bookedDates)) {
@@ -109,10 +109,11 @@ export class RentableCarsController {
 
           // Check for available rentable cars for reassignment
           const availableRentableCars = (
-            await RentableCarsRepository.fetchAvailableRentableCars(order.carId, id)
+            await RentableCarsRepository.fetchAvailableRentableCars(order.dataValues.RentableCar.dataValues.carId, id)
           ).data || [];
 
           let reassignedCarId = null;
+
 
           for (const rentableCar of availableRentableCars) {
             const existingBookingDates = Array.isArray(rentableCar.bookingDates)
@@ -138,7 +139,7 @@ export class RentableCarsController {
               ...bookedDates,
             ];
 
-            await RentableCarsRepository.updateBookingDates(reassignedCarId, newBookingDates);
+            // await RentableCarsRepository.updateBookingDates(reassignedCarId, newBookingDates);
           } else {
             return {
               status: false,

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {Form,Input,Button,Upload, message,Tooltip,Empty,Tabs, Card,Avatar,Row,Col} from "antd";
+import {Form,Input,Button,Upload, message,Tooltip,Empty,Tabs, Card,Avatar,Row,Col, UploadFile} from "antd";
 import { UserOutlined, CameraOutlined,EditOutlined, SaveOutlined, CloseOutlined,LockOutlined, PhoneOutlined,EnvironmentOutlined,MailOutlined,DownloadOutlined} from "@ant-design/icons";
 import { motion } from "framer-motion";
 import styles from "./user-form.module.css";
@@ -39,13 +39,13 @@ const UserProfile = () => {
 
   const [showPasswordFields, setShowPasswordFields] = useState(false);
 
-  const onFinish = async (values: any) => {
+  const onFinish = async (values: UserData) => {
     try {
-      setUserData((prevData) => ({ ...prevData, ...values })); // Use previous state
+      setUserData((prevData) => ({ ...prevData, ...values }));
       setIsEditing(false);
       setShowPasswordFields(false);
-      await userService.updateUserDetails(userData);
-    } catch (error) {
+      await userService.updateUserDetails(values);
+    } catch {
       message.error("Failed to update profile. Please try again.");
     }
   };
@@ -60,7 +60,7 @@ const UserProfile = () => {
     setIsEditing(!isEditing);
   };
 
-  const handleImageUpload = async (info: any) => {
+  const handleImageUpload = async (info: {file:UploadFile}) => {
     // Proceed only if the file is uploaded successfully
     if (info.file && info.file.status === "error") {
       const imageFile = info.file.originFileObj; // Get the actual file
@@ -77,6 +77,8 @@ const UserProfile = () => {
     const fetchOrderHistory = async() =>{
       await userService.fetchOrders(userData?.id,setOrderHistory,timePeriod,searchQuery,orderStatus)
     }
+
+    fetchOrderHistory()
   },[timePeriod,searchQuery,orderStatus])
 
   const renderUserDetails = () => (

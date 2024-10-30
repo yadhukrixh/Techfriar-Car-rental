@@ -28,7 +28,7 @@ export interface Country {
 // interface of countries
 export interface CountriesResponse {
   getCountries: {
-    status: Boolean;
+    status: boolean;
     message: string;
     data: Country[];
   };
@@ -44,7 +44,7 @@ export interface ImageFile{
 
 export interface AddBrandResponse{
   addBrand:{
-    status:Boolean;
+    status:boolean;
     message:string;
   }
 }

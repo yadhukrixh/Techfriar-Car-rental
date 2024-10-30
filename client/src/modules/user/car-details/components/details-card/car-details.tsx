@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import { Image as AntdImage, message, Tag } from "antd"; // Import Ant Design Image
+import { Image as AntdImage, Tag } from "antd"; // Import Ant Design Image
 import styles from "./car-details.module.css";
 import { FetchedCarData } from "@/interfaces/user/cars";
 import { ApolloClient, NormalizedCacheObject, useApolloClient } from "@apollo/client";
@@ -30,7 +30,6 @@ const CarDetailedView: React.FC = () => {
   const [userData, setUserData] = useState<UserData>({});
   const [showPayment, setShowPayment] = useState(false);
   const [bookingId, setBookingId] = useState<number>();
-  const [razorpayLoaded, setRazorpayLoaded] = useState(false);
   const [carBooked, setCarBooked] = useState(false);
 
   // Load Razorpay SDK
@@ -38,7 +37,6 @@ const CarDetailedView: React.FC = () => {
     const loadRazorpayScript = async () => {
       const script = document.createElement("script");
       script.src = "https://checkout.razorpay.com/v1/checkout.js";
-      script.onload = () => setRazorpayLoaded(true);
       script.onerror = () => console.error("Failed to load Razorpay SDK.");
       document.body.appendChild(script);
     };

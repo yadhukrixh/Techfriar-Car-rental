@@ -36,7 +36,7 @@ const carSchema = {
 const orderSchema = {
   name: "orders",
   fields: [
-    { name: "orderId", type: "string", facet: false }, // Unique primary key
+    { name: "orderId", type: "int32", facet: false },
     { name: "userId", type: "string", facet: true },
     { name: "method", type: "string", facet: true },
     { name: "orderStatus", type: "string", facet: true },
@@ -49,6 +49,7 @@ const orderSchema = {
   ],
   default_sorting_field: "amount",
 };
+
 
 // Function to create collections if they don't already exist
 async function createCollections() {

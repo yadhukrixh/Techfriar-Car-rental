@@ -1,4 +1,3 @@
-import { message } from "antd";
 import { OrderData } from "./orders";
 
 export interface UserData {

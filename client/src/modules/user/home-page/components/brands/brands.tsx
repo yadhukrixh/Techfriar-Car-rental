@@ -1,13 +1,13 @@
 "use client";
 
 
-import React, { FC, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './brands.module.css';
 import { PopularBrands } from '@/interfaces/admin/brands';
 import { carBrands } from '../../../../../../public/data/popular-brands';
 
 const Brands = () => {
-    const [brands,setBrands] = useState<PopularBrands[]>(carBrands)
+    const brands = carBrands;
   return (
     <div className={styles.container}>
       <h2>We work with Premium Brands</h2>

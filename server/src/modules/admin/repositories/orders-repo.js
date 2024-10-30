@@ -13,18 +13,24 @@ export class OrdersRepository {
     try {
       const currentDate = new Date();
 
-      // Fetch all orders where the bookedDates array contains dates greater than the current date
-      const futureOrders = await Orders.findAll({
+      // Fetch all orders for the given car ID
+      const orders = await Orders.findAll({
         where: {
           bookedCarId: id,
-          bookedDates: {
-            [Op.and]: [
-              { [Op.ne]: null },
-              { [Op.contains]: [currentDate] }, // Query where the array contains future dates
-            ],
-          },
+          bookedDates: { [Op.ne]: null }, // Ensure bookedDates is not null
         },
+        include: [
+          {
+            model: RentableCars,
+            attributes: ["carId"], // Fetch only carId from RentableCars
+          },
+        ],
       });
+
+      // Filter orders to include only those with future dates in bookedDates
+      const futureOrders = orders.filter((order) =>
+        order.bookedDates.some((date) => new Date(date) > currentDate)
+      );
 
       return {
         status: true,
@@ -90,7 +96,7 @@ export class OrdersRepository {
           {
             model: Transactions,
             as: "transaction", // Specify the alias defined in Orders model
-            attributes: ["method", "amount"], // Fetching method and amount
+            attributes: ["method", "amount", "status"], // Fetching method and amount
           },
           {
             model: RentableCars,
@@ -98,12 +104,12 @@ export class OrdersRepository {
             include: [
               {
                 model: AllCars,
-                as:'car',
+                as: "car",
                 attributes: ["name"], // Fetching carName
                 include: [
                   {
                     model: Brands,
-                    as:'brand',
+                    as: "brand",
                     attributes: ["name"], // Fetching brandName
                   },
                 ],
@@ -119,12 +125,13 @@ export class OrdersRepository {
       });
 
 
+
       const orders = orderDetails.map((order) => ({
         orderId: order.id,
         userId: order.User.id,
         method: order.transaction.method, // Use the alias here
-        orderStatus: order.OrderStatus.status,
-        completionStatus: order.OrderStatus.status,
+        orderStatus: order.transaction.status,
+        completionStatus:order.OrderStatus !== null ? order.OrderStatus.dataValues.status : "N/A",
         amount: order.transaction.amount, // Use the alias here
         bookedDates: order.bookedDates,
         brandName: order.RentableCar.car.brand.name,
@@ -132,9 +139,8 @@ export class OrdersRepository {
         registrationNumber: order.RentableCar.registrationNumber,
       }));
 
+      
       return orders;
-
-     
     } catch (error) {
       console.error(error);
     }

@@ -11,7 +11,7 @@ import {
 import { AddBrandClass } from "../services/add-brand-service";
 import InputComponent from "@/themes/input-component/input-component";
 import ButtonComponent from "@/themes/button-component/button-component";
-import { message, Upload, Select, Spin } from "antd";
+import { message, Upload, Select, Spin, UploadFile } from "antd";
 import { LoadingOutlined, UploadOutlined } from "@ant-design/icons";
 
 const { Option } = Select;
@@ -36,20 +36,27 @@ const AddBrand = () => {
     fetchData(); // Call the async function
   }, [client]);
 
-  const handleFileChange = (info: any) => {
+  const handleFileChange = (info: { fileList: UploadFile[] }) => {
     console.log(info); // Log the info object for debugging
     const { fileList } = info; // Destructure fileList from info
 
     // Check if there are any files in the fileList
     if (fileList.length > 0) {
-        const latestFile = fileList[0]; // Get the first file (assuming only one is uploaded)
-        setBrandLogo(latestFile.originFileObj); // Set the actual file object
+      const latestFile = fileList[0]; // Get the first file (assuming only one is uploaded)
+      const file = latestFile.originFileObj; // Get the actual file object
+
+      // Ensure the file is defined before setting it in state
+      if (file) {
+        setBrandLogo(file); // Set the actual file object
         message.success(`${latestFile.name} file uploaded successfully`);
+      } else {
+        message.error("File upload failed."); // Notify user if the file is undefined
+      }
     } else {
-        setBrandLogo(null); // Reset state if no files are selected
-        message.info("Brand logo removed."); // Optional: notify user if no file
+      setBrandLogo(null); // Reset state if no files are selected
+      message.info("Brand logo removed."); // Optional: notify user if no file
     }
-};
+  };
 
   const handleAddBrandClick = () => {
     if (!brandLogo) {
@@ -120,12 +127,10 @@ const AddBrand = () => {
             className={styles.uploadComponent}
             onRemove={() => setBrandLogo(null)} // Reset state on remove
           >
-
-                <div className={styles.uploadButton}>
-                  <UploadOutlined />
-                  <div>Upload Logo</div>
-                </div>
-
+            <div className={styles.uploadButton}>
+              <UploadOutlined />
+              <div>Upload Logo</div>
+            </div>
           </Upload>
         </div>
 
@@ -135,7 +140,7 @@ const AddBrand = () => {
             showSearch
             placeholder="Select a country"
             onChange={handleCountryChange}
-            style={{ width: "100%", maxWidth:"500px"}}
+            style={{ width: "100%", maxWidth: "500px" }}
             optionFilterProp="children"
             filterOption={(input, option) =>
               (option?.children as unknown as string)

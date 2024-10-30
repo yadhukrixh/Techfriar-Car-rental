@@ -1,0 +1,96 @@
+
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Yadhu@123
+      POSTGRES_DB: car_rental
+    ports:
+      - '5433:5432'
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+  # MinIO (for object storage)
+  minio:
+    image: minio/minio
+    environment:
+      MINIO_ACCESS_KEY: WzFjY978B2RYvEgOPPj2
+      MINIO_SECRET_KEY: 0EMD6wglNDAgRx6Qh8kMLfUyU720hqqmv3tS1knB
+    ports:
+      - '9000:9000'
+    command: server /data
+    networks:
+      - app-network
+
+  # Typesense
+  typesense:
+    image: typesense/typesense:0.23.0  # Specify a valid version here
+    environment:
+      TYPESENSE_API_KEY: xNdbsJC6MnAs4weD1ZqlOaLuz8CWz2pR
+    ports:
+      - '8108:8108'
+    networks:
+      - app-network
+
+  # Backend Service
+  backend:
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    environment:
+      PORT: 3400
+      DATABASE_HOST: db
+      DATABASE_PORT: 5432
+      DATABASE_USER: postgres
+      DATABASE_PASSWORD: Yadhu@123
+      DATABASE_NAME: car_rental
+      JWT_SECRET: my_secret
+      MINIO_SERVER: 127.0.0.1
+      MINIO_PORT: 9000
+      MINIO_USER_NAME: 'minioadmin'
+      MINIO_PASSWORD: 'minioadmin'
+      MINIO_ACCESS_KEY: WzFjY978B2RYvEgOPPj2
+      MINIO_SECRET_KEY: 0EMD6wglNDAgRx6Qh8kMLfUyU720hqqmv3tS1knB
+      MINIO_BUCKET_NAME: rentalia
+      MINIO_USER_BUCKET: user
+      MINIO_USE_SSL: false
+      TYPESENSE_HOST: '9gyp7fcx4d1lskmop-1.a1.typesense.net'
+      TYPESENSE_PORT: 443
+      TYPESENSE_ADMIN_KEY: xNdbsJC6MnAs4weD1ZqlOaLuz8CWz2pR
+      MOBILE_OTP_API_KEY: "ba859971-8b79-11ef-8b17-0200cd936042"
+      RAZORPAY_KEY_ID: 'rzp_test_37TZNY8cnWgUm8'
+      RAZORPAY_KEY_SECRET: 'rLzmuUsQPyPWfUC7N9qA8N2O'
+    depends_on:
+      - db
+      - minio
+    ports:
+      - '3400:3400'
+    networks:
+      - app-network
+
+  # Frontend Service (Next.js)
+  frontend:
+    build:
+      context: ./client
+      dockerfile: Dockerfile
+    environment:
+      NEXT_PUBLIC_API_URL: http://backend:3400/graphql
+      FRONTEND_URL: 'http://localhost:3300'
+    depends_on:
+      - backend
+    ports:
+      - '3300:3300'
+    networks:
+      - app-network
+
+volumes:
+  postgres-data:
+
+networks:
+  app-network:
+    driver: bridge

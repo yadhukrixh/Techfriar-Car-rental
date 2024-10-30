@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import styles from "./sidebar.module.css";
-import { Modal } from "antd";
 
 interface OrderFilterationProps{
     setOrderStatus:(satus:string)=>void;
@@ -14,7 +13,6 @@ const OrderFilteration: React.FC<OrderFilterationProps> = ({
 }) => {
   const [selectedOrderStatus, setSelectedOrderStatus] = useState<string>("");
   const [selectedTimePeriod, setSelectedTimePeriod] = useState<string>("");
-  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const orderStatuses = [
     { label: "Upcoming" },

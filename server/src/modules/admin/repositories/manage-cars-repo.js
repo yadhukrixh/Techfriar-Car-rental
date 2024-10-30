@@ -2,6 +2,7 @@ import { Sequelize } from "sequelize";
 import Brands from "../models/brands-models.js";
 import AllCars from "../models/cars-models.js";
 import RentableCars from "../models/rentable-cars-models.js";
+import Orders from "../models/orders-model.js";
 
 class ManageCarsRepository {
   // Check the car exist
@@ -51,7 +52,7 @@ class ManageCarsRepository {
         transmissionType: transmissionType,
         numberOfSeats: numberOfSeats,
         numberOfDoors: numberOfDoors,
-        pricePerDay: pricePerDay
+        pricePerDay: pricePerDay,
       });
 
       return {
@@ -129,7 +130,7 @@ class ManageCarsRepository {
         transmissionType: car.transmissionType,
         numberOfSeats: car.numberOfSeats,
         numberOfDoors: car.numberOfDoors,
-        pricePerDay: car.pricePerDay
+        pricePerDay: car.pricePerDay,
       }));
 
       return formattedCars;
@@ -141,40 +142,57 @@ class ManageCarsRepository {
   //   delete car
   static async deleteCar(id) {
     try {
-      const car = await RentableCars.findAll({
+      // Find all rentable cars associated with the car model ID
+      const rentableCars = await RentableCars.findAll({
+        where: { carId: id },
+        attributes: ["id"], // Only select the rentable car IDs
+      });
+
+      // Get the rentable car IDs to check for bookings
+      const rentableCarIds = rentableCars.map((car) => car.id);
+
+      // Check if any orders exist with booked dates for any of the rentable car IDs
+      const bookingsExist = await Orders.findOne({
         where: {
-          carId: id,
-          bookingDates: {
-            [Sequelize.Op.ne]: null, // Check if bookingDates is not null
+          bookedCarId: {
+            [Sequelize.Op.in]: rentableCarIds,
+          },
+          bookedDates: {
+            [Sequelize.Op.ne]: null, // Check if bookedDates is not null
           },
         },
       });
 
-      if (car.length !== 0) {
+      // If there are bookings, prevent deletion
+      if (bookingsExist) {
         return {
           status: false,
-          message:
-            "Can't delete this Model, Because lots of bookings has been done on this vehicle",
+          message: "Can't delete this model, as it has active bookings.",
+        };
+      }
+
+      // No bookings exist, proceed with deletion
+      const deleted = await AllCars.destroy({
+        where: { id: id }, // Match the car model ID
+      });
+
+      if (deleted) {
+        return {
+          status: true,
+          message: "Car model deleted successfully.",
         };
       } else {
-        const deleted = await AllCars.destroy({
-          where: { id: id }, // Condition to match the brand's ID
-        });
-
-        if (deleted) {
-          return {
-            status: true,
-            message: "Car model deleted succesfully.",
-          };
-        } else {
-          return {
-            status: false,
-            message: "No car model found in this id",
-          };
-        }
+        return {
+          status: false,
+          message: "No car model found with this ID.",
+        };
       }
     } catch (error) {
-      console.error(error);
+      console.error("Error deleting car model:", error);
+      return {
+        status: false,
+        message: "An error occurred while deleting the car model.",
+      };
     }
   }
 
@@ -197,17 +215,17 @@ class ManageCarsRepository {
     try {
       const car = await AllCars.findByPk(id);
       const updatedCar = await car.update({
-        name:name,
-        description:description,
-        brandId:brandId,
-        primaryImageUrl:primaryImage,
-        secondaryImages:otherImages,
-        availableQuantity:availableQuantity,
-        year:year,
-        fuelType:fuelType,
-        transmissionType:transmissionType,
-        numberOfSeats:numberOfSeats,
-        numberOfDoors:numberOfDoors,
+        name: name,
+        description: description,
+        brandId: brandId,
+        primaryImageUrl: primaryImage,
+        secondaryImages: otherImages,
+        availableQuantity: availableQuantity,
+        year: year,
+        fuelType: fuelType,
+        transmissionType: transmissionType,
+        numberOfSeats: numberOfSeats,
+        numberOfDoors: numberOfDoors,
         pricePerDay: pricePerDay,
       });
 

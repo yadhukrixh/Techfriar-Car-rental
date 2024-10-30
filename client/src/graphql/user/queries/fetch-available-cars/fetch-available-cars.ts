@@ -1,4 +1,4 @@
-import { gql, useQuery } from '@apollo/client';
+import { gql } from '@apollo/client';
 
 // Define the GraphQL query
 export const FETCH_AVAILABLE_CARS = gql`

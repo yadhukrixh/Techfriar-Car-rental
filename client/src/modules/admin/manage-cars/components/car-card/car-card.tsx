@@ -7,20 +7,21 @@ import {
   RightOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-
 import styles from "./car-card.module.css";
 import { CarData } from "@/interfaces/admin/cars";
+import type { CarouselRef } from 'antd/es/carousel';
 
 interface CarCardProps {
   car: CarData;
   onEdit: (car: CarData) => void; // Edit callback
   onDelete: (carId: number) => void; // Delete callback
-  onAddRentables:(carId: number)=>void;
+  onAddRentables: (carId: number) => void;
 }
 
 const CarCard: FC<CarCardProps> = ({ car, onEdit, onDelete, onAddRentables }) => {
-  const carouselRef = useRef<any>(null);
+  const carouselRef = useRef<CarouselRef>(null); // Updated to use CarouselRef type
   const allImages = [car.primaryImage, ...car.otherImages];
+  
   return (
     <Card
       className={styles.card}
@@ -74,7 +75,7 @@ const CarCard: FC<CarCardProps> = ({ car, onEdit, onDelete, onAddRentables }) =>
           <Tag color="blue">Doors: {car.numberOfDoors}</Tag>
         </div>
         <div className={styles.additionalDetails}>
-          <div style={{display:"flex", flexDirection:"row"}}>
+          <div style={{ display: "flex", flexDirection: "row" }}>
             <Tag color="black" style={{ width: "max-content" }}>
               <p>Available: {car.availableQuantity}</p>
             </Tag>
@@ -97,9 +98,9 @@ const CarCard: FC<CarCardProps> = ({ car, onEdit, onDelete, onAddRentables }) =>
         />
 
         <Button
-        style={{backgroundColor:"black", fontWeight:"700"}}
-          icon={<PlusOutlined style={{fontWeight:"700", color:"white"}}/>}
-          onClick={() => onAddRentables(car.id)} 
+          style={{ backgroundColor: "black", fontWeight: "700" }}
+          icon={<PlusOutlined style={{ fontWeight: "700", color: "white" }} />}
+          onClick={() => onAddRentables(car.id)}
         />
 
         <Button

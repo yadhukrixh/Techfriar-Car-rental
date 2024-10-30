@@ -3,7 +3,6 @@ import { EDIT_CAR } from "@/graphql/admin/mutations/cars/edit-car";
 import { GET_ALL_CARS_QUERY } from "@/graphql/admin/queries/cars/get-all-cars-query";
 import { CarData, DeleteCarResponse, EditCarResponse, GetAllCarsResponse } from "@/interfaces/admin/cars";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
-import { UploadFile } from "antd";
 import { RcFile } from "antd/es/upload";
 import Swal from "sweetalert2";
 
@@ -96,7 +95,7 @@ export class ManageCars {
         transmissionType: string,
         numberOfSeats: number | null,
         numberOfDoors: number | null,
-        pricePerDay: Number
+        pricePerDay: number
     ) => {
         try {
             // Prepare primary image input
