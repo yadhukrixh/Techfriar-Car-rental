@@ -15,7 +15,6 @@ class OrderCleanupCron {
     if (!this.job) {
       this.job = cron.schedule('* * * * *', async () => {
         await CarRepository.cancelPendingOrders();
-        await AdminOrderControllers.addOrdersToTypesense();
       });
     }
   }

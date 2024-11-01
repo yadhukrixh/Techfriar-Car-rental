@@ -2,7 +2,7 @@
     min-width: 500px !important;
     @media (max-width: 576px) {
         max-width: 100dvw !important;
-        min-width: 100dvw !important;
+        min-width: none !important;
       padding: 12px;
     }
   }
@@ -32,6 +32,8 @@
     max-width: 1400px;
   }
   .form{
+    display: flex;
+    align-items: center;
     padding: 10px;
   }
   .form input{
@@ -55,14 +57,56 @@
     width: 100% !important;
   }
 
+  .tab :global(.ant-tabs-tabpane){
+    justify-content: center;
+  }
+
+  .tab :global(.ant-tabs-content-holder){
+    width: 100% !important;
+  }
+
   .userProfileContainer{
     padding: 10px;
   }
+
+  .downloadButton{
+    border: 2px solid #06D001;
+    outline: none;
+    border-radius: 5px;
+    padding: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    color: #06D001;
+    gap: 4px;
+    transition: all 0.4s ease;
+  }
+
+  .downloadButton:active{
+    background-color: #06D001;
+    color: #fff;
+  }
+
+  .downloadButton:active{
+    background-color: #06D001;
+    color: #fff;
+  }
   
   @media (max-width: 576px) {
+    .userData{
+      max-width: none !important;
+      width: 100%;
+    }
     .profileHeader {
       flex-direction: column;
       align-items: flex-start;
+    }
+
+    .responsiveCard :global(.ant-card-body) {
+      min-width: 0 !important;
+      width: 100%;
     }
   }
   

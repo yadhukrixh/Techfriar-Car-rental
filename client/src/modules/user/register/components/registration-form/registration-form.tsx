@@ -247,7 +247,13 @@ const ThreeStepRegistration = () => {
                 <Button
                   danger
                   type="text"
-                  onClick={() => {otpSentStatus?verifyOtp(formData.otp?formData.otp:""):sendOtpToPhone(formData.phoneNumber?formData.phoneNumber:"")}}
+                  onClick={() => {
+                    if(otpSentStatus){
+                      verifyOtp(formData.otp?formData.otp:"")
+                    }else{
+                      sendOtpToPhone(formData.phoneNumber?formData.phoneNumber:"")
+                    }
+                  }}
                   className={styles.sendOtp}
                 >
                   {otpSentStatus ? "Verify Otp" : "Send Otp"}

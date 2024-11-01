@@ -73,8 +73,8 @@ export class UserServices {
                     orderStatus:orderStatus
                 }
             })
-            if(data.fetchAllOrderOfUser.status){
-                console.log("success");
+            if(data.fetchAllOrdersOfUser.status){
+                setOrders(data.fetchAllOrdersOfUser.data)
             }
         } catch (error) {
             console.error(error)

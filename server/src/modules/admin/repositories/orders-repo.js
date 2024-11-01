@@ -85,9 +85,9 @@ export class OrdersRepository {
   }
 
   //fetch data to upload orders into typesense
-  static async fetchOrdersToTypesense() {
+  static async fetchOrdersToTypesense(id) {
     try {
-      const orderDetails = await Orders.findAll({
+      const order = await Orders.findByPk(id, {
         include: [
           {
             model: Users,
@@ -96,7 +96,7 @@ export class OrdersRepository {
           {
             model: Transactions,
             as: "transaction", // Specify the alias defined in Orders model
-            attributes: ["method", "amount", "status"], // Fetching method and amount
+            attributes: ["method", "amount", "status"], // Fetching method, amount, and status
           },
           {
             model: RentableCars,
@@ -118,31 +118,34 @@ export class OrdersRepository {
           },
           {
             model: OrderStatus,
-            attributes: ["status"], // Fetching orderStatus and completionStatus
+            attributes: ["status"], // Fetching orderStatus
           },
         ],
         attributes: ["id", "bookedDates"], // Fetching orderId and bookedDates
       });
-
-
-
-      const orders = orderDetails.map((order) => ({
+  
+      if (!order) {
+        throw new Error("Order not found");
+      }
+  
+      const FormattedOrder = {
         orderId: order.id,
         userId: order.User.id,
-        method: order.transaction.method, // Use the alias here
+        method: order.transaction.method,
         orderStatus: order.transaction.status,
-        completionStatus:order.OrderStatus !== null ? order.OrderStatus.dataValues.status : "N/A",
-        amount: order.transaction.amount, // Use the alias here
+        completionStatus: order.OrderStatus ? order.OrderStatus.status : "N/A",
+        amount: order.transaction.amount,
         bookedDates: order.bookedDates,
         brandName: order.RentableCar.car.brand.name,
         carName: order.RentableCar.car.name,
         registrationNumber: order.RentableCar.registrationNumber,
-      }));
-
-      
-      return orders;
+      };
+  
+      return FormattedOrder;
     } catch (error) {
-      console.error(error);
+      console.error("Error fetching order:", error);
+      return null;
     }
   }
+  
 }

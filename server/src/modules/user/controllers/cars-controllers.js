@@ -3,6 +3,7 @@ import { FormatImageUrl } from "../../../utils/format-image-url.js";
 import { CarRepository } from "../repositories/car-repo.js";
 import crypto from "crypto";
 import { razorpay } from "../../../config/razorpay.js";
+import { AdminOrderControllers } from "../../admin/controllers/orders-controllers.js";
 
 
 export class CarsControllers {
@@ -179,6 +180,10 @@ export class CarsControllers {
         returnLocation,
         secondaryMobileNumber
       );
+
+      // add to typesense
+      await AdminOrderControllers.addOrdersToTypesense(booking.data.orderId)
+
       return booking;
     } catch (error) {
       return {
@@ -249,6 +254,10 @@ export class CarsControllers {
     try{
       const paymentDetails = await this.fetchPaymentDetails(paymentId);
       const updateBooking = await CarRepository.updateBooking(bookingId,paymentDetails.method,paymentDetails.order_id,verifiedStatus);
+
+      // add to typesense
+      await AdminOrderControllers.addOrdersToTypesense(bookingId);
+
       return updateBooking;
     }catch(error){
       return{
@@ -262,6 +271,10 @@ export class CarsControllers {
   static async cancelBooking(bookingId){
     try{
       const cancelBooking = await CarRepository.cancelBooking(bookingId);
+
+      // add to typesense
+      await AdminOrderControllers.addOrdersToTypesense(bookingId)
+
       return cancelBooking;
     }catch(error){
       return{

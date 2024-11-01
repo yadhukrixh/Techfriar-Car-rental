@@ -1,0 +1,75 @@
+.cardContainer{
+    height: fit-content !important;
+    border: 1px solid #c8c2c2;
+    padding: 10px;
+    display:flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+    padding-right: 10px;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    position: relative;
+    transition: all 0.4s ease;
+}
+
+.cardContainer:hover{
+    scale: 1.01;
+}
+
+.orderInfo{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+}
+
+.details{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.registrationNumber{
+    font-size: 20px;
+    padding: 5px;
+    text-align: center;
+}
+
+.cardContainer img{
+    width: 300px;
+}
+
+.disabled{
+    left: 0;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    background-color:#c6c6c6a4;
+    z-index: 500;
+}
+
+
+@media(max-width:860px){
+
+    .cardContainer{
+        min-height: 130px;
+    }
+    .cardContainer img{
+        width: 100px;
+    }
+}
+
+@media(max-width:505px){
+    .details h2{
+        font-size: 15px;
+    }
+
+    .registrationNumber{
+       display: none;
+    }
+
+    .completionStatus{
+        display: none;
+    }
+}

@@ -1,11 +1,38 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import {Form,Input,Button,Upload, message,Tooltip,Empty,Tabs, Card,Avatar,Row,Col, UploadFile} from "antd";
-import { UserOutlined, CameraOutlined,EditOutlined, SaveOutlined, CloseOutlined,LockOutlined, PhoneOutlined,EnvironmentOutlined,MailOutlined,DownloadOutlined} from "@ant-design/icons";
+import {
+  Form,
+  Input,
+  Button,
+  Upload,
+  message,
+  Tooltip,
+  Tabs,
+  Card,
+  Avatar,
+  Row,
+  Col,
+  UploadFile,
+} from "antd";
+import {
+  UserOutlined,
+  CameraOutlined,
+  EditOutlined,
+  SaveOutlined,
+  CloseOutlined,
+  LockOutlined,
+  PhoneOutlined,
+  EnvironmentOutlined,
+  MailOutlined,
+} from "@ant-design/icons";
 import { motion } from "framer-motion";
 import styles from "./user-form.module.css";
 import { UserData } from "@/interfaces/user/user-details";
-import {ApolloClient,NormalizedCacheObject,useApolloClient} from "@apollo/client";
+import {
+  ApolloClient,
+  NormalizedCacheObject,
+  useApolloClient,
+} from "@apollo/client";
 import { UserServices } from "../../services/user-services";
 import { OrderData } from "@/interfaces/user/orders";
 import OrderHistory from "../order-history/order-history";
@@ -60,7 +87,7 @@ const UserProfile = () => {
     setIsEditing(!isEditing);
   };
 
-  const handleImageUpload = async (info: {file:UploadFile}) => {
+  const handleImageUpload = async (info: { file: UploadFile }) => {
     // Proceed only if the file is uploaded successfully
     if (info.file && info.file.status === "error") {
       const imageFile = info.file.originFileObj; // Get the actual file
@@ -73,13 +100,21 @@ const UserProfile = () => {
   };
 
   // fetch order history
-  useEffect(()=>{
-    const fetchOrderHistory = async() =>{
-      await userService.fetchOrders(userData?.id,setOrderHistory,timePeriod,searchQuery,orderStatus)
-    }
+  useEffect(() => {
+    const fetchOrderHistory = async () => {
+      await userService.fetchOrders(
+        userData?.id,
+        setOrderHistory,
+        timePeriod,
+        searchQuery,
+        orderStatus
+      );
+    };
 
-    fetchOrderHistory()
-  },[timePeriod,searchQuery,orderStatus])
+    if (userData !== undefined) {
+      fetchOrderHistory();
+    }
+  }, [userData, timePeriod, searchQuery, orderStatus]);
 
   const renderUserDetails = () => (
     <motion.div
@@ -274,24 +309,25 @@ const UserProfile = () => {
           >
             <span>Order History</span>
             {orderHistory.length > 0 && (
-              <Button
-                type="primary"
-                icon={<DownloadOutlined />}
+              <button
+                className={styles.downloadButton}
                 // onClick={()} // Add your function here
               >
+                <i className="ri-file-excel-2-line"></i>
                 Download
-              </Button>
+              </button>
             )}
           </div>
         }
       >
-        {orderHistory.length == 0 ? (
-          <div className={styles.orderHistory}>
-            <OrderHistory orderList={orderHistory} setSearchQuery={setSearchQuery} setOrderStatus={setOrderStatus} setTimePeriod={setTimePeriod} />
-          </div>
-        ) : (
-          <Empty description="No orders found" />
-        )}
+        <div className={styles.orderHistory}>
+          <OrderHistory
+            orderList={orderHistory}
+            setSearchQuery={setSearchQuery}
+            setOrderStatus={setOrderStatus}
+            setTimePeriod={setTimePeriod}
+          />
+        </div>
       </Card>
     </motion.div>
   );

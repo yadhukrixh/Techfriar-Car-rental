@@ -36,7 +36,7 @@ const carSchema = {
 const orderSchema = {
   name: "orders",
   fields: [
-    { name: "orderId", type: "int32", facet: false },
+    { name: "id", type: "string", facet: false },
     { name: "userId", type: "string", facet: true },
     { name: "method", type: "string", facet: true },
     { name: "orderStatus", type: "string", facet: true },
@@ -46,10 +46,10 @@ const orderSchema = {
     { name: "brandName", type: "string", facet: true },
     { name: "carName", type: "string", facet: true },
     { name: "registrationNumber", type: "string", facet: true },
+    { name: "completionDate", type: "int64", facet: false }, // Assuming you have a timestamp field for time period filtering
   ],
   default_sorting_field: "amount",
 };
-
 
 // Function to create collections if they don't already exist
 async function createCollections() {
@@ -157,6 +157,75 @@ export const searchCarsWithFilters = async ({
     return {
       status: false,
       message: "Error searching cars",
+    };
+  }
+};
+
+// cerate order filter
+export const buildOrderQuery = ({
+  selectedTimePeriod,
+  selectedStatus,
+  searchQuery = "*",
+}) => {
+  const filterConditions = [];
+
+  // Time Period Filter (Assuming completionDate is stored as a timestamp in seconds)
+  if (selectedTimePeriod) {
+    const now = Math.floor(Date.now() / 1000);
+    const periodMap = {
+      "Last 30 Days": 2592000,
+      "In 6 Months": 15552000,
+      "In 1 Year": 31104000
+    };
+
+    const periodInSeconds = periodMap[selectedTimePeriod];
+    if (periodInSeconds) {
+      filterConditions.push(`completionDate: >= ${now - periodInSeconds}`);
+    }
+  }
+
+  // Status Filter
+  if (selectedStatus) {
+    filterConditions.push(`completionStatus: "${selectedStatus.toLowerCase()}"`);
+  }
+
+  return filterConditions.length ? filterConditions.join(" && ") : "";
+};
+
+// Search orders with the new filters
+export const searchOrdersWithFilters = async ({
+  searchQuery = "*",
+  filters = "",
+}) => {
+  try {
+    const response = await typesenseClient
+      .collections("orders")
+      .documents()
+      .search({
+        q: searchQuery,
+        query_by: "userId, method, orderStatus, brandName, carName, bookedDates, completionStatus, registrationNumber",
+        filter_by: filters,
+      });
+
+    return {
+      status: true,
+      data: response.hits.map((hit) => ({
+        id: hit.document.id,
+        userId: hit.document.userId,
+        method: hit.document.method,
+        orderStatus: hit.document.orderStatus,
+        amount: hit.document.amount,
+        bookedDates: hit.document.bookedDates,
+        brandName: hit.document.brandName,
+        carName: hit.document.carName,
+        registrationNumber: hit.document.registrationNumber,
+      })),
+    };
+  } catch (error) {
+    console.error("Error searching orders:", error);
+    return {
+      status: false,
+      message: "Error searching orders",
     };
   }
 };

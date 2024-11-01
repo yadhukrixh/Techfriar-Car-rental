@@ -16,6 +16,10 @@ export const FETCH_ALL_ORDERS_USER = gql`
                 image
                 registrationNumber
                 brandName
+                completionStatus
+                orderStatus
+                orderDate
+                bookedDates
             }
         }
     }

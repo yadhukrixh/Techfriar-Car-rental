@@ -5,6 +5,7 @@ import RentableCars from "../../admin/models/rentable-cars-models.js";
 import { Op } from "sequelize";
 import { Transactions } from "../../admin/models/transactions-model.js";
 import OrderStatus from "../../admin/models/order-status-model.js";
+import { AdminOrderControllers } from "../../admin/controllers/orders-controllers.js";
 
 export class CarRepository {
   //fech available cars
@@ -265,7 +266,7 @@ export class CarRepository {
   }
 
   // update booking
-  static async updateBooking(bookingId, method,orderId, verifiedStatus) {
+  static async updateBooking(bookingId, method, orderId, verifiedStatus) {
     try {
       // Find the booking/order by ID
       const order = await Orders.findByPk(bookingId, {
@@ -292,11 +293,11 @@ export class CarRepository {
         });
       }
 
-      if(verifiedStatus){
+      if (verifiedStatus) {
         const orderStatus = await OrderStatus.create({
-          orderId:bookingId,
-          status:"upcoming"
-        })
+          orderId: bookingId,
+          status: "upcoming",
+        });
       }
 
       return {
@@ -339,6 +340,7 @@ export class CarRepository {
       const transactionIds = ordersToCancel.map(
         (order) => order.transaction.id
       );
+
       const [updatedCount] = await Transactions.update(
         { status: "canceled" },
         {
@@ -350,9 +352,12 @@ export class CarRepository {
       );
 
       if (updatedCount > 0) {
-        console.log(
-          `Order cleanup: ${updatedCount} pending transactions have been canceled.`
-        );
+        ordersToCancel.map(async (order) => {
+          // add to typesense
+          await AdminOrderControllers.addOrdersToTypesense(
+            order.dataValues.id
+          );
+        });
       }
     } catch (error) {
       console.error("Error in cancelPendingOrders:", error);
@@ -372,24 +377,24 @@ export class CarRepository {
           },
         ],
       });
-  
+
       // Check if order and transaction exist
       if (!order || !order.transaction) {
         return {
           status: false,
-          message: 'Order or pending transaction not found',
+          message: "Order or pending transaction not found",
         };
       }
-  
+
       // Update the transaction's status to 'canceled'
       await Transactions.update(
         { status: "canceled" },
         { where: { id: order.transaction.id } }
       );
-  
+
       return {
         status: true,
-        message: 'Booking and transaction successfully canceled',
+        message: "Booking and transaction successfully canceled",
       };
     } catch (error) {
       return {

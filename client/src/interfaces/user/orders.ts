@@ -4,4 +4,8 @@ export interface OrderData{
     image:string;
     registrationNumber:string;
     brandname:string;
+    completionStatus:string;
+    orderStatus:string;
+    orderDate:string;
+    bookedDates:string[];
 }

@@ -54,7 +54,7 @@ export interface UpdateUSerDetailsResponse{
 }
 
 export interface FetchOrdersResponse{
-    fetchAllOrderOfUser:{
+    fetchAllOrdersOfUser:{
         status:boolean;
         message:string;
         data:OrderData[];
