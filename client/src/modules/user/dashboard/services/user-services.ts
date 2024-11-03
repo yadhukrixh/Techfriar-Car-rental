@@ -1,9 +1,10 @@
+import { DOWNLOAD_EXCEL_USER } from "@/graphql/user/mutations/download-file/excel-download/excel-download";
 import { UPDATE_USER_DETAILS_MUTATION } from "@/graphql/user/mutations/update-profile/update-details";
 import { UPDATE_PROFILE_PICTURE } from "@/graphql/user/mutations/update-profile/update-profile-picture";
 import { FETCH_ALL_ORDERS_USER } from "@/graphql/user/queries/fetch-orders/fetch-all-orders-user";
 import { FETCH_USER_DATA } from "@/graphql/user/queries/fetch-user/fetch-user";
 import { OrderData } from "@/interfaces/user/orders";
-import { FetchOrdersResponse, FetchUserDataResponse, UpdateProfilePictureResponse, UpdateUSerDetailsResponse, UserData } from "@/interfaces/user/user-details";
+import { DownloadExcelResponse, FetchOrdersResponse, FetchUserDataResponse, UpdateProfilePictureResponse, UpdateUSerDetailsResponse, UserData } from "@/interfaces/user/user-details";
 import { CookieClass } from "@/utils/cookies";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import Swal from "sweetalert2";
@@ -57,29 +58,51 @@ export class UserServices {
 
     //fetch orders
     public fetchOrders = async (
-        userId:number | undefined,
+        userId: number | undefined,
         setOrders: (order: OrderData[]) => void,
-        timePeriod:string | undefined,
-        searchQuery:string | undefined,
-        orderStatus:string | undefined
+        timePeriod: string | undefined,
+        searchQuery: string | undefined,
+        orderStatus: string | undefined
     ): Promise<void> => {
         try {
-            const {data} = await this.client.query<FetchOrdersResponse>({
-                query:FETCH_ALL_ORDERS_USER,
-                variables:{
-                    id:userId,
-                    timePeriod:timePeriod,
-                    searchQuery:searchQuery,
-                    orderStatus:orderStatus
+            const { data } = await this.client.query<FetchOrdersResponse>({
+                query: FETCH_ALL_ORDERS_USER,
+                variables: {
+                    id: userId,
+                    timePeriod: timePeriod,
+                    searchQuery: searchQuery,
+                    orderStatus: orderStatus
                 }
             })
-            if(data.fetchAllOrdersOfUser.status){
+            if (data.fetchAllOrdersOfUser.status) {
                 setOrders(data.fetchAllOrdersOfUser.data)
             }
         } catch (error) {
             console.error(error)
         }
     }
+
+    //download excel sheet of user's order
+    public downloadExcelByUser = async (id: number | undefined): Promise<void> => {
+        try {
+            const { data } = await this.client.mutate<DownloadExcelResponse>({
+                mutation: DOWNLOAD_EXCEL_USER,
+                variables: {
+                    id: id
+                }
+            })
+
+            const link = document.createElement("a");
+            link.href = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${data?.downloadExcelByUser.data.downloadUrl}`;
+            link.download = "orders.xlsx";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            console.error(error)
+        }
+    }
+
 
     //handle uplaod
     public updateProfilePicture = async (
@@ -107,7 +130,7 @@ export class UserServices {
                     profileImage: image
                 }
             });
-            if(data?.updateProfilePic.status){
+            if (data?.updateProfilePic.status) {
                 Swal.fire({
                     title: "Image Updated successfully!",
                     icon: "success",
@@ -117,10 +140,10 @@ export class UserServices {
                         window.location.reload();
                     }
                 });
-            }else{
+            } else {
                 Swal.fire({
                     title: "Failed to Update",
-                    text:data?.updateProfilePic.message,
+                    text: data?.updateProfilePic.message,
                     icon: "error",
                     showConfirmButton: true
                 });
@@ -132,9 +155,9 @@ export class UserServices {
 
     // update user details
     public updateUserDetails = async (
-        userData:UserData | undefined
-    ):Promise<void> => {
-        try{
+        userData: UserData | undefined
+    ): Promise<void> => {
+        try {
             const cookieClass = new CookieClass();
             const userIdString = cookieClass.getCookieValue("userId");
 
@@ -150,10 +173,10 @@ export class UserServices {
                 throw new Error("Invalid userId from cookie");
             }
 
-            if(userData?.password !== userData?.confirmPassword){
+            if (userData?.password !== userData?.confirmPassword) {
                 Swal.fire({
                     title: "password Mismatched!",
-                    text:"Password mismatch",
+                    text: "Password mismatch",
                     icon: "error",
                     showConfirmButton: true
                 });
@@ -170,29 +193,29 @@ export class UserServices {
                 country: userData?.country || null,
                 pincode: userData?.pincode || null,
             };
-    
+
             // Call the mutation and update the user details
             const { data } = await this.client.mutate<UpdateUSerDetailsResponse>({
                 mutation: UPDATE_USER_DETAILS_MUTATION,
                 variables: variables,
             });
 
-            if(data?.updateUserDetails.status){
+            if (data?.updateUserDetails.status) {
                 Swal.fire({
                     title: "Details Updated successfully!",
-                    text:data.updateUserDetails.message,
+                    text: data.updateUserDetails.message,
                     icon: "success",
                     showConfirmButton: true
                 });
-            }else{
+            } else {
                 Swal.fire({
                     title: "Failed to Update",
-                    text:data?.updateUserDetails.message,
+                    text: data?.updateUserDetails.message,
                     icon: "error",
                     showConfirmButton: true
                 });
             }
-        }catch(error){
+        } catch (error) {
             console.error(error)
         }
     }

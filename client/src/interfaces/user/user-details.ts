@@ -16,6 +16,23 @@ export interface UserData {
     newImage?:File;
 }
 
+
+
+export interface OrderDetails { 
+    id:number;
+    orderedDate:string;
+    bookedDates:[string];
+    carName:string;
+    carImage:string;
+    carYear:string;
+    brandName:string;
+    paymentId:string;
+    method:string;
+    status:string;
+    orderStatus:string;
+    amount:number;
+}
+
 export interface UserProfilePic{
     profileUrl:string,
     userId:number;
@@ -60,3 +77,36 @@ export interface FetchOrdersResponse{
         data:OrderData[];
     }
 }
+
+export interface DownloadExcelResponse{
+    downloadExcelByUser:{
+        status:boolean;
+        message:string;
+        data:{
+            downloadUrl:string;
+        }
+    }
+}
+
+
+export interface FetchEachOrderResponse{
+    fetchEachOrder:{
+        status:boolean;
+        message:string;
+        data:{
+            userData:UserData;
+            orderData:OrderDetails;
+        }
+    }
+}
+
+export interface DownloadPdfResponse{
+    downloadPdfByUser:{
+        status:boolean;
+        message:string;
+        data:{
+            downloadUrl:string;
+        }
+    }
+}
+

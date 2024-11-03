@@ -6,6 +6,7 @@ import { Transactions } from "../models/transactions-model.js";
 import Brands from "../models/brands-models.js";
 import OrderStatus from "../models/order-status-model.js";
 import Users from "../../user/models/user-model.js";
+import { AdminOrderControllers } from "../controllers/orders-controllers.js";
 
 export class OrdersRepository {
   // fetch future orders
@@ -123,11 +124,11 @@ export class OrdersRepository {
         ],
         attributes: ["id", "bookedDates"], // Fetching orderId and bookedDates
       });
-  
+
       if (!order) {
         throw new Error("Order not found");
       }
-  
+
       const FormattedOrder = {
         orderId: order.id,
         userId: order.User.id,
@@ -140,12 +141,65 @@ export class OrdersRepository {
         carName: order.RentableCar.car.name,
         registrationNumber: order.RentableCar.registrationNumber,
       };
-  
+
       return FormattedOrder;
     } catch (error) {
       console.error("Error fetching order:", error);
       return null;
     }
   }
-  
+
+  // update order status
+  static async updateOrderStatuses(currentDate) {
+    const updatedOrderIds = [];
+      const orders = await Orders.findAll({
+        include: [
+          {
+            model: Transactions,
+            as: "transaction",
+            where: { status: "success" },
+          },
+          {
+            model: OrderStatus,
+            attributes: ["status"], // Include the current status for checking
+          },
+        ],
+      });
+
+      for (const order of orders) {
+        const { bookedDates, id } = order;
+        const firstBookedDate = new Date(bookedDates[0]);
+        const lastBookedDate = new Date(bookedDates[bookedDates.length - 1]);
+
+        let newStatus;
+
+        if (currentDate < firstBookedDate) {
+          newStatus = "upcoming";
+        } else if (
+          currentDate >= firstBookedDate &&
+          currentDate <= lastBookedDate
+        ) {
+          newStatus = "ongoing";
+        } else {
+          newStatus = "returned?";
+        }
+
+        // Only update if the status has changed
+        if (order.OrderStatus.status !== newStatus) {
+          await OrderStatus.update(
+            { status: newStatus },
+            { where: { orderId: id } }
+          );
+         
+
+          // Add updated order ID to the array
+          updatedOrderIds.push(id);
+
+          // Update the status in Typesense
+          await AdminOrderControllers.updateStatusOnTypesense(id,newStatus);
+        }
+      }
+      // Return the updated order IDs for debugging or further processing
+      return updatedOrderIds;
+  }
 }

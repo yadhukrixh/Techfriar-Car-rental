@@ -1,17 +1,22 @@
+"use client";
 import React from "react";
 import styles from "./order-card.module.css";
 import { OrderData } from "@/interfaces/user/orders";
 import { Tag } from "antd";
+import { useRouter } from "next/navigation";
 
 interface OrderProps {
   order: OrderData;
 }
 
 const OrderCard: React.FC<OrderProps> = ({ order }) => {
-
+    const router = useRouter();
+    const handleOnclick = () => {
+        router.push(`/dashboard/orders/${order.orderId}`)
+    }
 
   return (
-    <div className={styles.cardContainer}>
+    <div className={styles.cardContainer} onClick={handleOnclick}>
 
         {order.orderStatus !== "success" && (
         <div className={styles.disabled}></div>

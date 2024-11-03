@@ -1,8 +1,8 @@
 import { gql } from "@apollo/client";
 
-export const DOWNLOAD_EXCEL_USER = gql `
-    mutation downloadExcelByUser($id:Int!){
-        downloadExcelByUser(id:$id){
+export const DOWNLOAD_PDF_USER = gql `
+    mutation downloadPdfByUser($id:Int!){
+        downloadPdfByUser(id:$id){
             status
             message
             data{

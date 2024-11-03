@@ -1,0 +1,27 @@
+.pageHeaderContainer{
+    padding-left: 20px;
+    padding-right: 20px;
+    box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    color: #444444;
+}
+
+.pageHeaderContainer button{
+    border:none;
+    outline: none;
+    font-size: 35px;
+    background-color: transparent;
+    color: #444444;
+    transition: all 0.4s ease;
+}
+
+.pageHeaderContainer button:hover{
+    scale: 1.2;
+}
+
+.pageHeaderContainer h2{
+    font-size: 20px;
+}

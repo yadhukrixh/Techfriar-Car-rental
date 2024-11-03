@@ -13,7 +13,7 @@ const OrderStatus = sequelize.define('OrderStatus', {
     onDelete: 'CASCADE',
   },
   status: {
-    type: DataTypes.ENUM('upcoming', 'ongoing', 'returned'),
+    type: DataTypes.ENUM('upcoming', 'ongoing', 'returned?','returned'),
     allowNull: false,
   },
 });

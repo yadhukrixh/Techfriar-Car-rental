@@ -2,6 +2,8 @@ import typesenseClient from "../../../config/typesense.js";
 import { OrdersRepository } from "../repositories/orders-repo.js";
 
 export class AdminOrderControllers {
+
+  // add orders to type sense
   static async addOrdersToTypesense(id) {
     try {
       // Fetch orders from your repository
@@ -29,6 +31,28 @@ export class AdminOrderControllers {
         .upsert(document);
     } catch (error) {
       console.error("Error adding order to Typesense:", error);
+    }
+  }
+
+  // update order status
+  static async updateOrderStatuses(){
+    try{
+      const currentDate = new Date();
+      await OrdersRepository.updateOrderStatuses(currentDate);
+
+    }catch(error){
+      console.error
+    }
+  }
+
+  // update typesense status
+  static async updateStatusOnTypesense(orderId,newStatus){
+    try {
+      await typesenseClient.collections('orders').documents(orderId).update({
+        completionStatus: newStatus
+      });
+    } catch (error) {
+      console.error(`Error updating Typesense for Order ${orderId}:`, error);
     }
   }
 }

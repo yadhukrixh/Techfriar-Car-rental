@@ -1,0 +1,127 @@
+.orderBodyContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    width: 100%;
+    margin: 0 auto;
+    gap: 20px;
+}
+
+.userInfoCard,
+.orderInfoCard {
+    width: 100%;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 16px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.invoiceCard {
+    width: 100%;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 5px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cardBody{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+
+
+.sectionTitle {
+    font-size: 18px;
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+
+.userName,
+.userContact,
+.userLocation {
+    display: block;
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 4px;
+}
+
+.userName {
+    font-weight: 500;
+    font-size: 16px;
+}
+
+.orderImageContainer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+    margin-bottom: 30px;
+    max-width: 800px;
+}
+
+.orderImage {
+    width: max-content;
+    max-width: 250px;
+    height: auto;
+    border-radius: 8px;
+    object-fit: cover;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.orderInfoCard {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.carInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.ant-steps-vertical {
+    max-width: 200px;
+}
+
+.ant-steps-item-title {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.ant-steps-item-description {
+    color: #888;
+    font-size: 12px;
+}
+
+.invoiceDownlod {
+    font-size: 20px;
+    font-weight: 600;
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+}
+
+.arrow{
+    font-size: 15px;
+}
+
+@media(max-width:650px) {
+    .orderImage {
+        display: none;
+    }
+
+    .invoiceCard{
+        padding: 3px;
+    }
+
+    .invoiceDownlod{
+        font-size: 15px;
+    }
+}

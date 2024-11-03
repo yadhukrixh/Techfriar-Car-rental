@@ -99,6 +99,10 @@ const UserProfile = () => {
     }
   };
 
+  const excelDownload = async() => {
+    await userService.downloadExcelByUser(userData?.id)
+  }
+
   // fetch order history
   useEffect(() => {
     const fetchOrderHistory = async () => {
@@ -311,7 +315,7 @@ const UserProfile = () => {
             {orderHistory.length > 0 && (
               <button
                 className={styles.downloadButton}
-                // onClick={()} // Add your function here
+                onClick={excelDownload}
               >
                 <i className="ri-file-excel-2-line"></i>
                 Download
