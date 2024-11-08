@@ -85,6 +85,8 @@ const allCarsTypeDefs = gql`
       numberOfDoors: Int!
       pricePerDay: Int!
     ): EditCarResponse
+
+    excelUpload(excelFile:Upload!): EditCarResponse!
   }
 
   type EditCarResponse {

@@ -49,7 +49,7 @@ export class AdminLoginService {
     
           if (data?.adminLogin.status) {
             
-            Cookies.set('adminToken', data.adminLogin.token || '', { expires: 1 / 24, path: '/admin' });
+            Cookies.set('adminToken', data.adminLogin.token || '', { expires: 7 / 24, path: '/admin' });
             this.router.push('/admin/dashboard');
           } else {
             this.setError(data?.adminLogin.message || 'Invalid email or password');

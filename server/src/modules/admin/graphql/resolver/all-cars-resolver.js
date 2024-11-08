@@ -21,6 +21,7 @@ const allCarsResolver = {
   },
 
   Mutation: {
+    // add car
     addCar: async (_, { input }) => {
       const {
         name,
@@ -72,6 +73,7 @@ const allCarsResolver = {
       }
     },
 
+    // delete car
     deleteCar: async (_, { id }) => {
       try {
         const deleteBrand = await ManageCarControllers.deleteCar(id);
@@ -87,6 +89,7 @@ const allCarsResolver = {
       }
     },
 
+    // edit car
     editCar: async (
       _,
       {
@@ -133,6 +136,19 @@ const allCarsResolver = {
         };
       }
     },
+
+    // upload excel
+    excelUpload: async (_, {excelFile}) => {
+      try{
+        const uploadExcel = await ManageCarControllers.excelUpload(excelFile);
+        
+      }catch(error){
+        return{
+          status:false,
+          message:error
+        }
+      }
+    }
   },
 };
 

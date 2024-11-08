@@ -11,7 +11,6 @@ import {
 import { OrderDetails, UserData } from "@/interfaces/user/user-details";
 import { OrderDetailsService } from "../../services/order-service";
 import { Steps, Card, Typography } from "antd";
-import { style } from "framer-motion/client";
 
 const { Title, Text } = Typography;
 

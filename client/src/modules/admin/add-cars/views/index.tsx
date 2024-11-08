@@ -9,7 +9,7 @@ import {
 } from "@apollo/client";
 import InputComponent from "@/themes/input-component/input-component";
 import ButtonComponent from "@/themes/button-component/button-component";
-import { Upload, Select, Spin } from "antd";
+import { Upload, Select, Spin, message } from "antd";
 import {
   LoadingOutlined,
   UploadOutlined,
@@ -18,6 +18,7 @@ import {
 import { AddVehicleClass } from "../services/add-vehicle-service";
 import { Brand } from "@/interfaces/admin/brands";
 import QuantitySelector from "@/themes/quantity-selector/quantity-selector";
+import ExcelUploadModal from "../components/upload-excel/upload-excel";
 
 const { Option } = Select;
 
@@ -36,7 +37,10 @@ const AddCars = () => {
   const [selectedYear, setSelectedYear] = useState<number | null>(null);
   const [numSeats, setNumSeats] = useState<number>(2);
   const [numDoors, setNumDoors] = useState<number>(2);
-  const [pricePerDay,setPricePerday] = useState<string>('')
+  const [pricePerDay, setPricePerday] = useState<string>("");
+
+  const [isModalVisible, setIsModalVisible] = useState(false); // Modal visibility
+  const [excelFile, setExcelFile] = useState<File | null>(null); // Store Excel file
 
   const addVehicleClass = new AddVehicleClass();
 
@@ -48,6 +52,7 @@ const AddCars = () => {
     fetchBrands();
   }, [client]);
 
+  // image change handler
   const handleFileChange = (info: any, type: string) => {
     addVehicleClass.handleFileChange(
       info,
@@ -57,6 +62,7 @@ const AddCars = () => {
     );
   };
 
+  // add vehicle handler
   const handleAddVehicleClick = async () => {
     if (!primaryImage || !selectedBrand) {
       alert("Please select a primary image and brand before submitting.");
@@ -75,14 +81,24 @@ const AddCars = () => {
       transmissionType,
       numSeats,
       numDoors,
-      parseInt(pricePerDay,10)
+      parseInt(pricePerDay, 10)
     );
   };
+
+  // upload modal visibility
+  const openModal = () => setIsModalVisible(true);
+  const closeModal = () => setIsModalVisible(false);
+
+  // handle excel upload
+  const handleExcelUpload = async() => {
+    await addVehicleClass.handleExcelUpload(excelFile);
+  }
 
   const handleBrandChange = (value: number) => setSelectedBrand(value);
   const handleYearChange = (value: number) => setSelectedYear(value);
   const handleFuelTypeChange = (value: string) => setFuelType(value);
-  const handleTransmissionChange = (value: string) => setTransmissionType(value);
+  const handleTransmissionChange = (value: string) =>
+    setTransmissionType(value);
 
   const generateYearOptions = () => {
     const currentYear = new Date().getFullYear();
@@ -232,7 +248,11 @@ const AddCars = () => {
 
           <div className={styles.formSection}>
             <label className={styles.inputLabel}>Number of Doors</label>
-            <QuantitySelector minimum={2} quantity={numDoors} setQuantity={setNumDoors} />
+            <QuantitySelector
+              minimum={2}
+              quantity={numDoors}
+              setQuantity={setNumDoors}
+            />
           </div>
 
           <div className={styles.uploadSection}>
@@ -285,6 +305,18 @@ const AddCars = () => {
             value="Add Vehicle"
             onClickFunction={handleAddVehicleClick}
             className={styles.submitButton}
+          />
+
+          <button className={styles.excelUpload} onClick={openModal}>
+            <i className="ri-upload-2-line"></i>
+            Upload Excel
+          </button>
+
+          <ExcelUploadModal
+            isVisible={isModalVisible}
+            onClose={closeModal}
+            setExcelFile={setExcelFile}
+            handleUpload={handleExcelUpload}
           />
         </div>
       </div>

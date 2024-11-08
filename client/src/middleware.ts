@@ -14,7 +14,7 @@ export function middleware(req: NextRequest) {
   }
 
   // Check if the user is trying to access a car detail page
-  if (pathname.startsWith('/cars/')) {
+  if (pathname.startsWith('/cars/') || pathname.startsWith('/dashboard')) {
     const userId = req.cookies.get('userId');
     if (!userId) {
       const loginUrl = new URL('/login', req.url);
@@ -27,5 +27,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/dashboard/:path*', '/cars/:path*'],
+  matcher: ['/admin/dashboard/:path*', '/cars/:path*','/dashboard/:path*'],
 };

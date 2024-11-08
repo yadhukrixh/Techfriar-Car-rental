@@ -1,7 +1,9 @@
 import { ADD_CAR } from "@/graphql/admin/mutations/cars/add-car-mutation";
+import { UPLOAD_EXCEL_MUTATION } from "@/graphql/admin/mutations/cars/upload-excel";
 import { BRANDS_QUERY } from "@/graphql/admin/queries/brands/brands-query";
 import { Brand, GetBrandsResponse } from "@/interfaces/admin/brands";
-import { AddCarResponse } from "@/interfaces/admin/vehicles";
+import { AddCarResponse, UploadExcelResponse } from "@/interfaces/admin/vehicles";
+import client from "@/lib/apollo-client";
 import { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import { message, UploadFile } from "antd";
 import Swal from "sweetalert2";
@@ -137,6 +139,23 @@ export class AddVehicleClass {
             message.error("An error occurred while adding the vehicle");
         }
     };
+
+    // Handle the excel upload
+    public handleExcelUpload = async (
+        file:File | null
+    ):Promise<void> => {
+        try{
+            console.log("Hai")
+            const {data} = await client.mutate<UploadExcelResponse>({
+                mutation:UPLOAD_EXCEL_MUTATION,
+                variables:{
+                    excelFile:file
+                }
+            });
+        }catch(error){
+            console.error(error)
+        }
+    }
 
 
 }

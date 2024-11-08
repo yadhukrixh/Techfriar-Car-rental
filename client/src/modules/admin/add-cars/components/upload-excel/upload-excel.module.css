@@ -1,0 +1,43 @@
+/* ExcelUploadModal.module.css */
+
+.modalContainer {
+    padding: 20px;
+  }
+  
+  .modalTitle {
+    font-size: 1.5em;
+    color: #333;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  
+  .uploadButton {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .uploadButton:hover {
+    background-color: #0056b3;
+  }
+  
+  .selectedFileText {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .uploadedMessage {
+    color: green;
+    font-weight: 500;
+    margin-top: 10px;
+  }
+  

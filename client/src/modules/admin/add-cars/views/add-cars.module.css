@@ -58,6 +58,27 @@
     outline: none;
 }
 
+.buttonSection{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.excelUpload{
+    outline: none;
+    padding: 3px;
+    border: 2px solid #06D001;
+    border-radius: 10px;
+    background-color: transparent;
+    color: #06D001;
+    transition: all 0.4s ease;
+}
+
+.excelUpload:hover{
+    background-color: #06D001;
+    color: #fff;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
 

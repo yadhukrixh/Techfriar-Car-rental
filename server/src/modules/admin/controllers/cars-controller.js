@@ -3,6 +3,8 @@ import dotenv from "dotenv";
 import { FormatImageUrl } from "../../../utils/format-image-url.js";
 import { MinioUtils } from "../../../utils/minio-functions.js";
 import BrandsRepository from "../repositories/brands-repo.js";
+import { parseExcelFile } from "../../../utils/parseExcelFile.js";
+import { ImageDownloaderClass } from "../../../utils/image-downloader.js";
 dotenv.config();
 
 class ManageCarControllers {
@@ -102,7 +104,7 @@ class ManageCarControllers {
           transmissionType: car.transmissionType || "",
           numberOfSeats: car.numberOfSeats || 0,
           numberOfDoors: car.numberOfDoors || 0,
-          pricePerDay: car.pricePerDay
+          pricePerDay: car.pricePerDay,
         }));
         return {
           status: true,
@@ -123,6 +125,7 @@ class ManageCarControllers {
     }
   }
 
+  // fetch car
   static async fetchCar(id) {
     try {
       const car = await ManageCarsRepository.fetchCar(id);
@@ -142,12 +145,18 @@ class ManageCarControllers {
       const car = await this.fetchCar(id);
 
       // delete the primary image
-      await MinioUtils.deleteFileFromMinio(car.data.primaryImageUrl,process.env.MINIO_BUCKET_NAME);
+      await MinioUtils.deleteFileFromMinio(
+        car.data.primaryImageUrl,
+        process.env.MINIO_BUCKET_NAME
+      );
 
       // Delete the secondary Images
       if (car.data.secondaryImages && car.data.secondaryImages.length > 0) {
         for (const imageUrl of car.data.secondaryImages) {
-          await MinioUtils.deleteFileFromMinio(imageUrl,process.env.MINIO_BUCKET_NAME);
+          await MinioUtils.deleteFileFromMinio(
+            imageUrl,
+            process.env.MINIO_BUCKET_NAME
+          );
         }
       }
 
@@ -186,17 +195,17 @@ class ManageCarControllers {
       // Check if the car with the same name and year exists
       const isCarExist = await ManageCarsRepository.checkCarExist(name, year);
       const car = await this.fetchCar(id);
-  
+
       if (isCarExist.status && name !== car.data.name) {
         return {
           status: false,
           message: "This car already exists!",
         };
       }
-  
+
       // Get the brand ID from the brand name
       const brandId = (await BrandsRepository.getBrandByName(brandName)).id;
-  
+
       // Handle primary image upload and deletion
       const handlePrimaryImage = async () => {
         if (primaryImage.image !== null) {
@@ -207,47 +216,55 @@ class ManageCarControllers {
             process.env.MINIO_BUCKET_NAME
           );
           // Delete the old primary image
-          await MinioUtils.deleteFileFromMinio(car.data.primaryImageUrl,process.env.MINIO_BUCKET_NAME);
-  
+          await MinioUtils.deleteFileFromMinio(
+            car.data.primaryImageUrl,
+            process.env.MINIO_BUCKET_NAME
+          );
+
           return url;
         } else {
           // Return the existing primary image URL if no new image is provided
           return car.data.primaryImageUrl;
         }
       };
-  
+
       const newPrimaryImageUrl = await handlePrimaryImage();
-  
+
       // Get URLs of non-changeable images (those that don't have a new upload)
       const nonChangableUrls = await Promise.all(
         otherImages
           .filter((item) => item.image === null) // Keep the old image if no new upload
           .map((item) => FormatImageUrl.deStructureImage(item.imageUrl)) // Extract the URL
       );
-  
+
       // Filter and upload the new images
       const newOtherImages = await Promise.all(
         otherImages
           .filter((item) => item.imageUrl === null) // Filter items that need new images
           .map((item) => item.image)
       );
-  
+
       if (newOtherImages.length > 0) {
         const allImageUrls = car.data.secondaryImages;
-  
+
         // Find the URLs that need to be deleted
         const deletionUrls = allImageUrls.filter(
           (item) => !nonChangableUrls.includes(item)
         );
-  
+
         // Delete the images that are no longer needed
         if (deletionUrls.length > 0) {
           await Promise.all(
-            deletionUrls.map((item) => MinioUtils.deleteFileFromMinio(item,process.env.MINIO_BUCKET_NAME))
+            deletionUrls.map((item) =>
+              MinioUtils.deleteFileFromMinio(
+                item,
+                process.env.MINIO_BUCKET_NAME
+              )
+            )
           );
         }
       }
-  
+
       // Upload new images and collect the URLs
       let newOtherImageUrls = await Promise.all(
         newOtherImages.map(async (imageFile, index) => {
@@ -258,10 +275,10 @@ class ManageCarControllers {
           );
         })
       );
-  
+
       // Concatenate the non-changeable URLs with the new URLs
       newOtherImageUrls = [...newOtherImageUrls, ...nonChangableUrls]; // Spread operator to concatenate arrays
-  
+
       // Update the car with new details
       const editCar = await ManageCarsRepository.editcar(
         id,
@@ -278,7 +295,7 @@ class ManageCarControllers {
         numberOfDoors,
         pricePerDay
       );
-  
+
       return {
         status: editCar.status,
         message: editCar.message,
@@ -291,7 +308,77 @@ class ManageCarControllers {
       };
     }
   }
-  
+
+  // excel upload
+  static async excelUpload(file) {
+    try {
+      const { createReadStream, filename, mimetype } = await file;
+
+      // check the file format
+      if (
+        ![
+          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "application/vnd.ms-excel",
+        ].includes(mimetype)
+      ) {
+        return {
+          status: false,
+          message: "Invalid File type!",
+        };
+      }
+
+      const stream = createReadStream();
+      // parse excel file
+      const vehicleData = await parseExcelFile(stream);
+
+      let alreadyExistingVehicle = [];
+
+      for (const vehicle of vehicleData) {
+        //here handle the logic of checking is the
+        // first we have to check is there the vehicle already exist
+        const isExist = await ManageCarsRepository.checkCarExist(
+          vehicle.name,
+          vehicle.year
+        );
+        if (isExist.status) {
+          // pushed as already existing
+          alreadyExistingVehicle.push(vehicle);
+          return{
+            status:false,
+            message:isExist.message
+          }
+        } else {
+          // minio url
+          const primaryImageUrl = await MinioUtils.uploadFileToMinio(
+            await ImageDownloaderClass.urlToFIle(vehicle.primaryImageFile),
+            `cars/${vehicle.name}-${vehicle.year}/primaryImage`,
+            process.env.MINIO_BUCKET_NAME
+          );
+
+          // secondary urls
+          const otherImageUrls = await Promise.all(
+            vehicle.secondaryImageFiles.map(async (url) => {
+              await MinioUtils.uploadFileToMinio(
+                await ImageDownloaderClass.urlToFIle(url),
+                `cars/${vehicle.name}-${vehicle.year}/additionalImages`,
+                process.env.MINIO_BUCKET_NAME
+              );
+            })
+          );
+
+          console.log(primaryImageUrl);
+          console.log(otherImageUrls);
+
+
+        }
+      }
+    } catch (error) {
+      return {
+        status: false,
+        message: error,
+      };
+    }
+  }
 }
 
 export default ManageCarControllers;

@@ -5,3 +5,10 @@ export interface AddCarResponse {
         message:string;
     }
 }
+
+export interface UploadExcelResponse{
+    uploadExcel:{
+        status:boolean;
+        message:string;
+    }
+}
